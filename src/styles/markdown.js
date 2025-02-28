@@ -50,7 +50,7 @@ const MARKDOWN = {
   em: {
     fontStyle: 'normal',
     fontFamily: FONT.italic,
-    fontSize: moderateScale(FONTSIZE.regular,),
+    fontSize: moderateScale(FONTSIZE.regular),
   },
   bullet_list: {
     fontFamily: FONT.regular,
@@ -100,7 +100,7 @@ const MARKDOWN = {
     width: '100%',
     fontFamily: FONT.regular,
     lineHeight: moderateScale(21),
-    fontSize: moderateScale(FONTSIZE.regular, 0.5),
+    fontSize: moderateScale(FONTSIZE.regular),
   },
   hr: {
     marginVertical: 20,

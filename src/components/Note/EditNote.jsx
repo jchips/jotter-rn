@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontFamily: FONT.code,
-    fontSize: moderateScale(FONTSIZE.regular, 0.6),
+    fontSize: moderateScale(FONTSIZE.regular),
     marginBottom: 5,
     paddingBottom: 10,
     whiteSpace: 'pre-wrap',

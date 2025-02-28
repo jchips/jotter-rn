@@ -35,7 +35,6 @@ const apiService = {
   setTokenGetter,
   authenticate: () => api.get('/', { withCredentials: true }),
   getRootNotes: () => api.get('/note'),
-  getNote: (noteId) => api.get(`/note/${noteId}`),
   getNotes: (folderId) => api.get(`/note/f/${folderId}`),
   addNote: (body) => api.post('/note', body),
   updateNote: (body, noteId) => api.patch(`/note/${noteId}`, body),
