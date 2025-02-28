@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontFamily: FONT.regular,
-    lineHeight: moderateScale(19),
+    lineHeight: moderateScale(19, 0.2),
     width: '100%',
   },
   warningContainer: {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   warningNote: {
     fontFamily: FONT.semiBold,
-    fontSize: moderateScale(FONTSIZE.smaller),
+    fontSize: moderateScale(FONTSIZE.smaller, 0.2),
     marginVertical: 25,
     width: '90%',
     marginLeft: 3,

@@ -21,6 +21,7 @@ import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
 import { moderateScale } from '../../util/scaling';
 import { app, COLORS, buttons, FONT, FONTSIZE } from '../../styles';
+const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {
   const { note } = route.params;
@@ -31,7 +32,7 @@ const Editor = ({ navigation, route }) => {
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
   const [words, setWords] = useState(getWordCount(markdown));
-  const screenWidth = Dimensions.get('window').width;
+  console.log('screenWidth:', screenWidth); // dl
 
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
@@ -39,12 +40,23 @@ const Editor = ({ navigation, route }) => {
       runOnJS(setIsEditable)(true);
     });
 
+  const calculateHeaderLength = () => {
+    if (screenWidth < 380 && note.title.length > 11) {
+      return note.title.substring(0, 10) + '...';
+    } else if (screenWidth < 440 && note.title.length > 13) {
+      return note.title.substring(0, 11) + '...';
+    } else {
+      return note.title;
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle:
-        screenWidth < 440 && note.title.length > 13
-          ? note.title.substring(0, 13) + '...'
-          : note.title,
+        // screenWidth < 440 && note.title.length > 13
+        //   ? note.title.substring(0, 11) + '...'
+        //   : note.title,
+        calculateHeaderLength(),
       headerRight: () => {
         return (
           <>
@@ -248,7 +260,7 @@ const styles = StyleSheet.create({
   },
   words: {
     textAlign: 'center',
-    fontSize: moderateScale(FONTSIZE.small),
+    fontSize: moderateScale(FONTSIZE.small, 0.2),
     fontFamily: FONT.regular,
     marginHorizontal: 10,
   },
@@ -261,8 +273,8 @@ const styles = StyleSheet.create({
   },
   headerBtn: {
     ...buttons.outlineBtn1,
-    height: moderateScale(30),
-    width: moderateScale(48),
+    height: moderateScale(30, 0.2),
+    width: moderateScale(48, 0.2),
     marginHorizontal: 2,
   },
   footer: {

@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   dropdownButtonTxtStyle: {
     flex: 1,
     fontFamily: FONT.regular,
-    fontSize: moderateScale(FONTSIZE.mid),
+    fontSize: moderateScale(FONTSIZE.mid, 0.2),
   },
 });
 

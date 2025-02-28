@@ -12,7 +12,7 @@ const POPOVER = {
     ...buttons.btn3,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    height: moderateScale(48),
+    height: moderateScale(48, 0.2),
     paddingHorizontal: 10,
     marginVertical: '2%',
   },

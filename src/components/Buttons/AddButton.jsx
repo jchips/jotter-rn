@@ -68,8 +68,8 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
 const styles = StyleSheet.create({
   popover: {
     borderRadius: BORDER.radius,
-    minHeight: moderateScale(115),
-    width: moderateScale(160),
+    minHeight: moderateScale(115, 0.2),
+    width: moderateScale(160, 0.2),
   },
   popoverContainer: {
     flex: 1,
@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
     ...buttons.btn3,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: moderateScale(48),
-    paddingHorizontal: moderateScale(10),
+    height: moderateScale(48, 0.2),
+    paddingHorizontal: moderateScale(10, 0.2),
     marginVertical: '2%',
   },
 });

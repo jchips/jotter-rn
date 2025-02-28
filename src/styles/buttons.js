@@ -7,7 +7,7 @@ const button = {
   alignItems: 'center',
   backgroundColor: COLORS.themePurple, // change based on theme
   borderRadius: BORDER.radius,
-  height: moderateScale(45),
+  height: moderateScale(45, 0.2),
   justifyContent: 'center',
   margin: 10,
   paddingHorizontal: 20,
@@ -15,9 +15,9 @@ const button = {
 
 const buttonText = {
   color: COLORS.themeWhite,
-  fontSize: moderateScale(FONTSIZE.regular),
+  fontSize: moderateScale(FONTSIZE.regular, 0.2),
   fontFamily: FONT.semiBold,
-  lineHeight: moderateScale(20),
+  lineHeight: moderateScale(20, 0.2),
 };
 
 const buttons = StyleSheet.create({
@@ -42,8 +42,8 @@ const buttons = StyleSheet.create({
     borderRadius: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    width: moderateScale(58),
-    height: moderateScale(58),
+    width: moderateScale(58, 0.2),
+    height: moderateScale(58, 0.2),
     backgroundColor: COLORS.themePurple,
     margin: 15,
     position: 'absolute',

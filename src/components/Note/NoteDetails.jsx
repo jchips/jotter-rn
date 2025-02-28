@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontFamily: FONT.regular,
-    fontSize: moderateScale(FONTSIZE.regular),
+    fontSize: moderateScale(FONTSIZE.regular, 0.2),
     color: COLORS.themePurpleText,
-    lineHeight: moderateScale(25),
+    lineHeight: moderateScale(25, 0.2),
   },
 });
 

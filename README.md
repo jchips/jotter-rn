@@ -28,21 +28,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 - Built with React Native Expo
 - Languages used: JavaScript
-- Backend uses MySQL, Sequelize, Nodejs, Jsonwebtoken, Bcrypt, and base-64
-
-## Resources
-
-- [React Navigation](https://reactnavigation.org/)
-- [React hook form](https://react-hook-form.com/)
-- [react-native-markdown-display](https://github.com/iamacup/react-native-markdown-display/tree/master)
-- [react-native-popover-view](https://www.npmjs.com/package/react-native-popover-view?activeTab=readme#from)
-- [react-native-select-dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown?tab=readme-ov-file)
-- [react-native-fadeview-wrapper](https://github.com/aliunco/react-native-fadeview)
-- [Scaling by Soluto](https://medium.com/soluto-engineering/size-matters-5aeeb462900a)
-- [icons8](https://icons8.com/)
-- [Web Dev Simplified](https://youtu.be/6XTRElVAZ9Y)
-- ['Inter' font by Rasmus Andersson](https://github.com/rsms/inter)
-- ['RobotoMono' Google font by Christian Robertson](https://fonts.google.com/specimen/Roboto+Mono)
+- Backend uses Nodejs, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
 
 ## Changelog
 
@@ -63,4 +49,18 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - **0.0.4** (2025-01-03, 9:33pm) - Users can move notes and folders to other folders.
 - **0.0.3** (2025-01-02, 2:38pm) - Users can add new notes and folders, preview toggle.
 - **0.0.2** (2025-01-01, 11:11pm) - Users can preview and edit notes.
-- **0.0.1** (2024-12-28, 9:48pm) - Auth.
+- **0.0.1** (2024-12-28, 9:48pm) - Working auth.
+
+## Resources
+
+- [React Navigation](https://reactnavigation.org/)
+- [React hook form](https://react-hook-form.com/)
+- [react-native-markdown-display](https://github.com/iamacup/react-native-markdown-display/tree/master)
+- [react-native-popover-view](https://www.npmjs.com/package/react-native-popover-view?activeTab=readme#from)
+- [react-native-select-dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown?tab=readme-ov-file)
+- [react-native-fadeview-wrapper](https://github.com/aliunco/react-native-fadeview)
+- [Scaling by Soluto](https://medium.com/soluto-engineering/size-matters-5aeeb462900a)
+- [icons8](https://icons8.com/)
+- [Web Dev Simplified](https://youtu.be/6XTRElVAZ9Y)
+- ['Inter' font by Rasmus Andersson](https://github.com/rsms/inter)
+- ['RobotoMono' Google font by Christian Robertson](https://fonts.google.com/specimen/Roboto+Mono)

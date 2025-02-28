@@ -153,7 +153,7 @@ function DrawerNav({ navigation }) {
       drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{
         drawerStyle: {
-          width: moderateScale(185),
+          width: moderateScale(185, 0.2),
         },
         cardStyle: {
           backgroundColor: '#fff',
@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   jotterLogo: {
-    width: moderateScale(50),
-    height: moderateScale(50),
+    width: moderateScale(50, 0.2),
+    height: moderateScale(50, 0.2),
     marginBottom: 10,
   },
   header: {
@@ -195,11 +195,11 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   headerText: {
-    fontSize: moderateScale(FONTSIZE.xlarge),
+    fontSize: moderateScale(FONTSIZE.xlarge, 0.2),
     fontFamily: FONT.bold,
   },
   headerEmail: {
-    fontSize: moderateScale(FONTSIZE.xsmall),
+    fontSize: moderateScale(FONTSIZE.xsmall, 0.2),
     fontFamily: FONT.regular,
   },
   content: {
@@ -210,12 +210,12 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   drawerItem: {
-    paddingVertical: moderateScale(10),
+    paddingVertical: moderateScale(10, 0.2),
     paddingHorizontal: 15,
     borderRadius: 5,
   },
   drawerLabel: {
-    fontSize: moderateScale(15),
+    fontSize: moderateScale(15, 0.2),
     color: '#000', // Inactive label color
     fontFamily: FONT.semiBold,
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   foldersTitle: {
     fontFamily: FONT.bold,
-    fontSize: moderateScale(FONTSIZE.smaller),
+    fontSize: moderateScale(FONTSIZE.smaller, 0.2),
     textAlign: 'center',
     marginVertical: 10,
     color: COLORS.mutedtext,
