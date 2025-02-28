@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   words: {
     textAlign: 'center',
-    fontSize: moderateScale(FONTSIZE.small, 0.2),
+    fontSize: moderateScale(FONTSIZE.small),
     fontFamily: FONT.regular,
     marginHorizontal: 10,
   },
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
   },
   headerBtn: {
     ...buttons.outlineBtn1,
-    height: moderateScale(30, 0.2),
-    width: moderateScale(48, 0.2),
+    height: moderateScale(30),
+    width: moderateScale(48),
     marginHorizontal: 2,
   },
   footer: {

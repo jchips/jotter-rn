@@ -15,7 +15,7 @@ const app = StyleSheet.create({
   },
   itemCard: {
     flex: 1,
-    padding: moderateScale(15, 0.2),
+    padding: moderateScale(15),
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: BORDER.color, // change based on theme
@@ -24,28 +24,28 @@ const app = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: moderateScale(38, 0.2),
+    height: moderateScale(38),
     padding: 5,
   },
   icon: {
-    height: moderateScale(22, 0.2),
-    width: moderateScale(22, 0.2),
+    height: moderateScale(22),
+    width: moderateScale(22),
   },
   icon2: {
-    height: moderateScale(23, 0.2),
-    width: moderateScale(23, 0.2),
+    height: moderateScale(23),
+    width: moderateScale(23),
   },
   smallText: {
-    fontSize: moderateScale(FONTSIZE.xsmall, 0.2),
+    fontSize: moderateScale(FONTSIZE.xsmall),
     marginVertical: 1,
     fontFamily: FONT.regular,
-    lineHeight: moderateScale(20, 0.2),
+    lineHeight: moderateScale(20),
   },
   boldText: {
     fontFamily: FONT.bold,
   },
   header: {
-    fontSize: moderateScale(FONTSIZE.large, 0.2),
+    fontSize: moderateScale(FONTSIZE.large),
     margin: 10,
     fontFamily: FONT.bold,
   },

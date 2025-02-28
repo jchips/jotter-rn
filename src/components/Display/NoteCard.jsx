@@ -150,18 +150,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   h1: {
-    fontSize: moderateScale(FONTSIZE.regular, 0.2),
+    fontSize: moderateScale(FONTSIZE.regular),
     fontFamily: FONT.bold,
   },
   metaData: {
-    fontSize: moderateScale(FONTSIZE.smaller, 0.2),
+    fontSize: moderateScale(FONTSIZE.smaller),
     fontFamily: FONT.regular,
     color: COLORS.mutedtext,
   },
   popover: {
     borderRadius: BORDER.radius,
-    minHeight: moderateScale(190, 0.2),
-    width: moderateScale(170, 0.2),
+    minHeight: moderateScale(190),
+    width: moderateScale(170),
   },
 });
 

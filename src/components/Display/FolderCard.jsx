@@ -137,15 +137,15 @@ const styles = StyleSheet.create({
   },
   h1: {
     flexShrink: 1,
-    fontSize: moderateScale(FONTSIZE.regular, 0.2),
+    fontSize: moderateScale(FONTSIZE.regular),
     fontFamily: FONT.bold,
     color: COLORS.themePurpleText,
     marginHorizontal: 10,
   },
   popover: {
     borderRadius: BORDER.radius,
-    minHeight: moderateScale(140, 0.2),
-    width: moderateScale(172, 0.2),
+    minHeight: moderateScale(140),
+    width: moderateScale(172),
   },
 });
 

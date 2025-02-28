@@ -15,7 +15,7 @@ const MODAL = {
     width: '90%',
     backgroundColor: COLORS.themeWhite,
     borderRadius: BORDER.radius,
-    padding: moderateScale(10, 0.2),
+    padding: moderateScale(10),
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -42,7 +42,7 @@ const MODAL = {
   dropdownItemTxtStyle: {
     flex: 1,
     fontFamily: FONT.semiBold,
-    fontSize: moderateScale(FONTSIZE.regular, 0.2),
+    fontSize: moderateScale(FONTSIZE.regular),
   },
   buttons: {
     alignItems: 'center',

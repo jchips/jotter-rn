@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: moderateScale(40, 0.2),
+    fontSize: moderateScale(40),
     fontFamily: FONT.bold,
   },
   img: {
-    width: moderateScale(27, 0.2),
-    height: moderateScale(27, 0.2),
+    width: moderateScale(27),
+    height: moderateScale(27),
     marginLeft: 3,
     marginRight: 4,
     marginTop: 4,
