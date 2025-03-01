@@ -58,8 +58,11 @@ function DrawerNav({ navigation }) {
           <Text style={styles.headerText}>Jotter</Text>
           <Text style={styles.headerEmail}>{user?.email}</Text>
         </View>
-        <DrawerContentScrollView {...props}>
-          {/* Home and Account items */}
+        <DrawerContentScrollView
+          {...props}
+          contentContainerStyle={styles.drawerWrapper}
+        >
+          {/* Home, Account, and Settings items */}
           {state.routes.map((route, index) => {
             const isActive = state.index === index;
             return (
@@ -208,6 +211,9 @@ const styles = StyleSheet.create({
   },
   button: {
     color: '#000',
+  },
+  drawerWrapper: {
+    paddingTop: 20,
   },
   drawerItem: {
     paddingVertical: moderateScale(10),

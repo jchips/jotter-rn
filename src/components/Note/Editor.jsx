@@ -32,7 +32,6 @@ const Editor = ({ navigation, route }) => {
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
   const [words, setWords] = useState(getWordCount(markdown));
-  console.log('screenWidth:', screenWidth); // dl
 
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
@@ -52,11 +51,7 @@ const Editor = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle:
-        // screenWidth < 440 && note.title.length > 13
-        //   ? note.title.substring(0, 11) + '...'
-        //   : note.title,
-        calculateHeaderLength(),
+      headerTitle: calculateHeaderLength(),
       headerRight: () => {
         return (
           <>

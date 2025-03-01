@@ -1,6 +1,8 @@
 # Jotter
 
-<center><img src='./assets/imgs/jotter-circle.png#jotter' alt='Jotter logo' height='50px' width='50px'/></center>
+<center>
+  <img src='./assets/imgs/jotter-circle.png#jotter' alt='Jotter logo' height='50px' width='50px'/>
+</center>
 
 Tired of searching for the perfect private, accessible tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking Android app that combines the simplicity of Markdown with the power of organization.
 
@@ -22,16 +24,17 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.1.9
+## Version: 1.2.0
 
 ## Architecture
 
 - Built with React Native Expo
 - Languages used: JavaScript
-- Backend uses Nodejs, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
+- Backend uses Nodejs, Express, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
 
 ## Changelog
 
+- **1.2.0** (2025-03-01, 1:15pm) - Persist user while logged in when app is closed.
 - **1.1.9** (2025-02-27, 10:17pm) - Improved device scaling.
 - **1.1.8** (2025-01-31, 3:05pm) - User can change grid size of folders and notes.
 - **1.1.7** (2025-01-23, 8:10pm) - Edit button fades out--double tap to reappear, improved editor.
