@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 import { Buffer } from 'buffer';
 import { API_URL } from '@env';
 import { setConfigs } from '../reducers/configReducer';
-import { setLocalConfigs } from '../util/persist';
+import {
+  setLocalConfigs,
+  storeCurrUser,
+  removeCurrUser,
+} from '../util/persist';
 import axios from 'axios';
 import api from '../util/api';
 
@@ -23,28 +27,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     api.setTokenGetter(() => token);
   }, [token]);
-
-  // authenticates user on page reload
-  useEffect(() => {
-    const authenticate = async () => {
-      try {
-        let res = await api.authenticate();
-        if (res.data) {
-          setUser(res.data);
-          setIsLoggedIn(true);
-        } else {
-          setUser(null);
-          setIsLoggedIn(false);
-        }
-      } catch (err) {
-        console.error('Failed to authenticate user ' + err);
-        setUser(null);
-        setIsLoggedIn(false);
-        // logout()?
-      }
-    };
-    authenticate();
-  }, []);
 
   /**
    * Logs user in
@@ -66,7 +48,9 @@ export function AuthProvider({ children }) {
       let requestUrl = `${API_URL}/jotter/login`;
       res = await axios.post(requestUrl, { withCredentials: true });
       setUser(res.data.user);
+      // console.log('res.data.user:', res.data.user); // dl
       setToken(res.data.token);
+      storeCurrUser(res.data.user);
       setIsLoggedIn(true);
       api.setTokenGetter(() => res.data.token);
       let uConfigs = await api.getConfigs();
@@ -89,6 +73,7 @@ export function AuthProvider({ children }) {
       setUser(null);
       setIsLoggedIn(false);
       setToken(null);
+      removeCurrUser();
       delete axios.defaults.headers.common['Authorization'];
     } catch (err) {
       console.error('Failed to log user out:', err);
