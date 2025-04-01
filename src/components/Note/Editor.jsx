@@ -26,14 +26,14 @@ const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {
   const { note } = route.params;
+  const configs = useSelector((state) => state.configs.data);
   const [error, setError] = useState('');
   const [isEditable, setIsEditable] = useState(false);
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(!configs?.hidePreview);
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
   const [words, setWords] = useState(getWordCount(markdown));
-  const configs = useSelector((state) => state.configs.data);
 
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
