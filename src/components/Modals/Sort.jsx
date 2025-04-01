@@ -7,7 +7,6 @@ import sortMethods from '../../util/sortMethods';
 import api from '../../util/api';
 import sortBy from '../../util/sortBy';
 import { setConfigs } from '../../reducers/configReducer';
-import { setLocalConfigs } from '../../util/persist';
 import { app, buttons, COLORS, MODAL } from '../../styles';
 
 let sortOptions = [
@@ -41,7 +40,6 @@ const Sort = (props) => {
       try {
         let res = await api.updateConfigs(configObj);
         dispatch(setConfigs({ ...res.data, ...configObj }));
-        setLocalConfigs({ ...res.data, ...configObj });
       } catch (err) {
         console.error('Failed to update sort -', err);
       }

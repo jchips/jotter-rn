@@ -24,16 +24,17 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.2.0
+## Version: 1.2.1
 
 ## Architecture
 
-- Built with React Native Expo, Redux
+- Built with React Native Expo & Redux
 - Languages used: JavaScript
 - Backend uses Nodejs, Express, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
 
 ## Changelog
 
+- **1.2.1** (2025-04-01, 12:40am) - Added Settings option to hide word count, improved device scaling.
 - **1.2.0** (2025-03-01, 1:15pm) - Persist user while logged in when app is closed.
 - **1.1.9** (2025-02-27, 10:17pm) - Improved device scaling.
 - **1.1.8** (2025-01-31, 3:05pm) - User can change grid size of folders and notes.

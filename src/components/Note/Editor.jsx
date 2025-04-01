@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -32,6 +33,7 @@ const Editor = ({ navigation, route }) => {
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
   const [words, setWords] = useState(getWordCount(markdown));
+  const configs = useSelector((state) => state.configs.data);
 
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
@@ -40,10 +42,30 @@ const Editor = ({ navigation, route }) => {
     });
 
   const calculateHeaderLength = () => {
-    if (screenWidth < 380 && note.title.length > 11) {
+    if (
+      screenWidth < 380 &&
+      note.title.length > 10 &&
+      !configs?.hideWordCount
+    ) {
+      return note.title.substring(0, 8) + '...';
+    } else if (
+      screenWidth < 380 &&
+      note.title.length > 12 &&
+      configs?.hideWordCount
+    ) {
       return note.title.substring(0, 10) + '...';
-    } else if (screenWidth < 440 && note.title.length > 13) {
-      return note.title.substring(0, 11) + '...';
+    } else if (
+      screenWidth < 440 &&
+      note.title.length > 12 &&
+      !configs?.hideWordCount
+    ) {
+      return note.title.substring(0, 9) + '...';
+    } else if (
+      screenWidth < 440 &&
+      note.title.length > 14 &&
+      configs?.hideWordCount
+    ) {
+      return note.title.substring(0, 12) + '...';
     } else {
       return note.title;
     }
@@ -55,7 +77,9 @@ const Editor = ({ navigation, route }) => {
       headerRight: () => {
         return (
           <>
-            <Text style={styles.words}>{words} words</Text>
+            {!configs?.hideWordCount ? (
+              <Text style={styles.words}>{words} words</Text>
+            ) : null}
             <View style={styles.headerBtns}>
               <Pressable
                 onPress={undo}

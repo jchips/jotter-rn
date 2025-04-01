@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import COLORS from './colors';
 import { moderateScale } from '../util/scaling';
+import COLORS from './colors';
 import { BORDER, FONT, FONTSIZE } from './constants';
 
 const app = StyleSheet.create({

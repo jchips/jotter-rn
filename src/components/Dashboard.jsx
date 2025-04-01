@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Pressable, Image, Dimensions } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
+import { fetchConfigs } from '../reducers/configReducer';
+import { useMarkdown } from '../contexts/MDContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useFolder } from '../hooks/useFolder';
-import { useMarkdown } from '../contexts/MDContext';
 import Loading from './Loading';
 import DisplayFolders from './Display/DisplayFolders';
 import DisplayNotes from './Display/DisplayNotes';
@@ -13,7 +14,6 @@ import Sort from './Modals/Sort';
 import Grid from './Modals/Grid';
 import AddTitle from './Modals/AddTitle';
 import api from '../util/api';
-import { fetchConfigs } from '../reducers/configReducer';
 import { app, buttons, COLORS } from '../styles';
 
 const Dashboard = ({ route }) => {
@@ -33,11 +33,6 @@ const Dashboard = ({ route }) => {
   const dispatch = useDispatch();
   const { folder } = useFolder(folderId);
   const screenWidth = Dimensions.get('window').width;
-
-  // Set up bearer auth for user
-  useEffect(() => {
-    api.setTokenGetter(() => token);
-  }, [token]);
 
   useEffect(() => {
     dispatch(fetchConfigs(token));
