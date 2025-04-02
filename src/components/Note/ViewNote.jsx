@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -11,6 +11,7 @@ import { useMarkdown } from '../../contexts/MDContext';
 import EditButton from '../Buttons/EditButton';
 import Preview from './Preview';
 import { app, COLORS } from '../../styles';
+const screenWidth = Dimensions.get('window').width;
 
 const ViewNote = ({ navigation, route }) => {
   const { note } = route.params;
@@ -22,9 +23,19 @@ const ViewNote = ({ navigation, route }) => {
       runOnJS(setEditBtnVisible)(true);
     });
 
+  const calculateHeaderLength = () => {
+    if (screenWidth < 380 && note.title.length > 24) {
+      return note.title.substring(0, 22) + '...';
+    } else if (screenWidth < 440 && note.title.length > 26) {
+      return note.title.substring(0, 24) + '...';
+    } else {
+      return note.title;
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: note.title,
+      headerTitle: calculateHeaderLength(),
       headerTint: COLORS.themePurpleText,
     });
   }, [navigation]);

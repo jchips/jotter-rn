@@ -3,11 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Buffer } from 'buffer';
 import { API_URL } from '@env';
 import { setConfigs } from '../reducers/configReducer';
-import {
-  setLocalConfigs,
-  storeCurrUser,
-  removeCurrUser,
-} from '../util/persist';
+import { storeCurrUser, removeCurrUser } from '../util/persist';
 import axios from 'axios';
 import api from '../util/api';
 
@@ -55,7 +51,6 @@ export function AuthProvider({ children }) {
       api.setTokenGetter(() => res.data.token);
       let uConfigs = await api.getConfigs();
       dispatch(setConfigs(uConfigs.data));
-      setLocalConfigs(uConfigs.data);
     } catch (err) {
       console.error(err);
       res = err;

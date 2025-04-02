@@ -5,7 +5,6 @@ import SelectDropdown from 'react-native-select-dropdown';
 import DropdownBtn from '../Buttons/DropdownBtn';
 import api from '../../util/api';
 import { setConfigs } from '../../reducers/configReducer';
-import { setLocalConfigs } from '../../util/persist';
 import { app, buttons, COLORS, MODAL } from '../../styles';
 
 let gridOptions = [
@@ -20,8 +19,7 @@ const Grid = (props) => {
   const dispatch = useDispatch();
 
   /**
-   * Updates the user's new grid option in the db, global state,
-   * and local storage
+   * Updates the user's new grid option in the db and global state
    * @param {String} gridOption - The selected grid option
    */
   const setUConfigs = (gridOption) => {
@@ -30,7 +28,6 @@ const Grid = (props) => {
       try {
         let res = await api.updateConfigs(configObj);
         dispatch(setConfigs({ ...res.data, ...configObj }));
-        setLocalConfigs({ ...res.data, ...configObj });
       } catch (err) {
         console.error('Failed to update grid -', err);
       }
