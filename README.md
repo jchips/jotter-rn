@@ -34,7 +34,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
-- **1.2.1** (2025-04-01, 4:55am) - Added Settings options to hide word count and editor preview, improved device scaling.
+- **1.2.1** (2025-04-01, 6:40pm) - Added Settings options to hide word count and editor preview, improved animations, improved device scaling.
 - **1.2.0** (2025-03-01, 1:15pm) - Persist user while logged in when app is closed.
 - **1.1.9** (2025-02-27, 10:17pm) - Improved device scaling.
 - **1.1.8** (2025-01-31, 3:05pm) - User can change grid size of folders and notes.

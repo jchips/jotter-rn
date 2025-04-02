@@ -46,7 +46,11 @@ const Router = () => {
   return (
     !loading && (
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            animation: 'scale_from_center',
+          }}
+        >
           {isLoggedIn ? (
             <>
               <Stack.Screen
@@ -54,6 +58,7 @@ const Router = () => {
                 component={DrawerNav}
                 options={{
                   headerShown: false,
+                  animation: 'none',
                 }}
               />
               <Stack.Screen
