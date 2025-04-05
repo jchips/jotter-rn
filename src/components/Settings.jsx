@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Switch } from 'react-native';
+import { StyleSheet, Text, View, Switch, Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchConfigs, setConfigs } from '../reducers/configReducer';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../util/api';
-import { app, COLORS } from '../styles';
+import { moderateScale } from '../util/scaling';
+import { app, COLORS, FONTSIZE, FONT } from '../styles';
 
 const Settings = ({ navigation }) => {
   const { data: configs } = useSelector((state) => state.configs);
@@ -50,27 +51,40 @@ const Settings = ({ navigation }) => {
 
   return (
     <View style={app.container}>
-      <View style={styles.settingsCard}>
-        <Text>Hide word count</Text>
-        <Switch
-          trackColor={{ false: '#767577', true: COLORS.themePurple }}
-          thumbColor={hideWordCount ? COLORS.themePurpleText : '#f4f3f4'}
-          ios_backgroundColor='#3e3e3e'
-          onValueChange={() => updateSettings('toggleWordCount')}
-          value={hideWordCount}
-        />
+      <View style={{ flex: 1 }}>
+        <View style={styles.settingsCard}>
+          <Text>Hide word count</Text>
+          <Switch
+            trackColor={{ false: '#767577', true: COLORS.themePurple }}
+            thumbColor={hideWordCount ? COLORS.themePurpleText : '#f4f3f4'}
+            ios_backgroundColor='#3e3e3e'
+            onValueChange={() => updateSettings('toggleWordCount')}
+            value={hideWordCount}
+          />
+        </View>
+        <View style={styles.settingsCard}>
+          <Text>Hide editor preview by default</Text>
+          <Switch
+            trackColor={{ false: '#767577', true: COLORS.themePurple }}
+            thumbColor={hidePreview ? COLORS.themePurpleText : '#f4f3f4'}
+            ios_backgroundColor='#3e3e3e'
+            onValueChange={() => updateSettings('togglePreview')}
+            value={hidePreview}
+          />
+        </View>
       </View>
-      <View style={styles.settingsCard}>
-        <Text>Hide editor preview by default</Text>
-        <Switch
-          trackColor={{ false: '#767577', true: COLORS.themePurple }}
-          thumbColor={hidePreview ? COLORS.themePurpleText : '#f4f3f4'}
-          ios_backgroundColor='#3e3e3e'
-          onValueChange={() => updateSettings('togglePreview')}
-          value={hidePreview}
-        />
+      <View style={styles.credits}>
+        <Text style={styles.creditsText}>{'\u00A9'} jrotech</Text>
+        <Text style={styles.creditsWrapper}>
+          <Text style={[styles.creditsTextSmall]}>Icons by </Text>
+          <Text
+            style={[styles.creditsTextSmall, styles.link]}
+            onPress={() => Linking.openURL('https://icons8.com')}
+          >
+            icons8
+          </Text>
+        </Text>
       </View>
-      <View></View>
     </View>
   );
 };
@@ -83,6 +97,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  creditsWrapper: {
+    flexDirection: 'row',
+  },
+  credits: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  creditsText: {
+    fontSize: moderateScale(FONTSIZE.xsmall),
+    fontFamily: FONT.semiBold,
+    marginVertical: 5,
+  },
+  creditsTextSmall: {
+    fontSize: moderateScale(FONTSIZE.xsmall),
+    fontFamily: FONT.semiBold,
+  },
+  link: {
+    color: COLORS.themePurpleText,
+    fontFamily: FONT.semiBold,
   },
 });
 

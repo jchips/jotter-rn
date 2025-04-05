@@ -5,7 +5,7 @@ import NoteCard from './NoteCard';
 import Move from '../Modals/Move';
 import Rename from '../Modals/Rename';
 import Delete from '../Modals/Delete';
-import NoteDetails from '../Note/NoteDetails';
+import NoteDetails from '../Modals/NoteDetails';
 import { app } from '../../styles';
 
 const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {

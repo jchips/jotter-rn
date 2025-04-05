@@ -109,14 +109,14 @@ export function useFolder(folderId = null, folder = null) {
       try {
         let childNotes = await api.getNotes(folderId);
         dispatch({
-          type: ACTIONS.SET_CHILD_FILES,
+          type: ACTIONS.SET_CHILD_NOTES,
           payload: { childNotes },
         });
       } catch (err) {
         console.error(err);
       }
-      getChildNotes();
     }
+    getChildNotes();
   }, [folderId]);
   return state;
 }

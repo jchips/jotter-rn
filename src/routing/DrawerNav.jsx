@@ -80,7 +80,7 @@ function DrawerNav({ navigation }) {
             );
           })}
           {currentFolder ? (
-            <Text style={styles.foldersTitle}>Folders</Text>
+            <Text style={styles.foldersTitle}>Open folders</Text>
           ) : null}
 
           {/* Breadcrumbs */}

@@ -5,13 +5,15 @@ import Delete from '../Modals/Delete';
 import FolderCard from './FolderCard';
 import Move from '../Modals/Move';
 import Rename from '../Modals/Rename';
+import NoteDetails from '../Modals/NoteDetails';
 import { app } from '../../styles';
 
 const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
   const [openMove, setOpenMove] = useState(false);
   const [openRename, setOpenRename] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState(null);
   const navigation = useNavigation();
   const numColumns = Number(gridSize) || 1;
 
@@ -37,6 +39,7 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
           setOpenRename={setOpenRename}
           setOpenDelete={setOpenDelete}
           setOpenMove={setOpenMove}
+          setOpenDetails={setOpenDetails}
           numColumns={numColumns}
         />
       </Pressable>
@@ -75,6 +78,11 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         folder={selectedFolder}
         allFolders={folders}
         setFolders={setFolders}
+      />
+      <NoteDetails
+        folder={selectedFolder}
+        openDetails={openDetails}
+        setOpenDetails={setOpenDetails}
       />
       <Delete
         openDelete={openDelete}

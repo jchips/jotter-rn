@@ -28,6 +28,7 @@ const FolderCard = (props) => {
     setOpenRename,
     setOpenDelete,
     setOpenMove,
+    setOpenDetails,
     numColumns,
   } = props;
   const popoverRef = useRef();
@@ -81,6 +82,23 @@ const FolderCard = (props) => {
               style={app.icon2}
             />
             <Text style={buttons.btnText2}>Rename folder</Text>
+          </Pressable>
+          <Pressable
+            style={POPOVER.button}
+            onPress={() => {
+              setSelectedFolder(folder);
+              setOpenDetails(true);
+              popoverRef.current.requestClose();
+            }}
+          >
+            <Image
+              source={{
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/info--v1.png`,
+              }}
+              alt='details-icon'
+              style={app.icon2}
+            />
+            <Text style={buttons.btnText2}>View details</Text>
           </Pressable>
           <Pressable
             style={POPOVER.button}
