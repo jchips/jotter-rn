@@ -14,7 +14,7 @@ import { moderateScale } from '../../util/scaling';
 import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
 const NoteDetails = ({ openDetails, setOpenDetails, note, folder }) => {
-  const { childNotes } = useFolder(folder?.id);
+  const { childNotes, childFolders } = useFolder(folder?.id);
 
   return (
     <Modal
@@ -40,6 +40,19 @@ const NoteDetails = ({ openDetails, setOpenDetails, note, folder }) => {
               <Text style={app.boldText}>Last edited:</Text>{' '}
               {formatDate(note?.updatedAt || folder?.updatedAt)}
             </Text>
+            {folder ? (
+              <Text style={styles.modalText}>
+                <Text style={app.boldText}>Folder count:</Text>{' '}
+                {childFolders?.data ? (
+                  childFolders?.data?.length
+                ) : (
+                  <ActivityIndicator
+                    size={moderateScale(15)}
+                    color={COLORS.themePurple}
+                  />
+                )}
+              </Text>
+            ) : null}
             <Text style={styles.modalText}>
               {note ? (
                 <>
