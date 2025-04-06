@@ -8,7 +8,7 @@ import Rename from '../Modals/Rename';
 import NoteDetails from '../Modals/NoteDetails';
 import { app } from '../../styles';
 
-const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
+const DisplayFolders = ({ folders, setFolders, error, gridSize, refresh }) => {
   const [openMove, setOpenMove] = useState(false);
   const [openRename, setOpenRename] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -90,6 +90,7 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         folders={folders}
         setFolders={setFolders}
         folder={selectedFolder}
+        refresh={refresh}
         navigation={navigation}
       />
     </View>

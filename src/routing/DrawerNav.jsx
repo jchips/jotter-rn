@@ -17,13 +17,14 @@ function DrawerNav({ navigation }) {
   const [currentFolder, setCurrentFolder] = useState(null);
   const { user, logout } = useAuth();
   const route = useRoute();
-  const { folder } = useFolder(route?.params?.params?.folderId);
+  const { state } = useFolder(route?.params?.params?.folderId);
+  // const { folder } = useFolder(route?.params?.params?.folderId).state;
 
   useEffect(() => {
-    if (folder?.data) {
-      setCurrentFolder(folder.data);
+    if (state.folder) {
+      setCurrentFolder(state.folder);
     }
-  }, [folder]);
+  }, [state.folder]);
 
   useFocusEffect(
     useCallback(() => {

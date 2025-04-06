@@ -19,7 +19,7 @@ const Move = (props) => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formattedFolders, setFormattedFolders] = useState([]);
-  const { childFolders } = useFolder(folder ? folder.id : null);
+  const { childFolders } = useFolder(folder ? folder.id : null).state;
   let folders = childFolders.data;
 
   /**

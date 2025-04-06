@@ -16,6 +16,7 @@ const Delete = (props) => {
     folders,
     setFolders,
     folder,
+    refresh,
   } = props;
 
   // Deletes the note or folder (and all its contents)
@@ -25,11 +26,13 @@ const Delete = (props) => {
       setSaving(true);
       if (note) {
         await api.deleteNote(note.id);
+        await refresh();
         let notesCopy = [...notes];
         notesCopy.splice(notes.indexOf(note), 1);
         setNotes(notesCopy);
       } else {
         await api.deleteFolder(folder.id);
+        await refresh();
         let foldersCopy = [...folders];
         foldersCopy.splice(folders.indexOf(folder), 1);
         setFolders(foldersCopy);

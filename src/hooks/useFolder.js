@@ -1,7 +1,7 @@
 /**
  * Code inspiration from "How To Build A Google Drive Clone With Firebase" by Web Dev Simplified.
 */
-import { useEffect, useReducer } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import api from '../util/api';
 
 const ACTIONS = {
@@ -51,6 +51,8 @@ export function useFolder(folderId = null, folder = null) {
     childNotes: []
   });
 
+  const [loading, setLoading] = useState(true);
+
   // resets folder for breadcrumb
   useEffect(() => {
     dispatch({
@@ -71,10 +73,12 @@ export function useFolder(folderId = null, folder = null) {
     // If there's an error getting the current folder, update the root instead
     const getFolder = async () => {
       try {
+        setLoading(true);
         let folder = await api.getFolder(folderId);
+        folderData = folder.data
         dispatch({
           type: ACTIONS.UPDATE_FOLDER,
-          payload: { folder }
+          payload: { folder: folderData }
         });
       } catch (err) {
         console.error(err);
@@ -83,40 +87,48 @@ export function useFolder(folderId = null, folder = null) {
           payload: { folder: ROOT_FOLDER }
         });
       }
+      setLoading(false);
     }
     getFolder();
   }, [folderId]);
 
-  // set child folders
-  useEffect(() => {
-    const getChildFolders = async () => {
-      try {
-        let childFolders = await api.getFolders(folderId);
-        dispatch({
-          type: ACTIONS.SET_CHILD_FOLDERS,
-          payload: { childFolders },
-        });
-      } catch (err) {
-        console.error(err);
-      }
+  const getChildFolders = async () => {
+    try {
+      setLoading(true);
+      let childFolders = await api.getFolders(folderId);
+      let folders = childFolders.data;
+      dispatch({
+        type: ACTIONS.SET_CHILD_FOLDERS,
+        payload: { childFolders: folders },
+      });
+    } catch (err) {
+      console.error(err);
     }
-    getChildFolders();
-  }, [folderId]);
+    setLoading(false);
+  };
 
-  // set child notes
-  useEffect(() => {
-    const getChildNotes = async () => {
-      try {
-        let childNotes = await api.getNotes(folderId);
-        dispatch({
-          type: ACTIONS.SET_CHILD_NOTES,
-          payload: { childNotes },
-        });
-      } catch (err) {
-        console.error(err);
-      }
+  const getChildNotes = async () => {
+    try {
+      setLoading(true);
+      let childNotes = await api.getNotes(folderId);
+      let notes = childNotes.data;
+      dispatch({
+        type: ACTIONS.SET_CHILD_NOTES,
+        payload: { childNotes: notes },
+      });
+    } catch (err) {
+      console.error(err);
     }
-    getChildNotes();
-  }, [folderId]);
-  return state;
+    setLoading(false);
+  };
+
+  const refresh = async () => {
+    await Promise.all([getChildFolders(), getChildNotes()]);
+  };
+
+  useEffect(() => {
+    refresh(); // fetch both on mount/folderId change
+  }, [folderId, folder]);
+
+  return { state, refresh, loading };
 }

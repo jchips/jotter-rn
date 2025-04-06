@@ -8,7 +8,14 @@ import Delete from '../Modals/Delete';
 import NoteDetails from '../Modals/NoteDetails';
 import { app } from '../../styles';
 
-const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
+const DisplayNotes = ({
+  notes,
+  setNotes,
+  folders,
+  error,
+  gridSize,
+  refresh,
+}) => {
   const [openMove, setOpenMove] = useState(false);
   const [openRename, setOpenRename] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -96,6 +103,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
         notes={notes}
         setNotes={setNotes}
         note={selectedNote}
+        refresh={refresh}
         navigation={navigation}
       />
     </View>

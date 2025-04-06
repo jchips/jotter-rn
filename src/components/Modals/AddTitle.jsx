@@ -14,19 +14,12 @@ import api from '../../util/api';
 import { app, COLORS, MODAL, buttons } from '../../styles';
 
 const AddTitle = (props) => {
-  const {
-    openAddTitle,
-    setOpenAddTitle,
-    type,
-    notes,
-    setNotes,
-    folders,
-    setFolders,
-  } = props;
+  const { openAddTitle, setOpenAddTitle, type, refresh } = props;
   let { currentFolder } = props;
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -75,7 +68,7 @@ const AddTitle = (props) => {
             userId: user.id,
             folderId: currentFolder.id,
           });
-          setNotes([res.data, ...notes]);
+          await refresh();
           break;
         // add folder
         case 'folder':
@@ -85,7 +78,7 @@ const AddTitle = (props) => {
             parentId: currentFolder.id,
             path,
           });
-          setFolders([res.data, ...folders]);
+          await refresh();
           break;
       }
       setOpenAddTitle(false);

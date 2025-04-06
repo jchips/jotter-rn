@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Pressable, Image, Dimensions } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,15 +13,14 @@ import AddButton from './Buttons/AddButton';
 import Sort from './Modals/Sort';
 import Grid from './Modals/Grid';
 import AddTitle from './Modals/AddTitle';
-import api from '../util/api';
 import { app, buttons, COLORS } from '../styles';
 
 const Dashboard = ({ route }) => {
   const { folderId, folderTitle } = route.params;
-  const [notes, setNotes] = useState();
-  const [folders, setFolders] = useState();
+  const { state, refresh, loading } = useFolder(folderId);
+  const [notes, setNotes] = useState([]);
+  const [folders, setFolders] = useState([]);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
   const [type, setType] = useState(null);
   const [openSort, setOpenSort] = useState(false);
   const [openGrid, setOpenGrid] = useState(false);
@@ -31,7 +30,6 @@ const Dashboard = ({ route }) => {
   const navigation = useNavigation();
   const { data } = useSelector((state) => state.configs);
   const dispatch = useDispatch();
-  const { folder } = useFolder(folderId);
   const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
@@ -91,31 +89,9 @@ const Dashboard = ({ route }) => {
   );
 
   useFocusEffect(
-    React.useCallback(() => {
-      const fetchContent = async () => {
-        setLoading(true);
-        let folder_id = !folderId ? null : folderId;
-        try {
-          setError('');
-          const [foldersRes, notesRes] = await Promise.all([
-            api.getFolders(folder_id),
-            folder_id ? api.getNotes(folder_id) : api.getRootNotes(),
-          ]);
-          setFolders(foldersRes.data);
-          setNotes(notesRes.data);
-        } catch (err) {
-          console.error(err);
-          if (err.response?.data?.message === 'jwt expired') {
-            logUserOut();
-          } else {
-            setError('Could not fetch content');
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchContent();
-    }, [folderId])
+    useCallback(() => {
+      refresh();
+    }, [])
   );
 
   // logs the user out
@@ -130,20 +106,22 @@ const Dashboard = ({ route }) => {
 
   return !loading ? (
     <View style={styles.container}>
-      {folders ? (
+      {state.childFolders ? (
         <DisplayFolders
-          folders={folders}
+          folders={state.childFolders}
           setFolders={setFolders}
           gridSize={data?.gridSize}
+          refresh={refresh}
           error={error}
         />
       ) : null}
-      {notes ? (
+      {state.childNotes ? (
         <DisplayNotes
-          notes={notes}
+          notes={state.childNotes}
           setNotes={setNotes}
-          folders={folders}
+          folders={state.childFolders}
           gridSize={data?.gridSize}
+          refresh={refresh}
           error={error}
         />
       ) : null}
@@ -152,17 +130,18 @@ const Dashboard = ({ route }) => {
         openAddTitle={openAddTitle}
         setOpenAddTitle={setOpenAddTitle}
         type={type}
-        notes={notes}
+        notes={state.childNotes}
         setNotes={setNotes}
-        folders={folders}
+        folders={state.childFolders}
+        refresh={refresh}
         setFolders={setFolders}
-        currentFolder={folder}
+        currentFolder={state.folder}
       />
       <Sort
         openSort={openSort}
         setOpenSort={setOpenSort}
-        folders={folders}
-        notes={notes}
+        folders={state.childFolders}
+        notes={state.childNotes}
         setNotes={setNotes}
         setFolders={setFolders}
       />
