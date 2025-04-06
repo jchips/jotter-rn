@@ -72,9 +72,10 @@ export function useFolder(folderId = null, folder = null) {
     const getFolder = async () => {
       try {
         let folder = await api.getFolder(folderId);
+        const folderData = folder.data;
         dispatch({
           type: ACTIONS.UPDATE_FOLDER,
-          payload: { folder }
+          payload: { folder: folderData }
         });
       } catch (err) {
         console.error(err);
@@ -92,9 +93,10 @@ export function useFolder(folderId = null, folder = null) {
     const getChildFolders = async () => {
       try {
         let childFolders = await api.getFolders(folderId);
+        const folders = childFolders.data;
         dispatch({
           type: ACTIONS.SET_CHILD_FOLDERS,
-          payload: { childFolders },
+          payload: { childFolders: folders },
         });
       } catch (err) {
         console.error(err);
@@ -108,9 +110,10 @@ export function useFolder(folderId = null, folder = null) {
     const getChildNotes = async () => {
       try {
         let childNotes = await api.getNotes(folderId);
+        const notes = childNotes.data;
         dispatch({
           type: ACTIONS.SET_CHILD_NOTES,
-          payload: { childNotes },
+          payload: { childNotes: notes },
         });
       } catch (err) {
         console.error(err);
@@ -118,5 +121,6 @@ export function useFolder(folderId = null, folder = null) {
     }
     getChildNotes();
   }, [folderId]);
+
   return state;
 }

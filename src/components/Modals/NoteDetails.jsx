@@ -43,8 +43,8 @@ const NoteDetails = ({ openDetails, setOpenDetails, note, folder }) => {
             {folder ? (
               <Text style={styles.modalText}>
                 <Text style={app.boldText}>Folder count:</Text>{' '}
-                {childFolders?.data ? (
-                  childFolders?.data?.length
+                {childFolders ? (
+                  childFolders?.length
                 ) : (
                   <ActivityIndicator
                     size={moderateScale(15)}
@@ -63,8 +63,8 @@ const NoteDetails = ({ openDetails, setOpenDetails, note, folder }) => {
               {folder ? (
                 <Text>
                   <Text style={app.boldText}>Note count:</Text>{' '}
-                  {childNotes?.data ? (
-                    childNotes?.data?.length
+                  {childNotes ? (
+                    childNotes?.length
                   ) : (
                     <ActivityIndicator
                       size={moderateScale(15)}
