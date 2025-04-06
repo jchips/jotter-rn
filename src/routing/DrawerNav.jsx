@@ -20,10 +20,10 @@ function DrawerNav({ navigation }) {
   const { folder } = useFolder(route?.params?.params?.folderId);
 
   useEffect(() => {
-    if (folder?.data) {
-      setCurrentFolder(folder.data);
+    if (folder?.id) {
+      setCurrentFolder(folder);
     }
-  }, [folder]);
+  }, [folder?.id]);
 
   useFocusEffect(
     useCallback(() => {
@@ -80,7 +80,7 @@ function DrawerNav({ navigation }) {
             );
           })}
           {currentFolder ? (
-            <Text style={styles.foldersTitle}>Folders</Text>
+            <Text style={styles.foldersTitle}>Open folders</Text>
           ) : null}
 
           {/* Breadcrumbs */}

@@ -67,13 +67,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={noteView.innerBullet}>
-              {Platform.select({
-                android: '\u25E6',
-                ios: '\u25E6',
-                default: '\u25E6',
-              })}
-            </Text>
+            <Text style={noteView.innerBullet}>{'\u25E6'}</Text>
             <View>{children}</View>
           </View>
         );

@@ -90,29 +90,37 @@ const Dashboard = ({ route }) => {
     }, [navigation, route, data])
   );
 
+  /**
+   * DB fetch for all folders and notes in the current folder
+   * @param {Number} folder_id
+   */
+  const refresh = async (folder_id) => {
+    try {
+      setError('');
+      const [foldersRes, notesRes] = await Promise.all([
+        api.getFolders(folder_id),
+        folder_id ? api.getNotes(folder_id) : api.getRootNotes(),
+      ]);
+      setFolders(foldersRes.data);
+      setNotes(notesRes.data);
+    } catch (err) {
+      console.error(err);
+      if (err.response?.data?.message === 'jwt expired') {
+        logUserOut();
+      } else {
+        setError('Could not fetch content');
+      }
+    }
+  };
+
+  /** For Drawer breadcrumbs */
   useFocusEffect(
     React.useCallback(() => {
       const fetchContent = async () => {
         setLoading(true);
         let folder_id = !folderId ? null : folderId;
-        try {
-          setError('');
-          const [foldersRes, notesRes] = await Promise.all([
-            api.getFolders(folder_id),
-            folder_id ? api.getNotes(folder_id) : api.getRootNotes(),
-          ]);
-          setFolders(foldersRes.data);
-          setNotes(notesRes.data);
-        } catch (err) {
-          console.error(err);
-          if (err.response?.data?.message === 'jwt expired') {
-            logUserOut();
-          } else {
-            setError('Could not fetch content');
-          }
-        } finally {
-          setLoading(false);
-        }
+        await refresh(folder_id);
+        setLoading(false);
       };
       fetchContent();
     }, [folderId])
