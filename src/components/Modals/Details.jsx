@@ -13,7 +13,7 @@ import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
 import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
-const NoteDetails = ({ openDetails, setOpenDetails, note, folder }) => {
+const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   const { childNotes, childFolders } = useFolder(folder?.id);
 
   return (
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NoteDetails;
+export default Details;

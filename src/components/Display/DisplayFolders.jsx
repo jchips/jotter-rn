@@ -5,7 +5,7 @@ import Delete from '../Modals/Delete';
 import FolderCard from './FolderCard';
 import Move from '../Modals/Move';
 import Rename from '../Modals/Rename';
-import NoteDetails from '../Modals/NoteDetails';
+import Details from '../Modals/Details';
 import { app } from '../../styles';
 
 const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
@@ -79,7 +79,7 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         allFolders={folders}
         setFolders={setFolders}
       />
-      <NoteDetails
+      <Details
         folder={selectedFolder}
         openDetails={openDetails}
         setOpenDetails={setOpenDetails}
