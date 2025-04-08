@@ -8,7 +8,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { moderateScale } from '../../util/scaling';
-import { FONT, FONTSIZE, COLORS } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { FONT, FONTSIZE } from '../../styles';
 
 const EditNote = (props) => {
   const { isEditable, markdown, update } = props;
@@ -16,6 +17,8 @@ const EditNote = (props) => {
     start: 0,
     end: 0,
   });
+  const { COLORS } = useTheme();
+  const styles = styleSheet(COLORS);
 
   const handleSelectionChange = ({ nativeEvent: { selection } }) => {
     setSelection(selection);
@@ -49,6 +52,7 @@ const EditNote = (props) => {
             selection={selection}
             onSelectionChange={handleSelectionChange}
             placeholder='Add markdown...'
+            placeholderTextColor={COLORS.placeHolderText}
             onBlur={() =>
               setSelection({
                 start: selection,
@@ -68,25 +72,29 @@ const EditNote = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  editor: {
-    fontFamily: FONT.code,
-    fontSize: moderateScale(FONTSIZE.regular),
-    marginBottom: 5,
-    whiteSpace: 'pre-wrap',
-  },
-  placeholderText: {
-    color: COLORS.mutedtext,
-    fontFamily: FONT.code,
-    fontSize: moderateScale(FONTSIZE.small),
-  },
-  textInput: {
-    fontFamily: FONT.code,
-    fontSize: moderateScale(FONTSIZE.regular),
-    marginBottom: 5,
-    paddingBottom: 10,
-    whiteSpace: 'pre-wrap',
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (COLORS) =>
+  StyleSheet.create({
+    editor: {
+      color: COLORS.text,
+      fontFamily: FONT.code,
+      fontSize: moderateScale(FONTSIZE.regular),
+      marginBottom: 5,
+      whiteSpace: 'pre-wrap',
+    },
+    placeholderText: {
+      color: COLORS.mutedtext,
+      fontFamily: FONT.code,
+      fontSize: moderateScale(FONTSIZE.small),
+    },
+    textInput: {
+      color: COLORS.text,
+      fontFamily: FONT.code,
+      fontSize: moderateScale(FONTSIZE.regular),
+      marginBottom: 5,
+      paddingBottom: 10,
+      whiteSpace: 'pre-wrap',
+    },
+  });
 
 export default EditNote;

@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/imgs/jotter-circle2.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/imgs/jotter-circle2.png",
@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/imgs/jotter-squircle3.png",
         "backgroundColor": "#000000"
       },
+      "userInterfaceStyle": "automatic",
       "package": "com.javacow.jotter"
     },
     "web": {

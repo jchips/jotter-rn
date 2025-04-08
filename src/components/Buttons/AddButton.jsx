@@ -2,10 +2,16 @@ import { useRef } from 'react';
 import { StyleSheet, Image, Pressable, View, Text } from 'react-native';
 import Popover from 'react-native-popover-view';
 import { moderateScale } from '../../util/scaling';
-import { app, COLORS, BORDER, buttons } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { BORDER } from '../../styles';
+// import { app, COLORS, BORDER, buttons } from '../../styles';
 
 const AddButton = ({ setOpenAddTitle, setType }) => {
   const popoverRef = useRef();
+  const { COLORS } = useTheme();
+  const { app, buttons } = useAppStyles();
+  const styles = styleSheet(buttons, COLORS);
 
   return (
     <Popover
@@ -65,26 +71,29 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  popover: {
-    borderRadius: BORDER.radius,
-    minHeight: moderateScale(115),
-    width: moderateScale(160),
-  },
-  popoverContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    paddingVertical: '4%',
-  },
-  popoverButton: {
-    ...buttons.btn3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: moderateScale(48),
-    paddingHorizontal: moderateScale(10),
-    marginVertical: '2%',
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (buttons, COLORS) =>
+  StyleSheet.create({
+    popover: {
+      borderRadius: BORDER.radius,
+      minHeight: moderateScale(115),
+      width: moderateScale(160),
+      backgroundColor: COLORS.cardBg,
+    },
+    popoverContainer: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'space-evenly',
+      paddingVertical: '4%',
+    },
+    popoverButton: {
+      ...buttons.btn3,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      height: moderateScale(48),
+      paddingHorizontal: moderateScale(10),
+      marginVertical: '2%',
+    },
+  });
 
 export default AddButton;

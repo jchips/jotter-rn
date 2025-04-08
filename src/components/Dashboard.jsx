@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchConfigs } from '../reducers/configReducer';
 import { useMarkdown } from '../contexts/MDContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { useFolder } from '../hooks/useFolder';
+import { useAppStyles } from '../styles';
 import Loading from './Loading';
 import DisplayFolders from './Display/DisplayFolders';
 import DisplayNotes from './Display/DisplayNotes';
@@ -14,7 +16,7 @@ import Sort from './Modals/Sort';
 import Grid from './Modals/Grid';
 import AddTitle from './Modals/AddTitle';
 import api from '../util/api';
-import { app, buttons, COLORS } from '../styles';
+// import { app, buttons, COLORS } from '../styles';
 
 const Dashboard = ({ route }) => {
   const { folderId, folderTitle } = route.params;
@@ -26,6 +28,7 @@ const Dashboard = ({ route }) => {
   const [openSort, setOpenSort] = useState(false);
   const [openGrid, setOpenGrid] = useState(false);
   const [openAddTitle, setOpenAddTitle] = useState(false);
+  const { COLORS } = useTheme();
   const { token, logout } = useAuth();
   const { setMarkdown } = useMarkdown();
   const navigation = useNavigation();
@@ -33,6 +36,9 @@ const Dashboard = ({ route }) => {
   const dispatch = useDispatch();
   const { folder } = useFolder(folderId);
   const screenWidth = Dimensions.get('window').width;
+  const { app, buttons } = useAppStyles();
+  const styles = styleSheet(app, buttons, COLORS);
+  // app = app(COLORS);
 
   useEffect(() => {
     dispatch(fetchConfigs(token));
@@ -62,8 +68,8 @@ const Dashboard = ({ route }) => {
                   source={{
                     uri:
                       data?.gridSize === '2'
-                        ? 'https://img.icons8.com/material-outlined/100/rows.png'
-                        : 'https://img.icons8.com/material-outlined/100/grid-2.png',
+                        ? `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/rows.png`
+                        : `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/grid-2.png`,
                   }}
                   alt='grid-button'
                   style={app.icon}
@@ -77,7 +83,7 @@ const Dashboard = ({ route }) => {
               >
                 <Image
                   source={{
-                    uri: 'https://img.icons8.com/material-outlined/100/sorting-arrows.png',
+                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/sorting-arrows.png`,
                   }}
                   alt='sort-button'
                   style={app.icon}
@@ -179,17 +185,19 @@ const Dashboard = ({ route }) => {
   ) : null;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.container,
-    ...app.dashboardContainer,
-  },
-  headerButton: {
-    ...buttons.btn1,
-    backgroundColor: COLORS.themeWhite,
-    margin: 0,
-    paddingLeft: 0,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, buttons, COLORS) =>
+  StyleSheet.create({
+    container: {
+      ...app.container,
+      ...app.dashboardContainer,
+    },
+    headerButton: {
+      ...buttons.btn1,
+      backgroundColor: COLORS.background,
+      margin: 0,
+      paddingLeft: 0,
+    },
+  });
 
 export default Dashboard;

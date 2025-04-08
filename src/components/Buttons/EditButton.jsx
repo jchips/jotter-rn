@@ -1,8 +1,13 @@
 import { Image, Pressable, StyleSheet } from 'react-native';
 import FadeView from 'react-native-fadeview-wrapper';
-import { app, COLORS, buttons } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+// import { app, COLORS, buttons } from '../../styles';
 
 const EditButton = ({ navigation, note, editBtnVisible }) => {
+  const { app, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(buttons);
   return (
     <FadeView visible={editBtnVisible}>
       <Pressable
@@ -21,12 +26,14 @@ const EditButton = ({ navigation, note, editBtnVisible }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    ...buttons.roundBtn,
-    marginHorizontal: -5,
-    marginVertical: 2,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (buttons) =>
+  StyleSheet.create({
+    button: {
+      ...buttons.roundBtn,
+      marginHorizontal: -5,
+      marginVertical: 2,
+    },
+  });
 
 export default EditButton;

@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import api from '../../util/api';
-import { app, COLORS, buttons } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+// import { app, COLORS, buttons } from '../../styles';
 
 const SaveButton = ({ note, markdown, setError }) => {
   const [saving, setSaving] = useState(false);
+  const { app, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(buttons);
 
   // Saves note to db
   const saveNote = async () => {
@@ -33,12 +38,12 @@ const SaveButton = ({ note, markdown, setError }) => {
         ...styles.saveButton,
         backgroundColor: saving
           ? `${COLORS.graySubtle}`
-          : `${COLORS.themeWhite}`,
+          : `${COLORS.background}`,
       }}
     >
       <Image
         source={{
-          uri: `https://img.icons8.com/material-outlined/100/save.png`,
+          uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/save.png`,
         }}
         alt='save-button'
         style={app.icon}
@@ -47,14 +52,16 @@ const SaveButton = ({ note, markdown, setError }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  saveButton: {
-    ...buttons.outlineBtn1,
-    flex: 1,
-    height: 40,
-    marginVertical: 0,
-    marginHorizontal: 10,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (buttons) =>
+  StyleSheet.create({
+    saveButton: {
+      ...buttons.outlineBtn1,
+      flex: 1,
+      height: 40,
+      marginVertical: 0,
+      marginHorizontal: 10,
+    },
+  });
 
 export default SaveButton;

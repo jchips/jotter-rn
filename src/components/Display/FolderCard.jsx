@@ -8,16 +8,19 @@ import {
   Dimensions,
 } from 'react-native';
 import Popover from 'react-native-popover-view';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 import { moderateScale } from '../../util/scaling';
-import {
-  app,
-  COLORS,
-  FONT,
-  FONTSIZE,
-  BORDER,
-  POPOVER,
-  buttons,
-} from '../../styles';
+import { FONT, FONTSIZE, BORDER } from '../../styles';
+// import {
+//   app,
+//   // COLORS,
+//   FONT,
+//   FONTSIZE,
+//   BORDER,
+//   POPOVER,
+//   buttons,
+// } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -32,6 +35,10 @@ const FolderCard = (props) => {
     numColumns,
   } = props;
   const popoverRef = useRef();
+  const { COLORS } = useTheme();
+  const { app, buttons, POPOVER } = useAppStyles();
+  const styles = styleSheet(app, COLORS);
+  // app = app(COLORS);
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
@@ -55,7 +62,7 @@ const FolderCard = (props) => {
           <Pressable>
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/more.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/more.png`,
               }}
               alt='more-icon'
               style={app.icon2}
@@ -140,31 +147,34 @@ const FolderCard = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.itemCard,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
-  h1Container: {
-    flexShrink: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  h1: {
-    flexShrink: 1,
-    fontSize: moderateScale(FONTSIZE.regular),
-    fontFamily: FONT.bold,
-    color: COLORS.themePurpleText,
-    marginHorizontal: 10,
-  },
-  popover: {
-    borderRadius: BORDER.radius,
-    minHeight: moderateScale(140),
-    width: moderateScale(172),
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    container: {
+      ...app.itemCard,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+    },
+    h1Container: {
+      flexShrink: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    h1: {
+      flexShrink: 1,
+      fontSize: moderateScale(FONTSIZE.regular),
+      fontFamily: FONT.bold,
+      color: COLORS.themePurpleText,
+      marginHorizontal: 10,
+    },
+    popover: {
+      borderRadius: BORDER.radius,
+      minHeight: moderateScale(140),
+      width: moderateScale(172),
+      backgroundColor: COLORS.cardBg,
+    },
+  });
 
 export default FolderCard;

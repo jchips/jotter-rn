@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Switch, Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import SelectDropdown from 'react-native-select-dropdown';
 import { fetchConfigs, setConfigs } from '../reducers/configReducer';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { useAppStyles } from '../styles';
 import api from '../util/api';
 import { moderateScale } from '../util/scaling';
-import { app, COLORS, FONTSIZE, FONT } from '../styles';
+import DropdownBtn from './Buttons/DropdownBtn';
+import { FONTSIZE, FONT } from '../styles';
+// import { app, COLORS, FONTSIZE, FONT, MODAL } from '../styles';
 
 const Settings = ({ navigation }) => {
   const { data: configs } = useSelector((state) => state.configs);
   const [hideWordCount, setHideWordCount] = useState(configs?.hideWordCount);
   const [hidePreview, setHidePreview] = useState(configs?.hidePreview);
+  // const [saving, setSaving] = useState(false);
+  const { COLORS, changeTheme, theme } = useTheme();
+  const { app, MODAL } = useAppStyles();
   const { token } = useAuth();
   const dispatch = useDispatch();
+  const styles = styleSheet(app, COLORS);
 
   useEffect(() => {
     dispatch(fetchConfigs(token));
@@ -49,11 +58,66 @@ const Settings = ({ navigation }) => {
     }
   };
 
+  const themes = [{ label: 'light' }, { label: 'dark' }, { label: 'system' }];
+
+  /**
+   * Renders a theme option
+   * @param {Object} item - Theme option
+   * @param {Integer} index - The index of theme option in dropdown
+   * @param {Boolean} isSelected - Whether the theme is selected or not
+   * @returns - The theme option item
+   */
+  const renderItem = (item, index, isSelected) => {
+    return (
+      <View
+        style={{
+          ...MODAL.dropdownItemStyle,
+          ...(isSelected && { backgroundColor: COLORS.graySubtle }),
+        }}
+      >
+        <Text style={MODAL.dropdownItemTxtStyle}>{item.label}</Text>
+      </View>
+    );
+  };
+
+  // Dropdown button default text
+  const dropdownBtnText = () => {
+    return <Text>Select theme</Text>;
+  };
+
+  console.log('theme', theme); // dl
+
   return (
     <View style={app.container}>
       <View style={{ flex: 1 }}>
+        <SelectDropdown
+          data={themes}
+          onSelect={(selection, index) => {
+            changeTheme(selection.label);
+          }}
+          renderItem={renderItem}
+          renderButton={(selectedItem, isOpened) =>
+            DropdownBtn(
+              selectedItem,
+              isOpened,
+              dropdownBtnText,
+              false,
+              '100%',
+              COLORS
+            )
+          }
+          showsVerticalScrollIndicator={false}
+          dropdownStyle={MODAL.dropdownMenuStyle}
+        />
+        {/* {saving ? (
+          <ActivityIndicator
+            size='large'
+            color={COLORS.text}
+            style={{ marginBottom: 5 }}
+          />
+        ) : null} */}
         <View style={styles.settingsCard}>
-          <Text>Hide word count</Text>
+          <Text style={{ color: COLORS.text }}>Hide word count</Text>
           <Switch
             trackColor={{ false: '#767577', true: COLORS.themePurple }}
             thumbColor={hideWordCount ? COLORS.themePurpleText : '#f4f3f4'}
@@ -63,7 +127,9 @@ const Settings = ({ navigation }) => {
           />
         </View>
         <View style={styles.settingsCard}>
-          <Text>Hide editor preview by default</Text>
+          <Text style={{ color: COLORS.text }}>
+            Hide editor preview by default
+          </Text>
           <Switch
             trackColor={{ false: '#767577', true: COLORS.themePurple }}
             thumbColor={hidePreview ? COLORS.themePurpleText : '#f4f3f4'}
@@ -89,35 +155,39 @@ const Settings = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  settingsCard: {
-    ...app.itemCard,
-    flex: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
-  creditsWrapper: {
-    flexDirection: 'row',
-  },
-  credits: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  creditsText: {
-    fontSize: moderateScale(FONTSIZE.xsmall),
-    fontFamily: FONT.semiBold,
-    marginVertical: 5,
-  },
-  creditsTextSmall: {
-    fontSize: moderateScale(FONTSIZE.xsmall),
-    fontFamily: FONT.semiBold,
-  },
-  link: {
-    color: COLORS.themePurpleText,
-    fontFamily: FONT.semiBold,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    settingsCard: {
+      ...app.itemCard,
+      flex: 0,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+    },
+    creditsWrapper: {
+      flexDirection: 'row',
+    },
+    credits: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    creditsText: {
+      fontSize: moderateScale(FONTSIZE.xsmall),
+      fontFamily: FONT.semiBold,
+      marginVertical: 5,
+      color: COLORS.text,
+    },
+    creditsTextSmall: {
+      fontSize: moderateScale(FONTSIZE.xsmall),
+      fontFamily: FONT.semiBold,
+      color: COLORS.text,
+    },
+    link: {
+      color: COLORS.themePurpleText,
+      fontFamily: FONT.semiBold,
+    },
+  });
 
 export default Settings;

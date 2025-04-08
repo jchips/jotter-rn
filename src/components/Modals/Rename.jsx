@@ -8,8 +8,10 @@ import {
   Pressable,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 import api from '../../util/api';
-import { app, COLORS, MODAL, buttons } from '../../styles';
+// import { app, COLORS, MODAL, buttons } from '../../styles';
 
 const Rename = ({
   openRename,
@@ -29,6 +31,8 @@ const Rename = ({
     reset,
     formState: { errors },
   } = useForm();
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
 
   /**
    * Changes the title of a note or folder
@@ -103,6 +107,7 @@ const Rename = ({
                 required: true,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
+                // <View style={{ borderColor: COLORS.border, borderWidth: 1 }}>
                 <TextInput
                   value={value}
                   defaultValue={note ? note?.title : folder?.title}
@@ -113,6 +118,7 @@ const Rename = ({
                   autoCorrect={false}
                   onSubmitEditing={handleSubmit(onSubmit)}
                 />
+                // </View>
               )}
             />
             {errors.rename && (
@@ -138,7 +144,7 @@ const Rename = ({
               onPress={handleSubmit(onSubmit)}
               disabled={saving}
             >
-              <Text style={buttons.btnText1}>Rename</Text>
+              <Text style={buttons.btnText4}>Rename</Text>
             </Pressable>
           </View>
         </View>

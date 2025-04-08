@@ -7,7 +7,9 @@ import sortMethods from '../../util/sortMethods';
 import api from '../../util/api';
 import sortBy from '../../util/sortBy';
 import { setConfigs } from '../../reducers/configReducer';
-import { app, buttons, COLORS, MODAL } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+// import { app, buttons, COLORS, MODAL } from '../../styles';
 
 let sortOptions = [
   { label: 'Last created', value: '1' },
@@ -22,6 +24,9 @@ const Sort = (props) => {
   const { openSort, setOpenSort, notes, folders, setNotes, setFolders } = props;
   const configs = useSelector((state) => state.configs.data);
   const [sort, setSort] = useState(configs?.sort);
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(COLORS, MODAL);
   const dispatch = useDispatch();
   const sortMethod = sortMethods;
 
@@ -102,7 +107,14 @@ const Sort = (props) => {
               setOpenSort(false);
             }}
             renderButton={(selectedItem, isOpened) =>
-              DropdownBtn(selectedItem, isOpened, dropdownBtnText)
+              DropdownBtn(
+                selectedItem,
+                isOpened,
+                dropdownBtnText,
+                false,
+                '95%',
+                COLORS
+              )
             }
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
@@ -122,11 +134,13 @@ const Sort = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  dropdownItemTxtStyle: {
-    ...MODAL.dropdownItemTxtStyle,
-    color: COLORS.themePurpleText,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (COLORS, MODAL) =>
+  StyleSheet.create({
+    dropdownItemTxtStyle: {
+      ...MODAL.dropdownItemTxtStyle,
+      color: COLORS.themePurpleText,
+    },
+  });
 
 export default Sort;

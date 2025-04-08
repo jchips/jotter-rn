@@ -11,7 +11,10 @@ import SelectDropdown from 'react-native-select-dropdown';
 import api from '../../util/api';
 import DropdownBtn from '../Buttons/DropdownBtn';
 import { useFolder } from '../../hooks/useFolder';
-import { app, buttons, COLORS, FONT, FONTSIZE, MODAL } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { FONT, FONTSIZE } from '../../styles';
+// import { app, buttons, COLORS, FONT, FONTSIZE, MODAL } from '../../styles';
 
 const Move = (props) => {
   const { navigation, openMove, setOpenMove, type, note, folder } = props;
@@ -19,6 +22,8 @@ const Move = (props) => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formattedFolders, setFormattedFolders] = useState([]);
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
   const { childFolders } = useFolder(folder ? folder.id : null);
   let folders = childFolders.data;
 
@@ -59,6 +64,7 @@ const Move = (props) => {
 
   let folderOpts;
 
+  // If user is already in root folder, do not add it as an option
   if (type === 'note') {
     folderOpts =
       !note?.folderId || note?.folderId === 'null'
@@ -298,7 +304,14 @@ const Move = (props) => {
                   move(selection);
                 }}
                 renderButton={(selectedItem, isOpened) =>
-                  DropdownBtn(selectedItem, isOpened, dropdownBtnText, saving)
+                  DropdownBtn(
+                    selectedItem,
+                    isOpened,
+                    dropdownBtnText,
+                    saving,
+                    '95%',
+                    COLORS
+                  )
                 }
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
@@ -308,7 +321,7 @@ const Move = (props) => {
             {saving ? (
               <ActivityIndicator
                 size='large'
-                color={COLORS.black}
+                color={COLORS.text}
                 style={{ marginBottom: 5 }}
               />
             ) : null}

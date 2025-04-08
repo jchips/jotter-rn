@@ -1,31 +1,34 @@
 import { StyleSheet } from 'react-native';
 import { moderateScale } from '../util/scaling';
-import COLORS from './colors';
 import { BORDER, FONT, FONTSIZE } from './constants';
 
-const app = StyleSheet.create({
+const app = (COLORS) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: COLORS.themeWhite,
+    backgroundColor: COLORS.background,
   },
   dashboardContainer: {
     padding: 10,
     paddingHorizontal: 20,
+    backgroundColor: COLORS.background,
   },
   itemCard: {
     flex: 1,
     padding: moderateScale(15),
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: BORDER.color, // change based on theme
+    borderColor: COLORS.border, // change based on theme
+    // borderColor: BORDER.color, // change based on theme
     borderRadius: BORDER.radius,
+    backgroundColor: COLORS.cardBg,
     marginVertical: 5,
   },
   input: {
     width: '100%',
     height: moderateScale(38),
     padding: 5,
+    color: COLORS.text,
   },
   icon: {
     height: moderateScale(22),
@@ -48,6 +51,7 @@ const app = StyleSheet.create({
     fontSize: moderateScale(FONTSIZE.large),
     margin: 10,
     fontFamily: FONT.bold,
+    color: COLORS.text
   },
   errorAlert: {
     backgroundColor: 'rgb(248, 215, 218)',
@@ -62,7 +66,8 @@ const app = StyleSheet.create({
   controllerContainer: {
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: BORDER.color,
+    borderColor: COLORS.border,
+    // borderColor: BORDER.color,
     borderRadius: BORDER.radius,
     padding: 5,
   },

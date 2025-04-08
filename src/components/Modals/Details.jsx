@@ -7,14 +7,23 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import { useTheme } from '../../contexts/ThemeContext';
 import { useFolder } from '../../hooks/useFolder';
+import { useAppStyles } from '../../styles';
 import getWordCount from '../../util/getWordCount';
 import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
-import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
+import { FONT, FONTSIZE } from '../../styles';
+// import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
 const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   const { childNotes, childFolders } = useFolder(folder?.id);
+  const { COLORS } = useTheme();
+  const { app, MODAL, buttons } = useAppStyles();
+  // app = app(COLORS);
+  // MODAL = MODAL(COLORS);
+  // buttons = buttons(COLORS);
+  const styles = styleSheet(COLORS, MODAL);
 
   return (
     <Modal
@@ -89,25 +98,27 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    width: '90%',
-    marginTop: 20,
-  },
-  modal: {
-    ...MODAL.modal,
-    width: '85%',
-  },
-  modalBody: {
-    textAlign: 'left',
-    width: '85%',
-  },
-  modalText: {
-    fontFamily: FONT.regular,
-    fontSize: moderateScale(FONTSIZE.regular),
-    color: COLORS.themePurpleText,
-    lineHeight: moderateScale(25),
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (COLORS, MODAL) =>
+  StyleSheet.create({
+    button: {
+      width: '90%',
+      marginTop: 20,
+    },
+    modal: {
+      ...MODAL.modal,
+      width: '85%',
+    },
+    modalBody: {
+      textAlign: 'left',
+      width: '85%',
+    },
+    modalText: {
+      fontFamily: FONT.regular,
+      fontSize: moderateScale(FONTSIZE.regular),
+      color: COLORS.themePurpleText,
+      lineHeight: moderateScale(25),
+    },
+  });
 
 export default Details;
