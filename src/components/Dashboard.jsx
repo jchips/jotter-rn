@@ -16,7 +16,6 @@ import Sort from './Modals/Sort';
 import Grid from './Modals/Grid';
 import AddTitle from './Modals/AddTitle';
 import api from '../util/api';
-// import { app, buttons, COLORS } from '../styles';
 
 const Dashboard = ({ route }) => {
   const { folderId, folderTitle } = route.params;

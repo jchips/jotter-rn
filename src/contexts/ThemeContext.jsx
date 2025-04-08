@@ -9,7 +9,6 @@ const THEME_KEY = 'app-theme';
 
 export const ThemeProvider = ({ children }) => {
   const systemTheme = useColorScheme();
-  console.log('systemTheme:', systemTheme); // dl
   const [theme, setTheme] = useState('system'); // default
 
   useEffect(() => {
@@ -17,7 +16,6 @@ export const ThemeProvider = ({ children }) => {
       try {
         const storedTheme = await SecureStore.getItemAsync(THEME_KEY);
         if (storedTheme) setTheme(storedTheme);
-        console.log('storedTheme', storedTheme); // dl
       } catch (err) {
         console.error('Failed to load theme', err);
       }
@@ -37,11 +35,9 @@ export const ThemeProvider = ({ children }) => {
       console.error('Failed to store theme changes', err);
     }
   };
-  let COLORS = light;
 
   const themeChoice = theme === 'system' ? systemTheme : theme;
-  COLORS = themeChoice === 'dark' ? dark : light;
-  // const COLORS = themeChoice === 'dark' ? dark : light;
+  const COLORS = themeChoice === 'dark' ? dark : light;
 
   return (
     <ThemeContext.Provider value={{ theme, changeTheme, COLORS, themeChoice }}>

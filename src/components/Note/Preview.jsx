@@ -13,10 +13,9 @@ import { useAppStyles } from '../../styles';
 import { noteView } from '../../styles';
 
 const Preview = ({ markdown }) => {
-  const { COLORS, theme } = useTheme();
+  const { COLORS } = useTheme();
   const { MARKDOWN } = useAppStyles();
   const styles = styleSheet(COLORS);
-  console.log('theme', theme); // dl
   /**
    * Flattens all the styles into one array
    * Filters out all undefined or null values
@@ -74,7 +73,6 @@ const Preview = ({ markdown }) => {
             style={[noteView.listItemContainer, style.list_item]}
           >
             <Text style={styles.innerBullet}>{'\u25E6'}</Text>
-            {/* <Text style={noteView.innerBullet}>{'\u25E6'}</Text> */}
             <View>{children}</View>
           </View>
         );

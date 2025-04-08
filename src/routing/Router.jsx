@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as NavigationBar from 'expo-navigation-bar';
+import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import DrawerNav from './DrawerNav';
@@ -19,6 +21,7 @@ const Router = () => {
   const [loading, setLoading] = useState(true);
   const { isLoggedIn, setIsLoggedIn, setToken, setUser } = useAuth();
   const { COLORS, theme } = useTheme();
+  const systemTheme = useColorScheme();
 
   useEffect(() => {
     const persistLogin = async () => {
@@ -46,19 +49,40 @@ const Router = () => {
     persistLogin();
   }, []);
 
-  // const MyTheme = {
-  //   ...DefaultTheme,
-  //   dark: true,
-  //   colors: {
-  //     ...DefaultTheme.colors,
-  //     background: COLORS.background,
-  //     primary: COLORS.text,
-  //   },
-  // };
+  // Makes the Android navigation background color follow the device theme (dark or light)
+  useEffect(() => {
+    try {
+      const navigationBg = async () => {
+        if (theme === 'system') {
+          if (systemTheme === 'light') {
+            await NavigationBar.setBackgroundColorAsync(COLORS.white);
+          } else {
+            await NavigationBar.setBackgroundColorAsync(COLORS.darkTheme);
+          }
+        } else {
+          await NavigationBar.setBackgroundColorAsync(COLORS.background);
+        }
+      };
+      Platform.OS === 'android' ? navigationBg() : null;
+    } catch (err) {
+      console.error(err);
+    }
+  }, [NavigationBar, theme, systemTheme]);
+
+  const statusBarTheme = () => {
+    if (theme === 'system') {
+      return 'auto';
+    } else if (theme === 'dark') {
+      return 'light';
+    } else {
+      return 'dark';
+    }
+  };
 
   return (
     !loading && (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+        <StatusBar style={statusBarTheme()} />
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{

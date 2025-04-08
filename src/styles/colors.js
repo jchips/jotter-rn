@@ -6,7 +6,8 @@ const COMMON_COLORS = {
   // graySubtle: '#f4f4f5',
   danger: '#dc3545',
   btn1Hover: '#000abc',
-  white: '#ffffff'
+  white: '#ffffff',
+  darkTheme: '#18181b',
   // disabled: '#000abc'
 }
 

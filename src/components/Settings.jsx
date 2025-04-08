@@ -10,13 +10,11 @@ import api from '../util/api';
 import { moderateScale } from '../util/scaling';
 import DropdownBtn from './Buttons/DropdownBtn';
 import { FONTSIZE, FONT } from '../styles';
-// import { app, COLORS, FONTSIZE, FONT, MODAL } from '../styles';
 
 const Settings = ({ navigation }) => {
   const { data: configs } = useSelector((state) => state.configs);
   const [hideWordCount, setHideWordCount] = useState(configs?.hideWordCount);
   const [hidePreview, setHidePreview] = useState(configs?.hidePreview);
-  // const [saving, setSaving] = useState(false);
   const { COLORS, changeTheme, theme } = useTheme();
   const { app, MODAL } = useAppStyles();
   const { token } = useAuth();
@@ -85,8 +83,6 @@ const Settings = ({ navigation }) => {
     return <Text>Select theme</Text>;
   };
 
-  console.log('theme', theme); // dl
-
   return (
     <View style={app.container}>
       <View style={{ flex: 1 }}>
@@ -95,6 +91,7 @@ const Settings = ({ navigation }) => {
           onSelect={(selection, index) => {
             changeTheme(selection.label);
           }}
+          defaultValue={{ label: theme }}
           renderItem={renderItem}
           renderButton={(selectedItem, isOpened) =>
             DropdownBtn(
@@ -109,13 +106,6 @@ const Settings = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           dropdownStyle={MODAL.dropdownMenuStyle}
         />
-        {/* {saving ? (
-          <ActivityIndicator
-            size='large'
-            color={COLORS.text}
-            style={{ marginBottom: 5 }}
-          />
-        ) : null} */}
         <View style={styles.settingsCard}>
           <Text style={{ color: COLORS.text }}>Hide word count</Text>
           <Switch
