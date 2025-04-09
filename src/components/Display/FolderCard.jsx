@@ -8,16 +8,19 @@ import {
   Dimensions,
 } from 'react-native';
 import Popover from 'react-native-popover-view';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 import { moderateScale } from '../../util/scaling';
-import {
-  app,
-  COLORS,
-  FONT,
-  FONTSIZE,
-  BORDER,
-  POPOVER,
-  buttons,
-} from '../../styles';
+import { FONT, FONTSIZE, BORDER } from '../../styles';
+// import {
+//   app,
+//   // COLORS,
+//   FONT,
+//   FONTSIZE,
+//   BORDER,
+//   POPOVER,
+//   buttons,
+// } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -32,6 +35,10 @@ const FolderCard = (props) => {
     numColumns,
   } = props;
   const popoverRef = useRef();
+  const { COLORS } = useTheme();
+  const { app, buttons, POPOVER } = useAppStyles();
+  const styles = styleSheet(app, COLORS);
+  // app = app(COLORS);
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
@@ -42,7 +49,7 @@ const FolderCard = (props) => {
       <View style={styles.h1Container}>
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/folder-invoices--v1.png`,
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
           }}
           alt='folder-icon'
           style={app.icon2}
@@ -55,7 +62,7 @@ const FolderCard = (props) => {
           <Pressable>
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/more.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/more.png`,
               }}
               alt='more-icon'
               style={app.icon2}
@@ -76,7 +83,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/rename.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/rename.png`,
               }}
               alt='rename-icon'
               style={app.icon2}
@@ -93,7 +100,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/info--v1.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/info--v1.png`,
               }}
               alt='details-icon'
               style={app.icon2}
@@ -110,7 +117,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/reorder.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/reorder.png`,
               }}
               alt='move-icon'
               style={app.icon2}
@@ -127,7 +134,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/trash--v1.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/trash--v1.png`,
               }}
               alt='delete-icon'
               style={app.icon2}
@@ -140,31 +147,34 @@ const FolderCard = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.itemCard,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
-  h1Container: {
-    flexShrink: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  h1: {
-    flexShrink: 1,
-    fontSize: moderateScale(FONTSIZE.regular),
-    fontFamily: FONT.bold,
-    color: COLORS.themePurpleText,
-    marginHorizontal: 10,
-  },
-  popover: {
-    borderRadius: BORDER.radius,
-    minHeight: moderateScale(140),
-    width: moderateScale(172),
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    container: {
+      ...app.itemCard,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+    },
+    h1Container: {
+      flexShrink: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    h1: {
+      flexShrink: 1,
+      fontSize: moderateScale(FONTSIZE.regular),
+      fontFamily: FONT.bold,
+      color: COLORS.themePurpleText,
+      marginHorizontal: 10,
+    },
+    popover: {
+      borderRadius: BORDER.radius,
+      minHeight: moderateScale(140),
+      width: moderateScale(172),
+      backgroundColor: COLORS.cardBg,
+    },
+  });
 
 export default FolderCard;

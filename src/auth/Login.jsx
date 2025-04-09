@@ -1,9 +1,12 @@
 import { StyleSheet, SafeAreaView, Text, Pressable } from 'react-native';
 import LoginForm from './LoginForm';
 import JotterText from '../components/JotterText';
-import { app, FONT, FONTSIZE, buttons } from '../styles';
+import { useAppStyles } from '../styles';
+import { FONT, FONTSIZE } from '../styles';
 
 const Login = ({ navigation }) => {
+  const { app, buttons, COLORS } = useAppStyles();
+  const styles = styleSheet(app, COLORS);
   return (
     <SafeAreaView style={styles.container}>
       <JotterText />
@@ -14,6 +17,7 @@ const Login = ({ navigation }) => {
           fontFamily: FONT.bold,
           fontSize: FONTSIZE.regular,
           marginBottom: 10,
+          color: COLORS.text,
         }}
       >
         or
@@ -33,17 +37,19 @@ const Login = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.container,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-  },
-  formHeader: {
-    fontSize: FONTSIZE.large,
-    fontFamily: FONT.bold,
-  },
-});
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    container: {
+      ...app.container,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+    },
+    formHeader: {
+      fontSize: FONTSIZE.large,
+      fontFamily: FONT.bold,
+      color: COLORS.text,
+    },
+  });
 
 export default Login;

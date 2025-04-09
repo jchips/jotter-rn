@@ -1,13 +1,17 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { moderateScale } from '../../util/scaling';
-import { app, COLORS, FONT, FONTSIZE, BORDER } from '../../styles';
+import { useAppStyles } from '../../styles';
+import { FONT, FONTSIZE, BORDER } from '../../styles';
 
-const DropdownBtn = (selectedItem, isOpened, text, saving) => {
+const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
+  const { app } = useAppStyles();
+  const styles = styleSheet(COLORS);
   return (
     <View
       style={{
+        width: width,
         ...styles.dropdownButtonStyle,
-        backgroundColor: saving ? COLORS.graySubtle : COLORS.themeWhite,
+        backgroundColor: saving ? COLORS.graySubtle : COLORS.cardBg,
       }}
     >
       <Text style={styles.dropdownButtonTxtStyle}>
@@ -16,7 +20,7 @@ const DropdownBtn = (selectedItem, isOpened, text, saving) => {
       {!isOpened ? (
         <Image
           source={{
-            uri: 'https://img.icons8.com/material-outlined/100/expand-arrow--v1.png',
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/expand-arrow--v1.png`,
           }}
           alt='dropdown arrow'
           style={app.icon}
@@ -24,7 +28,7 @@ const DropdownBtn = (selectedItem, isOpened, text, saving) => {
       ) : (
         <Image
           source={{
-            uri: 'https://img.icons8.com/material-outlined/100/collapse-arrow.png',
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/collapse-arrow.png`,
           }}
           alt='dropdown arrow'
           style={app.icon}
@@ -34,24 +38,25 @@ const DropdownBtn = (selectedItem, isOpened, text, saving) => {
   );
 };
 
-const styles = StyleSheet.create({
-  dropdownButtonStyle: {
-    width: '95%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: BORDER.color,
-    borderRadius: BORDER.radius,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 12,
-    paddingHorizontal: 12,
-  },
-  dropdownButtonTxtStyle: {
-    flex: 1,
-    fontFamily: FONT.regular,
-    fontSize: moderateScale(FONTSIZE.mid),
-  },
-});
+const styleSheet = (COLORS) =>
+  StyleSheet.create({
+    dropdownButtonStyle: {
+      height: 50,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      borderRadius: BORDER.radius,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 12,
+      paddingHorizontal: 12,
+    },
+    dropdownButtonTxtStyle: {
+      flex: 1,
+      fontFamily: FONT.regular,
+      fontSize: moderateScale(FONTSIZE.mid),
+      color: COLORS.text,
+    },
+  });
 
 export default DropdownBtn;

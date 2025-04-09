@@ -8,15 +8,19 @@ import {
 import { runOnJS } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMarkdown } from '../../contexts/MDContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 import EditButton from '../Buttons/EditButton';
 import Preview from './Preview';
-import { app, COLORS } from '../../styles';
 const screenWidth = Dimensions.get('window').width;
 
 const ViewNote = ({ navigation, route }) => {
   const { note } = route.params;
   const [editBtnVisible, setEditBtnVisible] = useState(true);
   const { markdown, setMarkdown } = useMarkdown();
+  const { app } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(app);
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
     .onEnd(() => {
@@ -69,16 +73,17 @@ const ViewNote = ({ navigation, route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.container,
-    paddingVertical: 10,
-  },
-  editBtn: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-  },
-});
+const styleSheet = (app) =>
+  StyleSheet.create({
+    container: {
+      ...app.container,
+      paddingVertical: 10,
+    },
+    editBtn: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+    },
+  });
 
 export default ViewNote;

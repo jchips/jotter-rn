@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 import { ROOT_FOLDER } from '../../hooks/useFolder';
 import api from '../../util/api';
-import { app, COLORS, MODAL, buttons } from '../../styles';
 
 const AddTitle = (props) => {
   const {
@@ -27,6 +28,8 @@ const AddTitle = (props) => {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
   const {
     control,
     handleSubmit,
@@ -129,6 +132,7 @@ const AddTitle = (props) => {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   placeholder={`Give ${type} a title`}
+                  placeholderTextColor={COLORS.placeHolderText}
                   style={app.input}
                   autoCapitalize='none'
                   autoCorrect={false}
@@ -151,12 +155,12 @@ const AddTitle = (props) => {
               style={{
                 ...buttons.btn1,
                 ...MODAL.button,
-                backgroundColor: saving ? COLORS.btn1Hover : COLORS.themePurple,
+                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
               }}
               onPress={handleSubmit(onSubmit)}
               disabled={saving}
             >
-              <Text style={buttons.btnText1}>Create {type}</Text>
+              <Text style={buttons.btnText4}>Create {type}</Text>
             </Pressable>
           </View>
         </View>

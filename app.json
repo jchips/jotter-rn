@@ -5,13 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/imgs/jotter-circle2.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/imgs/jotter-circle2.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -20,12 +15,25 @@
         "foregroundImage": "./assets/imgs/jotter-squircle3.png",
         "backgroundColor": "#000000"
       },
+      "userInterfaceStyle": "automatic",
       "package": "com.javacow.jotter"
     },
     "web": {
       "favicon": "./assets/imgs/jotter-circle2.png"
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/imgs/jotter-circle2.png",
+          "dark": {
+            "backgroundColor": "#18181b",
+            "image": "./assets/imgs/jotter-circle2.png"
+          },
+          "imageWidth": 200
+        }
+      ],
       [
         "expo-build-properties",
         {

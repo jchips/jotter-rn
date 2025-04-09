@@ -5,11 +5,13 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useFolder } from '../hooks/useFolder.js';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { useAppStyles } from '../styles';
 import { moderateScale } from '../util/scaling.js';
 import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
 import Settings from '../components/Settings.jsx';
-import { COLORS, FONT, FONTSIZE, BORDER, buttons } from '../styles';
+import { FONT, FONTSIZE, BORDER } from '../styles';
 
 const Drawer = createDrawerNavigator();
 
@@ -18,6 +20,9 @@ function DrawerNav({ navigation }) {
   const { user, logout } = useAuth();
   const route = useRoute();
   const { folder } = useFolder(route?.params?.params?.folderId);
+  const { buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(COLORS);
 
   useEffect(() => {
     if (folder?.id) {
@@ -149,6 +154,10 @@ function DrawerNav({ navigation }) {
     headerTitleStyle: {
       fontFamily: FONT.semiBold,
     },
+    headerStyle: {
+      backgroundColor: COLORS.background,
+    },
+    headerTintColor: COLORS.text2,
   };
 
   return (
@@ -159,7 +168,7 @@ function DrawerNav({ navigation }) {
           width: moderateScale(185),
         },
         cardStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: COLORS.background,
         },
         ...headerOptions,
       }}
@@ -175,77 +184,73 @@ function DrawerNav({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  drawerContainer: {
-    flex: 1,
-    paddingTop: 40,
-  },
-  jotterLogo: {
-    width: moderateScale(50),
-    height: moderateScale(50),
-    marginBottom: 10,
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#f4f4f4',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-  headerText: {
-    fontSize: moderateScale(FONTSIZE.xlarge),
-    fontFamily: FONT.bold,
-  },
-  headerEmail: {
-    fontSize: moderateScale(FONTSIZE.xsmall),
-    fontFamily: FONT.regular,
-  },
-  content: {
-    flex: 1,
-    padding: 10,
-  },
-  button: {
-    color: '#000',
-  },
-  drawerWrapper: {
-    paddingTop: 20,
-  },
-  drawerItem: {
-    paddingVertical: moderateScale(10),
-    paddingHorizontal: 15,
-    borderRadius: 5,
-  },
-  drawerLabel: {
-    fontSize: moderateScale(15),
-    color: '#000', // Inactive label color
-    fontFamily: FONT.semiBold,
-  },
-  activeItem: {
-    backgroundColor: COLORS.themePurpleLight, // Active item background color
-    borderRadius: BORDER.radius,
-  },
-  activeLabel: {
-    color: COLORS.themePurpleText, // Active label (text) color
-  },
-  foldersTitle: {
-    fontFamily: FONT.bold,
-    fontSize: moderateScale(FONTSIZE.smaller),
-    textAlign: 'center',
-    marginVertical: 10,
-    color: COLORS.mutedtext,
-  },
-  folderActiveItem: {
-    backgroundColor: COLORS.graySubtle,
-    borderRadius: BORDER.radius,
-  },
-  activeLabel: {
-    color: COLORS.darkTheme, // Active label (text) color
-  },
-});
+const styleSheet = (COLORS) =>
+  StyleSheet.create({
+    drawerContainer: {
+      flex: 1,
+      paddingTop: 40,
+      backgroundColor: COLORS.background,
+    },
+    jotterLogo: {
+      width: moderateScale(50),
+      height: moderateScale(50),
+      marginBottom: 10,
+    },
+    header: {
+      padding: 20,
+      backgroundColor: COLORS.faded,
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      borderColor: COLORS.borderDark,
+    },
+    headerText: {
+      fontSize: moderateScale(FONTSIZE.xlarge),
+      fontFamily: FONT.bold,
+      color: COLORS.text,
+    },
+    headerEmail: {
+      fontSize: moderateScale(FONTSIZE.xsmall),
+      fontFamily: FONT.regular,
+      color: COLORS.text,
+    },
+    content: {
+      flex: 1,
+      padding: 10,
+    },
+    drawerWrapper: {
+      paddingTop: 20,
+    },
+    drawerItem: {
+      paddingVertical: moderateScale(10),
+      paddingHorizontal: 15,
+      borderRadius: 5,
+    },
+    drawerLabel: {
+      fontSize: moderateScale(15),
+      color: COLORS.text, // Inactive label color
+      fontFamily: FONT.semiBold,
+    },
+    activeItem: {
+      backgroundColor: COLORS.themePurpleLight, // Active item background color
+      borderRadius: BORDER.radius,
+    },
+    activeLabel: {
+      color: COLORS.themePurpleText, // Active label (text) color
+    },
+    foldersTitle: {
+      fontFamily: FONT.bold,
+      fontSize: moderateScale(FONTSIZE.smaller),
+      textAlign: 'center',
+      marginVertical: 10,
+      color: COLORS.mutedtext,
+    },
+    folderActiveItem: {
+      backgroundColor: COLORS.graySubtle,
+      borderRadius: BORDER.radius,
+    },
+    activeLabel: {
+      color: COLORS.text, // Active label (text) color
+    },
+  });
 
 export default DrawerNav;

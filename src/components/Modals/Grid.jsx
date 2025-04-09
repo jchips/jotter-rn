@@ -5,7 +5,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 import DropdownBtn from '../Buttons/DropdownBtn';
 import api from '../../util/api';
 import { setConfigs } from '../../reducers/configReducer';
-import { app, buttons, COLORS, MODAL } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 
 let gridOptions = [
   { label: '1', value: '1' },
@@ -16,6 +17,9 @@ const Grid = (props) => {
   const { openGrid, setOpenGrid } = props;
   const configs = useSelector((state) => state.configs.data);
   const [grid, setGrid] = useState(configs?.gridSize);
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(MODAL, COLORS);
   const dispatch = useDispatch();
 
   /**
@@ -81,7 +85,14 @@ const Grid = (props) => {
               setOpenGrid(false);
             }}
             renderButton={(selectedItem, isOpened) =>
-              DropdownBtn(selectedItem, isOpened, dropdownBtnText)
+              DropdownBtn(
+                selectedItem,
+                isOpened,
+                dropdownBtnText,
+                false,
+                '95%',
+                COLORS
+              )
             }
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
@@ -101,6 +112,12 @@ const Grid = (props) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styleSheet = (MODAL, COLORS) =>
+  StyleSheet.create({
+    dropdownItemTxtStyle: {
+      ...MODAL.dropdownItemTxtStyle,
+      color: COLORS.themePurpleText,
+    },
+  });
 
 export default Grid;

@@ -7,7 +7,7 @@ const noteView = StyleSheet.create({
     flex: 1,
     height: '100%',
     padding: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -20,13 +20,11 @@ const noteView = StyleSheet.create({
     height: 15,
     borderWidth: 1,
     lineHeight: moderateScale(21),
-    borderColor: '#000',
     marginLeft: 5,
     marginRight: 10,
     fontFamily: FONT.regular,
   },
   checkedCheckbox: {
-    backgroundColor: '#000',
     fontFamily: FONT.regular,
   },
   listItemContainer: {
@@ -41,14 +39,12 @@ const noteView = StyleSheet.create({
     lineHeight: moderateScale(21),
     marginLeft: 10,
     marginRight: 10,
-    color: '#000',
   },
   innerBullet: {
     fontFamily: FONT.regular,
     lineHeight: moderateScale(21),
     marginLeft: 0,
     marginRight: 10,
-    color: '#000',
   },
 });
 

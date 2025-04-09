@@ -1,11 +1,11 @@
 import './gesture-handler';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { ThemeProvider } from './src/contexts/ThemeContext';
 import { MarkdownProvider } from './src/contexts/MDContext';
 import Router from './src/routing/Router';
 import store from './src/store';
@@ -36,22 +36,16 @@ export default function App() {
   }
 
   return fontsLoaded ? (
-    <ReduxProvider store={store}>
-      <AuthProvider>
-        <MarkdownProvider>
-          <StatusBar style='dark' />
-          <Router />
-        </MarkdownProvider>
-      </AuthProvider>
-    </ReduxProvider>
+    <ThemeProvider>
+      <ReduxProvider store={store}>
+        <AuthProvider>
+          <MarkdownProvider>
+            <Router />
+          </MarkdownProvider>
+        </AuthProvider>
+      </ReduxProvider>
+    </ThemeProvider>
   ) : null;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});

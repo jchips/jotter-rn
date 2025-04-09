@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAppStyles } from '../../styles';
 import NoteCard from './NoteCard';
 import Move from '../Modals/Move';
 import Rename from '../Modals/Rename';
 import Delete from '../Modals/Delete';
 import Details from '../Modals/Details';
-import { app } from '../../styles';
 
 const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
   const [openMove, setOpenMove] = useState(false);
@@ -15,6 +15,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const navigation = useNavigation();
+  const { app } = useAppStyles();
   const numColumns = Number(gridSize) || 1;
 
   /**

@@ -1,11 +1,14 @@
 import { Image, StyleSheet } from 'react-native';
-import { app } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
 
 const TogglePreview = ({ showPreview }) => {
+  const { COLORS } = useTheme();
+  const { app } = useAppStyles();
   return showPreview ? (
     <Image
       source={{
-        uri: 'https://img.icons8.com/material-outlined/100/invisible.png',
+        uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/invisible.png`,
       }}
       alt='show-preview'
       style={app.icon}
@@ -13,7 +16,7 @@ const TogglePreview = ({ showPreview }) => {
   ) : (
     <Image
       source={{
-        uri: 'https://img.icons8.com/material-outlined/100/visible--v1.png',
+        uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/visible--v1.png`,
       }}
       alt='hide-preview'
       style={app.icon}

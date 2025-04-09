@@ -8,17 +8,20 @@ import {
   Dimensions,
 } from 'react-native';
 import Popover from 'react-native-popover-view';
+import { useTheme } from '../../contexts/ThemeContext';
 import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
-import {
-  app,
-  COLORS,
-  FONT,
-  FONTSIZE,
-  BORDER,
-  POPOVER,
-  buttons,
-} from '../../styles';
+import { useAppStyles } from '../../styles';
+import { FONT, FONTSIZE, BORDER } from '../../styles';
+// import {
+//   app,
+//   // COLORS,
+//   FONT,
+//   FONTSIZE,
+//   BORDER,
+//   POPOVER,
+//   buttons,
+// } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -33,6 +36,10 @@ const NoteCard = (props) => {
     numColumns,
   } = props;
   const popoverRef = useRef();
+  const { app, POPOVER, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(app, COLORS);
+  // app = app(COLORS);
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
@@ -48,7 +55,7 @@ const NoteCard = (props) => {
             <Pressable>
               <Image
                 source={{
-                  uri: `https://img.icons8.com/material-outlined/100/more.png`,
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.noteBtnNH}/more.png`,
                 }}
                 alt='more-icon'
                 style={app.icon2}
@@ -69,7 +76,7 @@ const NoteCard = (props) => {
             >
               <Image
                 source={{
-                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/rename.png`,
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/rename.png`,
                 }}
                 alt='rename-icon'
                 style={app.icon2}
@@ -86,7 +93,7 @@ const NoteCard = (props) => {
             >
               <Image
                 source={{
-                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/info--v1.png`,
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/info--v1.png`,
                 }}
                 alt='details-icon'
                 style={app.icon2}
@@ -103,7 +110,7 @@ const NoteCard = (props) => {
             >
               <Image
                 source={{
-                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/reorder.png`,
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/reorder.png`,
                 }}
                 alt='move-icon'
                 style={app.icon2}
@@ -120,7 +127,7 @@ const NoteCard = (props) => {
             >
               <Image
                 source={{
-                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/trash--v1.png`,
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/trash--v1.png`,
                 }}
                 alt='delete-icon'
                 style={app.icon2}
@@ -138,31 +145,35 @@ const NoteCard = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...app.itemCard,
-  },
-  h1Container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 1,
-    flexWrap: 'wrap',
-    marginBottom: 10,
-  },
-  h1: {
-    fontSize: moderateScale(FONTSIZE.regular),
-    fontFamily: FONT.bold,
-  },
-  metaData: {
-    fontSize: moderateScale(FONTSIZE.smaller),
-    fontFamily: FONT.regular,
-    color: COLORS.mutedtext,
-  },
-  popover: {
-    borderRadius: BORDER.radius,
-    minHeight: moderateScale(190),
-    width: moderateScale(170),
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    container: {
+      ...app.itemCard,
+    },
+    h1Container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 1,
+      flexWrap: 'wrap',
+      marginBottom: 10,
+    },
+    h1: {
+      fontSize: moderateScale(FONTSIZE.regular),
+      fontFamily: FONT.bold,
+      color: COLORS.text,
+    },
+    metaData: {
+      fontSize: moderateScale(FONTSIZE.smaller),
+      fontFamily: FONT.regular,
+      color: COLORS.mutedtext,
+    },
+    popover: {
+      borderRadius: BORDER.radius,
+      minHeight: moderateScale(190),
+      width: moderateScale(170),
+      backgroundColor: COLORS.cardBg,
+    },
+  });
 
 export default NoteCard;

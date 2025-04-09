@@ -44,7 +44,6 @@ export function AuthProvider({ children }) {
       let requestUrl = `${API_URL}/jotter/login`;
       res = await axios.post(requestUrl, { withCredentials: true });
       setUser(res.data.user);
-      // console.log('res.data.user:', res.data.user); // dl
       setToken(res.data.token);
       storeCurrUser(res.data.user);
       setIsLoggedIn(true);

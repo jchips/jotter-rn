@@ -8,9 +8,14 @@ import {
 } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { extractText } from '../../util/extract';
-import { noteView, MARKDOWN } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { noteView } from '../../styles';
 
 const Preview = ({ markdown }) => {
+  const { COLORS } = useTheme();
+  const { MARKDOWN } = useAppStyles();
+  const styles = styleSheet(COLORS);
   /**
    * Flattens all the styles into one array
    * Filters out all undefined or null values
@@ -53,7 +58,7 @@ const Preview = ({ markdown }) => {
             style={[noteView.checkboxContainer, style.list_item]}
           >
             <View
-              style={[noteView.checkbox, isChecked && noteView.checkedCheckbox]}
+              style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
             <Text style={finalStyles}>{filteredChildren}</Text>
           </TouchableOpacity>
@@ -67,7 +72,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={noteView.innerBullet}>{'\u25E6'}</Text>
+            <Text style={styles.innerBullet}>{'\u25E6'}</Text>
             <View>{children}</View>
           </View>
         );
@@ -86,7 +91,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={noteView.bullet}>
+            <Text style={styles.bullet}>
               {listItemNumber}
               {node.markup}
             </Text>
@@ -101,7 +106,7 @@ const Preview = ({ markdown }) => {
           key={node.key}
           style={[noteView.listItemContainer, style.list_item]}
         >
-          <Text style={noteView.bullet}>
+          <Text style={styles.bullet}>
             {Platform.select({
               android: '\u2022',
               ios: '\u00B7',
@@ -127,13 +132,30 @@ const Preview = ({ markdown }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  markdown: {
-    height: '100%',
-    width: '100%',
-    paddingBottom: 20,
-    whiteSpace: 'pre-wrap',
-  },
-});
+const styleSheet = (COLORS) =>
+  StyleSheet.create({
+    markdown: {
+      height: '100%',
+      width: '100%',
+      paddingBottom: 20,
+      whiteSpace: 'pre-wrap',
+    },
+    bullet: {
+      ...noteView.bullet,
+      color: COLORS.text,
+    },
+    innerBullet: {
+      ...noteView.innerBullet,
+      color: COLORS.text,
+    },
+    checkbox: {
+      ...noteView.checkbox,
+      borderColor: COLORS.text,
+    },
+    checkedCheckbox: {
+      ...noteView.checkedCheckbox,
+      backgroundColor: COLORS.text,
+    },
+  });
 
 export default Preview;

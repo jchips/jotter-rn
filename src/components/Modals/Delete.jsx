@@ -2,11 +2,17 @@ import { useState } from 'react';
 import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import api from '../../util/api';
 import { moderateScale } from '../../util/scaling';
-import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { FONT, FONTSIZE } from '../../styles';
+// import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
 const Delete = (props) => {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(app, COLORS);
   const {
     openDelete,
     setOpenDelete,
@@ -103,12 +109,12 @@ const Delete = (props) => {
               style={{
                 ...buttons.btn1,
                 ...MODAL.button,
-                backgroundColor: saving ? COLORS.btn1Hover : COLORS.themePurple,
+                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
               }}
               onPress={handleSubmit}
               disabled={saving}
             >
-              <Text style={buttons.btnText1}>Delete</Text>
+              <Text style={buttons.btnText4}>Delete</Text>
             </Pressable>
           </View>
         </View>
@@ -117,37 +123,41 @@ const Delete = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  header: {
-    ...app.header,
-    marginBottom: 15,
-  },
-  modalContainer: {
-    width: '100%',
-    paddingHorizontal: 10,
-  },
-  modalText: {
-    fontFamily: FONT.regular,
-    lineHeight: moderateScale(19),
-    width: '100%',
-  },
-  warningContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  warningNote: {
-    fontFamily: FONT.semiBold,
-    fontSize: moderateScale(FONTSIZE.smaller),
-    marginVertical: 25,
-    width: '90%',
-    marginLeft: 3,
-  },
-  icon: {
-    height: 27,
-    width: 27,
-    marginRight: 3,
-  },
-});
+// const styles = StyleSheet.create({
+const styleSheet = (app, COLORS) =>
+  StyleSheet.create({
+    header: {
+      ...app.header,
+      marginBottom: 15,
+    },
+    modalContainer: {
+      width: '100%',
+      paddingHorizontal: 10,
+    },
+    modalText: {
+      fontFamily: FONT.regular,
+      lineHeight: moderateScale(19),
+      width: '100%',
+      color: COLORS.text,
+    },
+    warningContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 10,
+    },
+    warningNote: {
+      fontFamily: FONT.semiBold,
+      fontSize: moderateScale(FONTSIZE.smaller),
+      marginVertical: 25,
+      width: '90%',
+      marginLeft: 3,
+      color: COLORS.text,
+    },
+    icon: {
+      height: 27,
+      width: 27,
+      marginRight: 3,
+    },
+  });
 
 export default Delete;
