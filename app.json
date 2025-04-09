@@ -9,8 +9,7 @@
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/imgs/jotter-circle2.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "ios": {
       "supportsTablet": true
@@ -27,6 +26,15 @@
       "favicon": "./assets/imgs/jotter-circle2.png"
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#18181b"
+          }
+        }
+      ],
       [
         "expo-build-properties",
         {

@@ -4,7 +4,6 @@ import { StyleSheet, Text } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-// import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { ThemeProvider } from './src/contexts/ThemeContext';
 import { MarkdownProvider } from './src/contexts/MDContext';
@@ -41,7 +40,6 @@ export default function App() {
       <ReduxProvider store={store}>
         <AuthProvider>
           <MarkdownProvider>
-            {/* <StatusBar style='dark' /> */}
             <Router />
           </MarkdownProvider>
         </AuthProvider>
@@ -53,7 +51,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

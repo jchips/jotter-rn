@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Pressable, Image, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Pressable,
+  Image,
+  Dimensions,
+  useColorScheme,
+} from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchConfigs } from '../reducers/configReducer';
@@ -34,9 +41,10 @@ const Dashboard = ({ route }) => {
   const { data } = useSelector((state) => state.configs);
   const dispatch = useDispatch();
   const { folder } = useFolder(folderId);
-  const screenWidth = Dimensions.get('window').width;
   const { app, buttons } = useAppStyles();
+  const systemTheme = useColorScheme();
   const styles = styleSheet(app, buttons, COLORS);
+  const screenWidth = Dimensions.get('window').width;
   // app = app(COLORS);
 
   useEffect(() => {
@@ -92,7 +100,7 @@ const Dashboard = ({ route }) => {
           );
         },
       });
-    }, [navigation, route, data])
+    }, [navigation, route, data, systemTheme])
   );
 
   /**

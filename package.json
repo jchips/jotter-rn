@@ -39,7 +39,8 @@
     "react-native-webview": "13.12.5",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
-    "expo-navigation-bar": "~4.0.9"
+    "expo-navigation-bar": "~4.0.9",
+    "expo-system-ui": "~4.0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

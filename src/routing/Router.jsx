@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import DrawerNav from './DrawerNav';
@@ -13,7 +14,6 @@ import Editor from '../components/Note/Editor';
 import Signup from '../auth/Signup';
 import { getCurrUser, removeCurrUser } from '../util/persist';
 import { FONT } from '../styles';
-// import { COLORS, FONT } from '../styles';
 
 const Stack = createStackNavigator();
 
@@ -62,6 +62,7 @@ const Router = () => {
         } else {
           await NavigationBar.setBackgroundColorAsync(COLORS.background);
         }
+        await SystemUI.setBackgroundColorAsync(COLORS.background);
       };
       Platform.OS === 'android' ? navigationBg() : null;
     } catch (err) {
@@ -90,10 +91,7 @@ const Router = () => {
                 backgroundColor: COLORS.background,
               },
               headerTintColor: COLORS.text2,
-              // headerTintColor: COLORS.text,
-              // animation: 'none',
               animation: 'scale_from_center',
-              // animation: theme === 'light' ? 'scale_from_center' : 'none',
               transitionSpec: {
                 open: { animation: 'timing', config: { duration: 200 } },
                 close: { animation: 'timing', config: { duration: 200 } },
