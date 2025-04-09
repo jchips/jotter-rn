@@ -58,7 +58,7 @@ const Preview = ({ markdown }) => {
             style={[noteView.checkboxContainer, style.list_item]}
           >
             <View
-              style={[noteView.checkbox, isChecked && noteView.checkedCheckbox]}
+              style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
             <Text style={finalStyles}>{filteredChildren}</Text>
           </TouchableOpacity>
@@ -91,7 +91,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={noteView.bullet}>
+            <Text style={styles.bullet}>
               {listItemNumber}
               {node.markup}
             </Text>
@@ -148,6 +148,14 @@ const styleSheet = (COLORS) =>
     innerBullet: {
       ...noteView.innerBullet,
       color: COLORS.text,
+    },
+    checkbox: {
+      ...noteView.checkbox,
+      borderColor: COLORS.text,
+    },
+    checkedCheckbox: {
+      ...noteView.checkedCheckbox,
+      backgroundColor: COLORS.text,
     },
   });
 

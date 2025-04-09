@@ -20,13 +20,13 @@ const noteView = StyleSheet.create({
     height: 15,
     borderWidth: 1,
     lineHeight: moderateScale(21),
-    borderColor: '#000',
+    // borderColor: '#000',
     marginLeft: 5,
     marginRight: 10,
     fontFamily: FONT.regular,
   },
   checkedCheckbox: {
-    backgroundColor: '#000',
+    // backgroundColor: '#000',
     fontFamily: FONT.regular,
   },
   listItemContainer: {
