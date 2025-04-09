@@ -1,12 +1,10 @@
-// import { StyleSheet } from 'react-native';
-// import COLORS from './colors';
 import { moderateScale } from '../util/scaling';
 import { BORDER, FONT, FONTSIZE } from './constants';
 
 const buttons = (COLORS) => {
   const button = {
     alignItems: 'center',
-    backgroundColor: COLORS.themePurple, // change based on theme
+    backgroundColor: COLORS.themePurple,
     borderRadius: BORDER.radius,
     height: moderateScale(45),
     justifyContent: 'center',
@@ -22,7 +20,6 @@ const buttons = (COLORS) => {
   };
 
   return {
-    // return StyleSheet.create({
     btn1: {
       ...button,
     },
@@ -39,7 +36,6 @@ const buttons = (COLORS) => {
       backgroundColor: COLORS.background,
       borderWidth: 1,
       borderColor: COLORS.border,
-      // borderColor: BORDER.color,
     },
     roundBtn: {
       borderRadius: '100%',
@@ -69,7 +65,6 @@ const buttons = (COLORS) => {
       color: COLORS.white,
     }
   };
-  // });
 }
 
 export default buttons;

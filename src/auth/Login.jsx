@@ -3,7 +3,6 @@ import LoginForm from './LoginForm';
 import JotterText from '../components/JotterText';
 import { useAppStyles } from '../styles';
 import { FONT, FONTSIZE } from '../styles';
-// import { app, FONT, FONTSIZE, buttons } from '../styles';
 
 const Login = ({ navigation }) => {
   const { app, buttons, COLORS } = useAppStyles();
@@ -38,7 +37,6 @@ const Login = ({ navigation }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
     container: {

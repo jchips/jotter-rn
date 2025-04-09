@@ -132,7 +132,6 @@ const Preview = ({ markdown }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS) =>
   StyleSheet.create({
     markdown: {

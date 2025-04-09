@@ -12,7 +12,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
 import { FONT, FONTSIZE } from '../styles';
-// import { app, COLORS, FONT, FONTSIZE, buttons } from '../styles';
 
 const LoginForm = () => {
   const [error, setError] = useState('');
@@ -22,8 +21,7 @@ const LoginForm = () => {
   const { app, buttons } = useAppStyles();
   const styles = styleSheet(app, COLORS, buttons);
   const fieldRequired = 'This field is required';
-  // app = app(COLORS);
-  // buttons = buttons(COLORS);
+
   const {
     control,
     handleSubmit,
@@ -135,7 +133,6 @@ const LoginForm = () => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS, buttons) =>
   StyleSheet.create({
     container: {
@@ -149,7 +146,7 @@ const styleSheet = (app, COLORS, buttons) =>
     button: {
       ...buttons.btn2,
       marginHorizontal: 0,
-      backgroundColor: COLORS.logoutBtn,
+      backgroundColor: COLORS.authBtn,
     },
     errorText: {
       fontFamily: FONT.bold,

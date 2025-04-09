@@ -1,12 +1,9 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { moderateScale } from '../../util/scaling';
-// import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { FONT, FONTSIZE, BORDER } from '../../styles';
-// import { app, COLORS, FONT, FONTSIZE, BORDER } from '../../styles';
 
 const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
-  // const { COLORS } = useTheme();
   const { app } = useAppStyles();
   const styles = styleSheet(COLORS);
   return (
@@ -23,7 +20,7 @@ const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
       {!isOpened ? (
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/expand-arrow--v1.png`,
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/expand-arrow--v1.png`,
           }}
           alt='dropdown arrow'
           style={app.icon}
@@ -31,7 +28,7 @@ const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
       ) : (
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/collapse-arrow.png`,
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/collapse-arrow.png`,
           }}
           alt='dropdown arrow'
           style={app.icon}
@@ -43,13 +40,10 @@ const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
 
 const styleSheet = (COLORS) =>
   StyleSheet.create({
-    // const styles = StyleSheet.create({
     dropdownButtonStyle: {
-      // width: '95%',
       height: 50,
       borderWidth: 1,
       borderColor: COLORS.border,
-      // borderColor: BORDER.color,
       borderRadius: BORDER.radius,
       flexDirection: 'row',
       justifyContent: 'center',

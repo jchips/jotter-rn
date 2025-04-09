@@ -86,6 +86,7 @@ const Settings = ({ navigation }) => {
   return (
     <View style={app.container}>
       <View style={{ flex: 1 }}>
+        <Text style={app.header2}>Theme</Text>
         <SelectDropdown
           data={themes}
           onSelect={(selection, index) => {
@@ -106,6 +107,7 @@ const Settings = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           dropdownStyle={MODAL.dropdownMenuStyle}
         />
+        <Text style={app.header2}>Editor</Text>
         <View style={styles.settingsCard}>
           <Text style={{ color: COLORS.text }}>Hide word count</Text>
           <Switch
@@ -128,6 +130,15 @@ const Settings = ({ navigation }) => {
             value={hidePreview}
           />
         </View>
+        <Text
+          style={{
+            ...app.smallText,
+            color: COLORS.themePurpleText,
+            fontFamily: FONT.semiBold,
+          }}
+        >
+          To export notes, log in to web version
+        </Text>
       </View>
       <View style={styles.credits}>
         <Text style={styles.creditsText}>{'\u00A9'} jrotech</Text>
@@ -145,7 +156,6 @@ const Settings = ({ navigation }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
     settingsCard: {

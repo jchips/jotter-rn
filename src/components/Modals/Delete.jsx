@@ -109,7 +109,7 @@ const Delete = (props) => {
               style={{
                 ...buttons.btn1,
                 ...MODAL.button,
-                backgroundColor: saving ? COLORS.btn1Hover : COLORS.themePurple,
+                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
               }}
               onPress={handleSubmit}
               disabled={saving}

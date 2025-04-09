@@ -12,7 +12,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import EditButton from '../Buttons/EditButton';
 import Preview from './Preview';
-// import { app, COLORS } from '../../styles';
 const screenWidth = Dimensions.get('window').width;
 
 const ViewNote = ({ navigation, route }) => {
@@ -74,7 +73,6 @@ const ViewNote = ({ navigation, route }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app) =>
   StyleSheet.create({
     container: {

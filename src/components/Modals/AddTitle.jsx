@@ -13,7 +13,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { ROOT_FOLDER } from '../../hooks/useFolder';
 import api from '../../util/api';
-// import { app, COLORS, MODAL, buttons } from '../../styles';
 
 const AddTitle = (props) => {
   const {
@@ -156,7 +155,7 @@ const AddTitle = (props) => {
               style={{
                 ...buttons.btn1,
                 ...MODAL.button,
-                backgroundColor: saving ? COLORS.btn1Hover : COLORS.themePurple,
+                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
               }}
               onPress={handleSubmit(onSubmit)}
               disabled={saving}

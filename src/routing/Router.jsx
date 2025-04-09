@@ -70,6 +70,7 @@ const Router = () => {
     }
   }, [NavigationBar, theme, systemTheme]);
 
+  // Sets the status bar theme
   const statusBarTheme = () => {
     if (theme === 'system') {
       return 'auto';

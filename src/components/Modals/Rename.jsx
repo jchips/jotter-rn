@@ -139,7 +139,7 @@ const Rename = ({
               style={{
                 ...buttons.btn1,
                 ...MODAL.button,
-                backgroundColor: saving ? COLORS.btn1Hover : COLORS.themePurple,
+                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
               }}
               onPress={handleSubmit(onSubmit)}
               disabled={saving}

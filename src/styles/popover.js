@@ -1,9 +1,6 @@
 import { moderateScale } from '../util/scaling';
-// import buttons from './buttons';
-// import { useAppStyles } from '../styles';
 
 const POPOVER = (buttons, COLORS) => {
-  // const { buttons } = useAppStyles();
   return {
     popoverContainer: {
       flex: 1,

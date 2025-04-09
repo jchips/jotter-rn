@@ -24,7 +24,6 @@ import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE } from '../../styles';
-// import { app, COLORS, buttons, FONT, FONTSIZE } from '../../styles';
 const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {
@@ -100,7 +99,7 @@ const Editor = ({ navigation, route }) => {
               >
                 <Image
                   source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/undo.png`,
+                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/undo.png`,
                   }}
                   alt='undo-button'
                   style={app.icon}
@@ -119,7 +118,7 @@ const Editor = ({ navigation, route }) => {
               >
                 <Image
                   source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/redo.png`,
+                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/redo.png`,
                   }}
                   alt='redo-button'
                   style={app.icon}
@@ -264,7 +263,6 @@ const Editor = ({ navigation, route }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
     container: {
@@ -283,7 +281,6 @@ const styleSheet = (app, buttons, COLORS) =>
       flex: 1,
       padding: 5,
       borderTopWidth: 1,
-      // borderColor: COLORS.mutedText,
       borderColor: COLORS.graySubtle,
     },
     words: {

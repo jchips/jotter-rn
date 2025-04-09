@@ -9,7 +9,6 @@ import sortBy from '../../util/sortBy';
 import { setConfigs } from '../../reducers/configReducer';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
-// import { app, buttons, COLORS, MODAL } from '../../styles';
 
 let sortOptions = [
   { label: 'Last created', value: '1' },
@@ -134,7 +133,6 @@ const Sort = (props) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS, MODAL) =>
   StyleSheet.create({
     dropdownItemTxtStyle: {

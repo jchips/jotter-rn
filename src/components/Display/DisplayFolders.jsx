@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import Delete from '../Modals/Delete';
 import FolderCard from './FolderCard';
 import Move from '../Modals/Move';
 import Rename from '../Modals/Rename';
 import Details from '../Modals/Details';
-// import { app } from '../../styles';
 
 const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
   const [openMove, setOpenMove] = useState(false);
@@ -16,11 +14,9 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  // const { COLORS } = useTheme();
   const { app } = useAppStyles();
   const navigation = useNavigation();
   const numColumns = Number(gridSize) || 1;
-  // app = app(COLORS);
 
   /**
    * Renders list of folders

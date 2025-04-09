@@ -14,15 +14,11 @@ import getWordCount from '../../util/getWordCount';
 import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE } from '../../styles';
-// import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
 const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   const { childNotes, childFolders } = useFolder(folder?.id);
   const { COLORS } = useTheme();
   const { app, MODAL, buttons } = useAppStyles();
-  // app = app(COLORS);
-  // MODAL = MODAL(COLORS);
-  // buttons = buttons(COLORS);
   const styles = styleSheet(COLORS, MODAL);
 
   return (
@@ -98,7 +94,6 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS, MODAL) =>
   StyleSheet.create({
     button: {

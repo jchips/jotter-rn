@@ -12,7 +12,6 @@ import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
 import Settings from '../components/Settings.jsx';
 import { FONT, FONTSIZE, BORDER } from '../styles';
-// import { COLORS, FONT, FONTSIZE, BORDER, buttons } from '../styles';
 
 const Drawer = createDrawerNavigator();
 
@@ -159,7 +158,6 @@ function DrawerNav({ navigation }) {
       backgroundColor: COLORS.background,
     },
     headerTintColor: COLORS.text2,
-    // headerTintColor: COLORS.text,
   };
 
   return (
@@ -171,7 +169,6 @@ function DrawerNav({ navigation }) {
         },
         cardStyle: {
           backgroundColor: COLORS.background,
-          // backgroundColor: '#fff',
         },
         ...headerOptions,
       }}
@@ -187,7 +184,6 @@ function DrawerNav({ navigation }) {
   );
 }
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS) =>
   StyleSheet.create({
     drawerContainer: {

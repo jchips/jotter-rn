@@ -5,7 +5,6 @@ import { moderateScale } from '../../util/scaling';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { BORDER } from '../../styles';
-// import { app, COLORS, BORDER, buttons } from '../../styles';
 
 const AddButton = ({ setOpenAddTitle, setType }) => {
   const popoverRef = useRef();
@@ -20,7 +19,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         <Pressable style={buttons.roundBtn}>
           <Image
             source={{
-              uri: `https://img.icons8.com/material-outlined/100/${COLORS.whiteNoHash}/plus-math--v1.png`,
+              uri: `https://img.icons8.com/material-outlined/100/${COLORS.whiteNH}/plus-math--v1.png`,
             }}
             alt='add-icon'
             style={app.icon}
@@ -42,7 +41,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         >
           <Image
             source={{
-              uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/folder-invoices--v1.png`,
+              uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
             }}
             alt='folder-icon'
             style={app.icon}
@@ -59,7 +58,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         >
           <Image
             source={{
-              uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/file.png`,
+              uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/file.png`,
             }}
             alt='note-icon'
             style={app.icon}
@@ -71,7 +70,6 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (buttons, COLORS) =>
   StyleSheet.create({
     popover: {

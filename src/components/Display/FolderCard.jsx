@@ -49,7 +49,7 @@ const FolderCard = (props) => {
       <View style={styles.h1Container}>
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/folder-invoices--v1.png`,
+            uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
           }}
           alt='folder-icon'
           style={app.icon2}
@@ -62,7 +62,7 @@ const FolderCard = (props) => {
           <Pressable>
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/more.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/more.png`,
               }}
               alt='more-icon'
               style={app.icon2}
@@ -83,7 +83,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/rename.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/rename.png`,
               }}
               alt='rename-icon'
               style={app.icon2}
@@ -100,7 +100,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/info--v1.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/info--v1.png`,
               }}
               alt='details-icon'
               style={app.icon2}
@@ -117,7 +117,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/reorder.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/reorder.png`,
               }}
               alt='move-icon'
               style={app.icon2}
@@ -134,7 +134,7 @@ const FolderCard = (props) => {
           >
             <Image
               source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNoHash}/trash--v1.png`,
+                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/trash--v1.png`,
               }}
               alt='delete-icon'
               style={app.icon2}

@@ -1,6 +1,5 @@
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
-// import { COLORS } from '../styles';
 
 /**
  * Adds a loading symbol while the video is loading.
@@ -20,7 +19,6 @@ const Loading = () => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS) =>
   StyleSheet.create({
     container: {

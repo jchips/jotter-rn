@@ -3,7 +3,6 @@ import { Image, Pressable, StyleSheet } from 'react-native';
 import api from '../../util/api';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
-// import { app, COLORS, buttons } from '../../styles';
 
 const SaveButton = ({ note, markdown, setError }) => {
   const [saving, setSaving] = useState(false);
@@ -43,7 +42,7 @@ const SaveButton = ({ note, markdown, setError }) => {
     >
       <Image
         source={{
-          uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/save.png`,
+          uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/save.png`,
         }}
         alt='save-button'
         style={app.icon}
@@ -52,7 +51,6 @@ const SaveButton = ({ note, markdown, setError }) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (buttons) =>
   StyleSheet.create({
     saveButton: {

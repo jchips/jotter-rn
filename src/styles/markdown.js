@@ -1,6 +1,5 @@
 import { moderateScale } from '../util/scaling';
-// import COLORS from './colors';
-import { BORDER, FONT, FONTSIZE } from './constants';
+import { FONT, FONTSIZE } from './constants';
 
 const MARKDOWN = (COLORS) => {
   const textColor = {
@@ -89,7 +88,6 @@ const MARKDOWN = (COLORS) => {
       marginVertical: 20,
       maxWidth: '100%',
       overflow: 'auto'
-      // borderRadius: 3,
     },
     thead: {
       fontFamily: FONT.bold,
@@ -122,18 +120,18 @@ const MARKDOWN = (COLORS) => {
       ...textColor,
     },
     blockquote: {
-      backgroundColor: COLORS.blockquote,
+      backgroundColor: COLORS.block,
     },
     code_inline: {
-      backgroundColor: COLORS.blockquote,
+      backgroundColor: COLORS.block,
       color: COLORS.placeHolderText
     },
     code_block: {
-      backgroundColor: COLORS.blockquote,
+      backgroundColor: COLORS.block,
       ...textColor,
     },
     fence: {
-      backgroundColor: COLORS.blockquote,
+      backgroundColor: COLORS.block,
       ...textColor,
     },
     hr: {
@@ -142,7 +140,7 @@ const MARKDOWN = (COLORS) => {
       backgroundColor: '#84848424',
     },
     link: {
-      textDecorationLine: 'none', // 'underline',
+      textDecorationLine: 'none',
       color: COLORS.themePurpleText,
     }
   }

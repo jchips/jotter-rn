@@ -45,7 +45,6 @@ const Dashboard = ({ route }) => {
   const systemTheme = useColorScheme();
   const styles = styleSheet(app, buttons, COLORS);
   const screenWidth = Dimensions.get('window').width;
-  // app = app(COLORS);
 
   useEffect(() => {
     dispatch(fetchConfigs(token));
@@ -75,8 +74,8 @@ const Dashboard = ({ route }) => {
                   source={{
                     uri:
                       data?.gridSize === '2'
-                        ? `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/rows.png`
-                        : `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/grid-2.png`,
+                        ? `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/rows.png`
+                        : `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/grid-2.png`,
                   }}
                   alt='grid-button'
                   style={app.icon}
@@ -90,7 +89,7 @@ const Dashboard = ({ route }) => {
               >
                 <Image
                   source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeNoHash}/sorting-arrows.png`,
+                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/sorting-arrows.png`,
                   }}
                   alt='sort-button'
                   style={app.icon}
@@ -192,7 +191,6 @@ const Dashboard = ({ route }) => {
   ) : null;
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
     container: {

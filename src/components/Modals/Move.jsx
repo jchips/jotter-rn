@@ -14,7 +14,6 @@ import { useFolder } from '../../hooks/useFolder';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { FONT, FONTSIZE } from '../../styles';
-// import { app, buttons, COLORS, FONT, FONTSIZE, MODAL } from '../../styles';
 
 const Move = (props) => {
   const { navigation, openMove, setOpenMove, type, note, folder } = props;

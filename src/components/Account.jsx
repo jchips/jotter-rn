@@ -3,7 +3,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
 import { FONT, FONTSIZE } from '../styles';
-// import { app, buttons, FONT, FONTSIZE } from '../styles';
 
 const Account = () => {
   const { user, logout } = useAuth();
@@ -26,7 +25,6 @@ const Account = () => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
     container: {
@@ -44,7 +42,7 @@ const styleSheet = (app, buttons, COLORS) =>
     button: {
       ...buttons.btn2,
       width: '100%',
-      backgroundColor: COLORS.logoutBtn,
+      backgroundColor: COLORS.authBtn,
     },
   });
 

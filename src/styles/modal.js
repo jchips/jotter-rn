@@ -1,10 +1,7 @@
 import { moderateScale } from '../util/scaling';
 import { BORDER, FONT, FONTSIZE } from './constants';
-// import COLORS from './colors';
-// import app from './appDefault';
 
 const MODAL = (COLORS, app) => {
-  // const themedApp = app(COLORS);
   return {
     centeredView: {
       flex: 1,

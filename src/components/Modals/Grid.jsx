@@ -7,7 +7,6 @@ import api from '../../util/api';
 import { setConfigs } from '../../reducers/configReducer';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
-// import { app, buttons, COLORS, MODAL } from '../../styles';
 
 let gridOptions = [
   { label: '1', value: '1' },
@@ -115,7 +114,6 @@ const Grid = (props) => {
 
 const styleSheet = (MODAL, COLORS) =>
   StyleSheet.create({
-    // const styles = StyleSheet.create({
     dropdownItemTxtStyle: {
       ...MODAL.dropdownItemTxtStyle,
       color: COLORS.themePurpleText,

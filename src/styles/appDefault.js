@@ -18,8 +18,7 @@ const app = (COLORS) => StyleSheet.create({
     padding: moderateScale(15),
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: COLORS.border, // change based on theme
-    // borderColor: BORDER.color, // change based on theme
+    borderColor: COLORS.border,
     borderRadius: BORDER.radius,
     backgroundColor: COLORS.cardBg,
     marginVertical: 5,
@@ -53,6 +52,12 @@ const app = (COLORS) => StyleSheet.create({
     fontFamily: FONT.bold,
     color: COLORS.text
   },
+  header2: {
+    fontSize: moderateScale(FONTSIZE.large),
+    margin: 5,
+    fontFamily: FONT.bold,
+    color: COLORS.text
+  },
   errorAlert: {
     backgroundColor: 'rgb(248, 215, 218)',
     padding: 16,
@@ -67,7 +72,6 @@ const app = (COLORS) => StyleSheet.create({
     marginVertical: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
-    // borderColor: BORDER.color,
     borderRadius: BORDER.radius,
     padding: 5,
   },

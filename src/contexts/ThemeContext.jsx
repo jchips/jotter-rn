@@ -5,6 +5,8 @@ import { light, dark } from '../styles/colors';
 
 const ThemeContext = createContext();
 
+export const useTheme = () => useContext(ThemeContext);
+
 const THEME_KEY = 'app-theme';
 
 export const ThemeProvider = ({ children }) => {
@@ -45,5 +47,3 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-export const useTheme = () => useContext(ThemeContext);

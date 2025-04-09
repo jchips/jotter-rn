@@ -19,7 +19,6 @@ const JotterText = () => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (COLORS) =>
   StyleSheet.create({
     headerContainer: {
