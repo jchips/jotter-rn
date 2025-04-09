@@ -124,6 +124,18 @@ const MARKDOWN = (COLORS) => {
     blockquote: {
       backgroundColor: COLORS.blockquote,
     },
+    code_inline: {
+      backgroundColor: COLORS.blockquote,
+      color: COLORS.placeHolderText
+    },
+    code_block: {
+      backgroundColor: COLORS.blockquote,
+      ...textColor,
+    },
+    fence: {
+      backgroundColor: COLORS.blockquote,
+      ...textColor,
+    },
     hr: {
       marginVertical: 20,
       marginTop: 25,

@@ -7,10 +7,6 @@
     "icon": "./assets/imgs/jotter-circle2.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/imgs/jotter-circle2.png",
-      "resizeMode": "contain"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -30,9 +26,12 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
+          "image": "./assets/imgs/jotter-circle2.png",
           "dark": {
-            "backgroundColor": "#18181b"
-          }
+            "backgroundColor": "#18181b",
+            "image": "./assets/imgs/jotter-circle2.png"
+          },
+          "imageWidth": 200
         }
       ],
       [
