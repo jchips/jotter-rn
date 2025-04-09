@@ -56,11 +56,16 @@ const Router = () => {
         if (theme === 'system') {
           if (systemTheme === 'light') {
             await NavigationBar.setBackgroundColorAsync(COLORS.white);
+            await NavigationBar.setButtonStyleAsync('dark');
           } else {
             await NavigationBar.setBackgroundColorAsync(COLORS.darkTheme);
+            await NavigationBar.setButtonStyleAsync('light');
           }
         } else {
           await NavigationBar.setBackgroundColorAsync(COLORS.background);
+          await NavigationBar.setButtonStyleAsync(
+            theme === 'dark' ? 'light' : 'dark'
+          );
         }
         await SystemUI.setBackgroundColorAsync(COLORS.background);
       };
