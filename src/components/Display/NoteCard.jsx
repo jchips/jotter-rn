@@ -13,15 +13,6 @@ import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
 import { useAppStyles } from '../../styles';
 import { FONT, FONTSIZE, BORDER } from '../../styles';
-// import {
-//   app,
-//   // COLORS,
-//   FONT,
-//   FONTSIZE,
-//   BORDER,
-//   POPOVER,
-//   buttons,
-// } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -39,7 +30,6 @@ const NoteCard = (props) => {
   const { app, POPOVER, buttons } = useAppStyles();
   const { COLORS } = useTheme();
   const styles = styleSheet(app, COLORS);
-  // app = app(COLORS);
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
@@ -145,7 +135,6 @@ const NoteCard = (props) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
     container: {

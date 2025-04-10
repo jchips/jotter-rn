@@ -34,7 +34,7 @@ const Dashboard = ({ route }) => {
   const [openSort, setOpenSort] = useState(false);
   const [openGrid, setOpenGrid] = useState(false);
   const [openAddTitle, setOpenAddTitle] = useState(false);
-  const { COLORS } = useTheme();
+  const { COLORS, theme } = useTheme();
   const { token, logout } = useAuth();
   const { setMarkdown } = useMarkdown();
   const navigation = useNavigation();
@@ -99,7 +99,7 @@ const Dashboard = ({ route }) => {
           );
         },
       });
-    }, [navigation, route, data, systemTheme])
+    }, [navigation, route, data, systemTheme, theme])
   );
 
   /**
@@ -138,7 +138,7 @@ const Dashboard = ({ route }) => {
     }, [folderId])
   );
 
-  // logs the user out
+  // Logs the user out
   const logUserOut = () => {
     logout();
   };

@@ -11,7 +11,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import api from '../../util/api';
-// import { app, COLORS, MODAL, buttons } from '../../styles';
 
 const Rename = ({
   openRename,
@@ -107,7 +106,6 @@ const Rename = ({
                 required: true,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
-                // <View style={{ borderColor: COLORS.border, borderWidth: 1 }}>
                 <TextInput
                   value={value}
                   defaultValue={note ? note?.title : folder?.title}
@@ -118,7 +116,6 @@ const Rename = ({
                   autoCorrect={false}
                   onSubmitEditing={handleSubmit(onSubmit)}
                 />
-                // </View>
               )}
             />
             {errors.rename && (

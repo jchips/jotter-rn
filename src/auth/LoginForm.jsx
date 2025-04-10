@@ -64,6 +64,7 @@ const LoginForm = () => {
       Keyboard.dismiss();
     }
   };
+
   return (
     <View style={styles.container}>
       {error ? (
