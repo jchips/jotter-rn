@@ -5,7 +5,6 @@ import { moderateScale } from '../../util/scaling';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { FONT, FONTSIZE } from '../../styles';
-// import { app, COLORS, FONT, FONTSIZE, MODAL, buttons } from '../../styles';
 
 const Delete = (props) => {
   const [error, setError] = useState('');
@@ -123,7 +122,6 @@ const Delete = (props) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
     header: {

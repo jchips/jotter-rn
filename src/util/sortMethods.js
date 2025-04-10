@@ -123,7 +123,7 @@ const sortMethods = {
         }
       }
 
-      // Equal strings
+      // Equal title strings
       return 0;
     })
     return dataCopy;

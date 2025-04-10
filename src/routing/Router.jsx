@@ -114,7 +114,6 @@ const Router = () => {
                   component={DrawerNav}
                   options={{
                     headerShown: false,
-                    // animation: 'none',
                   }}
                 />
                 <Stack.Screen

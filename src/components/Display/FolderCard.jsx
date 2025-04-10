@@ -12,15 +12,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE, BORDER } from '../../styles';
-// import {
-//   app,
-//   // COLORS,
-//   FONT,
-//   FONTSIZE,
-//   BORDER,
-//   POPOVER,
-//   buttons,
-// } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -38,7 +29,6 @@ const FolderCard = (props) => {
   const { COLORS } = useTheme();
   const { app, buttons, POPOVER } = useAppStyles();
   const styles = styleSheet(app, COLORS);
-  // app = app(COLORS);
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
@@ -147,7 +137,6 @@ const FolderCard = (props) => {
   );
 };
 
-// const styles = StyleSheet.create({
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
     container: {

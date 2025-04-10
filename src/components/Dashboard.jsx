@@ -138,7 +138,7 @@ const Dashboard = ({ route }) => {
     }, [folderId])
   );
 
-  // logs the user out
+  // Logs the user out
   const logUserOut = () => {
     logout();
   };
