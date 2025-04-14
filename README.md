@@ -9,9 +9,10 @@ Tired of searching for the perfect private, accessible tool to easily organize y
 **Why Choose Jotter?**
 
 - **Stay Organized Your Way**: Create folders to neatly categorize your notes. Move notes and folders effortlessly to stay on top of your workflow.
-- **Markdown Made Easy**: Use Markdown to format your notes quickly and beautifully, whether it’s for lists, headings, code snippets, or more.
-- **Personalized Accounts**: Sign up and securely log in to access your notes anywhere, anytime.
-- **Seamless Note Management**: Create, save, edit, or delete notes and folders with ease.
+- **Markdown Made Easy**: Use Markdown to format your notes quickly and beautifully, whether it’s for lists, headings, code snippets, and more.
+- **Personalized Accounts**: Sign up and securely log in on browser or mobile device to access your notes anywhere, anytime.
+- **Seamless Note Management**: Create, save, edit, and delete notes and folders with ease.
+- **Adaptive Themes**: Whether your device is set to light or dark mode, **Jotter** adapts to your preferences, keeping your note-taking experience easy on the eyes.
 - **A Minimalist Design**: No clutter, no distractions—just you and your thoughts, perfectly synced.
 
 Whether you're a student, professional, or creative thinker, **Jotter** empowers you to take control of your notes and ideas with precision and style.
@@ -24,7 +25,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.2.3
+## Version: 1.2.4
 
 ## Architecture
 
@@ -34,6 +35,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
+- **1.2.4** (2025-04-10, 9:30pm) - Fixed bug where some devices showed a white line on the right of the drawer, fixed bug where loading indictor was appearing cover images.
 - **1.2.3** (2025-04-09, 2:05pm) - Added dark mode option in settings.
 - **1.2.2** (2025-04-05, 5:05pm) - Added details for folders.
 - **1.2.1** (2025-04-01, 6:40pm) - Added Settings options to hide word count and editor preview, improved animations, improved device scaling.
@@ -68,6 +70,5 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - [react-native-fadeview-wrapper](https://github.com/aliunco/react-native-fadeview)
 - [Scaling by Soluto](https://medium.com/soluto-engineering/size-matters-5aeeb462900a)
 - [icons8](https://icons8.com/)
-- [Web Dev Simplified](https://youtu.be/6XTRElVAZ9Y)
 - ['Inter' font by Rasmus Andersson](https://github.com/rsms/inter)
 - ['RobotoMono' Google font by Christian Robertson](https://fonts.google.com/specimen/Roboto+Mono)

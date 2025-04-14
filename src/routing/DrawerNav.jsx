@@ -1,5 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
@@ -12,6 +19,8 @@ import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
 import Settings from '../components/Settings.jsx';
 import { FONT, FONTSIZE, BORDER } from '../styles';
+
+const screenWidth = Dimensions.get('window').width;
 
 const Drawer = createDrawerNavigator();
 
@@ -165,7 +174,7 @@ function DrawerNav({ navigation }) {
       drawerContent={(props) => <DrawerContent {...props} />}
       screenOptions={{
         drawerStyle: {
-          width: moderateScale(185),
+          width: screenWidth < 440 ? moderateScale(184) : moderateScale(206),
         },
         cardStyle: {
           backgroundColor: COLORS.background,

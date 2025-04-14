@@ -15,7 +15,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const navigation = useNavigation();
-  const { app } = useAppStyles();
+  const { app, COLORS } = useAppStyles();
   const numColumns = Number(gridSize) || 1;
 
   /**
@@ -48,7 +48,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
     <View>
       {notes.length === 0 && folders.length === 0 ? (
         <View style={{ marginHorizontal: 10 }}>
-          <Text>No notes.</Text>
+          <Text style={{ color: COLORS.text }}>No notes.</Text>
         </View>
       ) : (
         <View>

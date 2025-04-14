@@ -1,6 +1,3 @@
-/**
- * Code inspiration from "How To Build A Google Drive Clone With Firebase" by Web Dev Simplified.
-*/
 import { useEffect, useReducer } from 'react';
 import api from '../util/api';
 
