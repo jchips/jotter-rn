@@ -6,6 +6,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
+import FitImage from 'react-native-fit-image';
 import Markdown from 'react-native-markdown-display';
 import { extractText } from '../../util/extract';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -116,6 +117,42 @@ const Preview = ({ markdown }) => {
           <View>{children}</View>
         </View>
       );
+    },
+    // Image rules (to turn indicator off)
+    image: (
+      node,
+      children,
+      parent,
+      styles,
+      allowedImageHandlers,
+      defaultImageHandler
+    ) => {
+      const { src, alt } = node.attributes;
+
+      // we check that the source starts with at least one of the elements in allowedImageHandlers
+      const show =
+        allowedImageHandlers.filter((value) => {
+          return src.toLowerCase().startsWith(value.toLowerCase());
+        }).length > 0;
+
+      if (show === false && defaultImageHandler === null) {
+        return null;
+      }
+
+      const imageProps = {
+        indicator: false,
+        style: styles._VIEW_SAFE_image,
+        source: {
+          uri: show === true ? src : `${defaultImageHandler}${src}`,
+        },
+      };
+
+      if (alt) {
+        imageProps.accessible = true;
+        imageProps.accessibilityLabel = alt;
+      }
+
+      return <FitImage key={node.key} {...imageProps} />;
     },
   };
 
