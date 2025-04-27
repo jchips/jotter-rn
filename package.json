@@ -31,6 +31,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-fadeview-wrapper": "^1.0.8",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-markdown-display": "^7.0.2",
     "react-native-pager-view": "6.5.1",
     "react-native-popover-view": "^6.0.1",

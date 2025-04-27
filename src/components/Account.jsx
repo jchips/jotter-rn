@@ -4,7 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
 import { FONT, FONTSIZE } from '../styles';
 
-const Account = () => {
+const Account = ({ navigation }) => {
   const { user, logout } = useAuth();
   const { COLORS } = useTheme();
   const { app, buttons } = useAppStyles();
@@ -18,6 +18,12 @@ const Account = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.h1}>{user?.email}</Text>
+      <Pressable
+        style={styles.updateAcctBtn}
+        onPress={() => navigation.navigate('UpdateLogin')}
+      >
+        <Text style={buttons.btnText2}>Change email or password</Text>
+      </Pressable>
       <Pressable style={styles.button} onPress={logUserOut}>
         <Text style={buttons.btnText4}>Log out</Text>
       </Pressable>
@@ -43,6 +49,10 @@ const styleSheet = (app, buttons, COLORS) =>
       ...buttons.btn2,
       width: '100%',
       backgroundColor: COLORS.authBtn,
+    },
+    updateAcctBtn: {
+      ...buttons.outlineBtn1,
+      width: '100%',
     },
   });
 

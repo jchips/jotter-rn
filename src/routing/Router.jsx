@@ -11,6 +11,7 @@ import DrawerNav from './DrawerNav';
 import Login from '../auth/Login';
 import ViewNote from '../components/Note/ViewNote';
 import Editor from '../components/Note/Editor';
+import UpdateLogin from '../auth/UpdateLogin';
 import Signup from '../auth/Signup';
 import { getCurrUser, removeCurrUser } from '../util/persist';
 import { FONT } from '../styles';
@@ -47,7 +48,7 @@ const Router = () => {
       setLoading(false);
     };
     persistLogin();
-  }, []);
+  }, [setUser]);
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -135,6 +136,22 @@ const Router = () => {
                   name='Editor'
                   component={Editor}
                   options={{
+                    headerTintColor: COLORS.themePurpleText,
+                    headerShadowVisible: false,
+                    headerStyle: {
+                      height: 90,
+                      backgroundColor: COLORS.background,
+                    },
+                    headerTitleStyle: {
+                      fontFamily: FONT.semiBold,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name='UpdateLogin'
+                  component={UpdateLogin}
+                  options={{
+                    headerTitle: 'Update Account Info',
                     headerTintColor: COLORS.themePurpleText,
                     headerShadowVisible: false,
                     headerStyle: {
