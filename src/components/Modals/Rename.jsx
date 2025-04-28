@@ -95,7 +95,7 @@ const Rename = ({
           </Text>
           {error ? (
             <View style={app.errorAlert}>
-              <Text>{error}</Text>
+              <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
           <View style={MODAL.controllerContainer}>
@@ -119,7 +119,7 @@ const Rename = ({
               )}
             />
             {errors.rename && (
-              <Text style={app.errorText}>This field is required.</Text>
+              <Text style={app.formErrorText}>This field is required.</Text>
             )}
           </View>
           <View style={MODAL.buttons}>

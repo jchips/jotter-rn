@@ -10,7 +10,6 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useForm, Controller } from 'react-hook-form';
 import api from '../util/api';
-import showToast from '../util/showToast';
 import { storeCurrUser } from '../util/persist';
 import { moderateScale } from '../util/scaling';
 import { useAuth } from '../contexts/AuthContext';
@@ -49,7 +48,7 @@ const UpdateLogin = ({ navigation }) => {
       setError('');
       if (formData.newPassword !== formData.confirmPassword) {
         setLoading(false);
-        return setError('Passwords do not match');
+        return setError('New password does not match');
       }
       let updates = {};
       if (formData.email.trim() !== user.email) {
@@ -72,7 +71,6 @@ const UpdateLogin = ({ navigation }) => {
       setUser(res.data);
       setToken(res.data.token);
       storeCurrUser(res.data);
-      showToast(`Successfully updated account info`);
       navigation.navigate('Drawer', { screen: 'Account' });
     } catch (err) {
       if (err.status === 404) {
@@ -103,13 +101,13 @@ const UpdateLogin = ({ navigation }) => {
       </View>
       {error ? (
         <View style={styles.errorAlert}>
-          <Text>{error}</Text>
+          <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
 
       {/* Email */}
       <View style={styles.inputGroup}>
-        <Text style={styles.text}>Email*</Text>
+        <Text style={styles.text}>Email *</Text>
         <View style={app.controllerContainer}>
           <Controller
             name='email'
@@ -131,14 +129,14 @@ const UpdateLogin = ({ navigation }) => {
             )}
           />
           {errors.email && (
-            <Text style={styles.errorText}>{fieldRequired}</Text>
+            <Text style={app.formErrorText}>{fieldRequired}</Text>
           )}
         </View>
       </View>
 
       {/* Current password */}
       <View style={styles.inputGroup}>
-        <Text style={styles.text}>Current password*</Text>
+        <Text style={styles.text}>Current password *</Text>
         <View style={app.controllerContainer}>
           <Controller
             name='password'
@@ -163,7 +161,7 @@ const UpdateLogin = ({ navigation }) => {
             )}
           />
           {errors.password && (
-            <Text style={styles.errorText}>{fieldRequired}</Text>
+            <Text style={app.formErrorText}>{fieldRequired}</Text>
           )}
         </View>
       </View>
@@ -206,7 +204,7 @@ const UpdateLogin = ({ navigation }) => {
                 )}
               />
               {errors.newPassword && (
-                <Text style={styles.errorText}>{errors.newPassword}</Text>
+                <Text style={app.formErrorText}>{errors.newPassword}</Text>
               )}
             </View>
           </View>
@@ -222,7 +220,7 @@ const UpdateLogin = ({ navigation }) => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  placeholder='Re-enter new password'
+                  placeholder='Repeat new password'
                   placeholderTextColor={COLORS.placeHolderText}
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -231,12 +229,13 @@ const UpdateLogin = ({ navigation }) => {
                   textContentType='password'
                   autoCapitalize='none'
                   autoCorrect={false}
+                  onSubmitEditing={handleSubmit(onSubmit)}
                   secureTextEntry
                 />
               )}
             />
             {errors.confirmPassword && (
-              <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              <Text style={app.formErrorText}>{errors.confirmPassword}</Text>
             )}
           </View>
         </View>
@@ -274,7 +273,7 @@ const styleSheet = (app, COLORS, buttons) =>
     text: {
       fontSize: FONTSIZE.regular,
       fontFamily: FONT.bold,
-      color: COLORS.text,
+      color: COLORS.themePurpleLabel,
     },
     inputGroup: {
       marginBottom: moderateScale(5),
@@ -293,11 +292,6 @@ const styleSheet = (app, COLORS, buttons) =>
       ...buttons.outlineBtn1,
       width: '100%',
       marginHorizontal: 0,
-    },
-    errorText: {
-      fontFamily: FONT.bold,
-      fontSize: FONTSIZE.xsmall,
-      color: COLORS.themePurpleText,
     },
   });
 

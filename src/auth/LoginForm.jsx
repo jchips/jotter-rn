@@ -11,7 +11,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
-import { FONT, FONTSIZE } from '../styles';
 
 const LoginForm = () => {
   const [error, setError] = useState('');
@@ -69,7 +68,7 @@ const LoginForm = () => {
     <View style={styles.container}>
       {error ? (
         <View style={styles.errorAlert}>
-          <Text>{error}</Text>
+          <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
       <View style={app.controllerContainer}>
@@ -92,7 +91,7 @@ const LoginForm = () => {
             />
           )}
         />
-        {errors.email && <Text style={styles.errorText}>{fieldRequired}</Text>}
+        {errors.email && <Text style={app.formErrorText}>{fieldRequired}</Text>}
       </View>
 
       <View style={app.controllerContainer}>
@@ -119,7 +118,7 @@ const LoginForm = () => {
           )}
         />
         {errors.password && (
-          <Text style={styles.errorText}>{fieldRequired}</Text>
+          <Text style={app.formErrorText}>{fieldRequired}</Text>
         )}
       </View>
 
@@ -148,11 +147,6 @@ const styleSheet = (app, COLORS, buttons) =>
       ...buttons.btn2,
       marginHorizontal: 0,
       backgroundColor: COLORS.authBtn,
-    },
-    errorText: {
-      fontFamily: FONT.bold,
-      fontSize: FONTSIZE.xsmall,
-      color: COLORS.themePurpleText,
     },
   });
 

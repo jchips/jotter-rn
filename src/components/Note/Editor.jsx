@@ -235,7 +235,7 @@ const Editor = ({ navigation, route }) => {
     <GestureHandlerRootView style={styles.container}>
       {error ? (
         <View style={app.errorAlert}>
-          <Text>{error}</Text>
+          <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
       {showPreview ? <Preview markdown={markdown} /> : null}

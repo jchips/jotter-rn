@@ -116,7 +116,7 @@ const AddTitle = (props) => {
           <Text style={app.header}>Add {type}</Text>
           {error ? (
             <View style={app.errorAlert}>
-              <Text>{error}</Text>
+              <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
           <View style={MODAL.controllerContainer}>
@@ -141,7 +141,7 @@ const AddTitle = (props) => {
               )}
             />
             {errors.title && (
-              <Text style={app.errorText}>This field is required.</Text>
+              <Text style={app.formErrorText}>This field is required.</Text>
             )}
           </View>
           <View style={MODAL.buttons}>
