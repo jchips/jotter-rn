@@ -1,6 +1,7 @@
 const COMMON_COLORS = {
   themePurple: '#3b45ff',
   themePurpleText: '#646cff',
+  themePurpleLabel: '#737bff',
   themePurpleLight: '#3b45ff33',
   mutedtext: '#a1a1aa',
   danger: '#dc3545',
@@ -32,6 +33,8 @@ const light = {
   block: '#F5F5F5',
   themeBtnNH: NO_HASH.blackNH,
   noteBtnNH: NO_HASH.blackNH,
+  errAlert: '#fee2e2',
+  errText: '#991919',
   ...COMMON_COLORS,
   ...NO_HASH
 }
@@ -50,6 +53,8 @@ const dark = {
   block: '#111111',
   themeBtnNH: '646cff',
   noteBtnNH: 'e4e4e7',
+  errAlert: '#300c0c',
+  errText: '#fca5a5',
   ...COMMON_COLORS,
   ...NO_HASH
 }

@@ -13,7 +13,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
 import { API_URL } from '@env';
-import { FONT, FONTSIZE } from '../styles';
 
 const SignupForm = () => {
   const [error, setError] = useState('');
@@ -83,7 +82,7 @@ const SignupForm = () => {
     <View style={styles.container}>
       {error ? (
         <View style={styles.errorAlert}>
-          <Text>{error}</Text>
+          <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
       <View style={app.controllerContainer}>
@@ -106,7 +105,7 @@ const SignupForm = () => {
             />
           )}
         />
-        {errors.email && <Text style={styles.errorText}>{fieldRequired}</Text>}
+        {errors.email && <Text style={app.formErrorText}>{fieldRequired}</Text>}
       </View>
 
       <View style={app.controllerContainer}>
@@ -132,7 +131,7 @@ const SignupForm = () => {
           )}
         />
         {errors.password && (
-          <Text style={styles.errorText}>{fieldRequired}</Text>
+          <Text style={app.formErrorText}>{fieldRequired}</Text>
         )}
       </View>
       <View style={app.controllerContainer}>
@@ -159,7 +158,7 @@ const SignupForm = () => {
           )}
         />
         {errors.confirmPassword && (
-          <Text style={styles.errorText}>{fieldRequired}</Text>
+          <Text style={app.formErrorText}>{fieldRequired}</Text>
         )}
       </View>
       <Pressable
@@ -187,11 +186,6 @@ const styleSheet = (app, COLORS, buttons) =>
       ...buttons.btn2,
       marginHorizontal: 0,
       backgroundColor: COLORS.authBtn,
-    },
-    errorText: {
-      fontFamily: FONT.bold,
-      fontSize: FONTSIZE.xsmall,
-      color: COLORS.themePurpleText,
     },
   });
 

@@ -59,14 +59,19 @@ const app = (COLORS) => StyleSheet.create({
     color: COLORS.text
   },
   errorAlert: {
-    backgroundColor: 'rgb(248, 215, 218)',
+    backgroundColor: COLORS.errAlert,
     padding: 16,
     borderRadius: 8,
     margin: 10,
     width: '100%',
   },
   errorText: {
-    color: '#dc3545',
+    color: COLORS.errText,
+  },
+  formErrorText: {
+    fontFamily: FONT.bold,
+    fontSize: FONTSIZE.xsmall,
+    color: COLORS.themePurpleText,
   },
   controllerContainer: {
     marginVertical: 8,

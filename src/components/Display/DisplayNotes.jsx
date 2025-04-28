@@ -54,7 +54,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
         <View>
           {error ? (
             <View style={app.errorAlert}>
-              <Text>{error}</Text>
+              <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
           <FlatList

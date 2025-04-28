@@ -47,8 +47,7 @@ const apiService = {
   deleteFolder: (folderId) => api.delete(`/folder/${folderId}`),
   getConfigs: () => api.get('/config'),
   updateConfigs: (body) => api.patch('/config', body),
-  updateUser: (body, userId) => api.patch(`/update/${userId}`, body),
-  deleteUser: (userId) => api.delete(`/delete/${userId}`),
+  updateUser: (body, userId) => api.patch(`/update/${userId}`, body)
 }
 
 export default apiService;
