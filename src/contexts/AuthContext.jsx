@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
   // Set up bearer auth for user
   useEffect(() => {
     api.setTokenGetter(() => token);
-  }, [token]);
+  }, [token, user]);
 
   /**
    * Logs user in

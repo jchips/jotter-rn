@@ -38,7 +38,7 @@ const SignupForm = () => {
 
   /**
    * Creates an account for new user
-   * @param {Object} formData - The form data the user submits (email and password)
+   * @param {Object} formData - The signup data the user submits (email and password)
    */
   const onSubmit = async (formData) => {
     try {
@@ -52,7 +52,7 @@ const SignupForm = () => {
         /^[a-zA-z]+(\.)*(-)*(_)*[a-zA-z]*(@)[a-zA-z]+(\.)[a-zA-z]+$/gm;
       if (!isEmailAddr.test(formData.email)) {
         setLoading(false);
-        return setError('Must use an email address');
+        return setError('Must use a valid email address');
       }
       const signupInfo = {
         email: formData.email,
