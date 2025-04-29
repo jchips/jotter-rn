@@ -277,7 +277,7 @@ const styleSheet = (app, buttons, COLORS) =>
       flex: 1,
       padding: 5,
       borderTopWidth: 1,
-      borderColor: COLORS.editorLine,
+      borderColor: COLORS.subtle,
     },
     words: {
       textAlign: 'center',
