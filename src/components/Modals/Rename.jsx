@@ -124,7 +124,7 @@ const Rename = ({
           </View>
           <View style={MODAL.buttons}>
             <Pressable
-              style={[buttons.outlineBtn1, MODAL.button]}
+              style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
                 setOpenRename(!openRename);
                 setError('');

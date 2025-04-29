@@ -68,7 +68,7 @@ const Sort = (props) => {
       <View
         style={{
           ...MODAL.dropdownItemStyle,
-          ...(isSelected && { backgroundColor: COLORS.graySubtle }),
+          ...(isSelected && { backgroundColor: COLORS.subtle }),
         }}
       >
         <Text style={styles.dropdownItemTxtStyle}>{item.label}</Text>

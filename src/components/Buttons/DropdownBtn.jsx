@@ -11,7 +11,7 @@ const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
       style={{
         width: width,
         ...styles.dropdownButtonStyle,
-        backgroundColor: saving ? COLORS.graySubtle : COLORS.cardBg,
+        backgroundColor: saving ? COLORS.subtle : COLORS.cardBg,
       }}
     >
       <Text style={styles.dropdownButtonTxtStyle}>
@@ -43,7 +43,7 @@ const styleSheet = (COLORS) =>
     dropdownButtonStyle: {
       height: 50,
       borderWidth: 1,
-      borderColor: COLORS.border,
+      borderColor: COLORS.borderDark,
       borderRadius: BORDER.radius,
       flexDirection: 'row',
       justifyContent: 'center',

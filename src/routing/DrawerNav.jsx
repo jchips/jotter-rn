@@ -13,12 +13,11 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useFolder } from '../hooks/useFolder.js';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAppStyles } from '../styles';
 import { moderateScale } from '../util/scaling.js';
 import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
 import Settings from '../components/Settings.jsx';
-import { FONT, FONTSIZE, BORDER } from '../styles';
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -254,7 +253,7 @@ const styleSheet = (COLORS) =>
       color: COLORS.mutedtext,
     },
     folderActiveItem: {
-      backgroundColor: COLORS.graySubtle,
+      backgroundColor: COLORS.subtle,
       borderRadius: BORDER.radius,
     },
     activeLabel: {

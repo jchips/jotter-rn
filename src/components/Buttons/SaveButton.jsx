@@ -35,9 +35,7 @@ const SaveButton = ({ note, markdown, setError }) => {
       onPress={saveNote}
       style={{
         ...styles.saveButton,
-        backgroundColor: saving
-          ? `${COLORS.graySubtle}`
-          : `${COLORS.background}`,
+        backgroundColor: saving ? `${COLORS.subtle}` : `${COLORS.background}`,
       }}
     >
       <Image

@@ -70,7 +70,7 @@ const Settings = ({ navigation }) => {
       <View
         style={{
           ...MODAL.dropdownItemStyle,
-          ...(isSelected && { backgroundColor: COLORS.graySubtle }),
+          ...(isSelected && { backgroundColor: COLORS.subtle }),
         }}
       >
         <Text style={MODAL.dropdownItemTxtStyle}>{item.label}</Text>

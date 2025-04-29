@@ -96,7 +96,7 @@ const Delete = (props) => {
           </View>
           <View style={MODAL.buttons}>
             <Pressable
-              style={[buttons.outlineBtn1, MODAL.button]}
+              style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
                 setOpenDelete(!openDelete);
                 setError('');

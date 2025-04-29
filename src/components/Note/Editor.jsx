@@ -92,9 +92,7 @@ const Editor = ({ navigation, route }) => {
                 style={{
                   ...styles.headerBtn,
                   backgroundColor:
-                    undoStack?.length < 1
-                      ? COLORS.graySubtle
-                      : COLORS.background,
+                    undoStack?.length < 1 ? COLORS.subtle : COLORS.background,
                 }}
               >
                 <Image
@@ -111,9 +109,7 @@ const Editor = ({ navigation, route }) => {
                 style={{
                   ...styles.headerBtn,
                   backgroundColor:
-                    redoStack?.length < 1
-                      ? COLORS.graySubtle
-                      : COLORS.background,
+                    redoStack?.length < 1 ? COLORS.subtle : COLORS.background,
                 }}
               >
                 <Image
@@ -281,7 +277,7 @@ const styleSheet = (app, buttons, COLORS) =>
       flex: 1,
       padding: 5,
       borderTopWidth: 1,
-      borderColor: COLORS.graySubtle,
+      borderColor: COLORS.editorLine,
     },
     words: {
       textAlign: 'center',

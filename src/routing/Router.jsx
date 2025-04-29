@@ -154,6 +154,14 @@ const Router = () => {
                     headerTitle: 'Update Account Info',
                     headerTintColor: COLORS.themePurpleText,
                     headerShadowVisible: false,
+                    animation: 'none',
+                    transitionSpec: {
+                      open: { animation: 'timing', config: { duration: 200 } },
+                      close: { animation: 'timing', config: { duration: 200 } },
+                    },
+                    cardStyleInterpolator: ({ current }) => ({
+                      cardStyle: { opacity: current.progress },
+                    }),
                     headerStyle: {
                       height: 90,
                       backgroundColor: COLORS.background,

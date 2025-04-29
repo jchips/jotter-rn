@@ -261,7 +261,7 @@ const Move = (props) => {
       <View
         style={{
           ...MODAL.dropdownItemStyle,
-          ...(isSelected && { backgroundColor: COLORS.graySubtle }),
+          ...(isSelected && { backgroundColor: COLORS.subtle }),
         }}
       >
         <Text style={MODAL.dropdownItemTxtStyle}>
