@@ -60,7 +60,7 @@ const dark = {
   authBtn: COMMON_COLORS.themePurple,
   mutedBtn: COMMON_COLORS.mutedPurple,
   placeHolderText: '#9CA3AF',
-  block: '#18181b',
+  block: '#1d1d1d',
   themeBtnNH: NO_HASH.textNH,
   noteBtnNH: 'e4e4e7',
   errAlert: '#300c0c',
