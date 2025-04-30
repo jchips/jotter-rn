@@ -52,7 +52,7 @@ const dark = {
   cardBg: '#18181a',
   modalBg: '#1a1a1a',
   popover: '#18181b',
-  subtle: '#2a2a33',
+  subtle: '#222228',
   faded: '#18181b',
   border: '#27272a',
   border2: '#1d1d1d',
