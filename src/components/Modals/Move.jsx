@@ -12,8 +12,7 @@ import api from '../../util/api';
 import DropdownBtn from '../Buttons/DropdownBtn';
 import { useFolder } from '../../hooks/useFolder';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import { FONT, FONTSIZE } from '../../styles';
+import { FONT, FONTSIZE, useAppStyles } from '../../styles';
 
 const Move = (props) => {
   const { navigation, openMove, setOpenMove, type, note, folder } = props;

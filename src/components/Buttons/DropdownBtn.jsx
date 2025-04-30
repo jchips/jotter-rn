@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { moderateScale } from '../../util/scaling';
-import { useAppStyles } from '../../styles';
-import { FONT, FONTSIZE, BORDER } from '../../styles';
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles';
 
 const DropdownBtn = (selectedItem, isOpened, text, saving, width, COLORS) => {
   const { app } = useAppStyles();

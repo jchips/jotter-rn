@@ -14,7 +14,7 @@ const POPOVER = (buttons, COLORS) => {
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       height: moderateScale(48),
-      paddingHorizontal: 10,
+      paddingHorizontal: moderateScale(10),
       marginVertical: '2%',
     }
   }
