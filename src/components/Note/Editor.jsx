@@ -277,7 +277,7 @@ const styleSheet = (app, buttons, COLORS) =>
       flex: 1,
       padding: 5,
       borderTopWidth: 1,
-      borderColor: COLORS.subtle,
+      borderColor: COLORS.border2,
     },
     words: {
       textAlign: 'center',

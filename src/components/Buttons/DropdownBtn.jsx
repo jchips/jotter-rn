@@ -43,7 +43,7 @@ const styleSheet = (COLORS) =>
     dropdownButtonStyle: {
       height: 50,
       borderWidth: 1,
-      borderColor: COLORS.border2,
+      borderColor: COLORS.border,
       borderRadius: BORDER.radius,
       flexDirection: 'row',
       justifyContent: 'center',

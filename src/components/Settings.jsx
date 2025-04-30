@@ -5,11 +5,10 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { fetchConfigs, setConfigs } from '../reducers/configReducer';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAppStyles } from '../styles';
 import api from '../util/api';
 import { moderateScale } from '../util/scaling';
 import DropdownBtn from './Buttons/DropdownBtn';
-import { FONTSIZE, FONT } from '../styles';
+import { FONTSIZE, FONT, useAppStyles } from '../styles';
 
 const Settings = ({ navigation }) => {
   const { data: configs } = useSelector((state) => state.configs);

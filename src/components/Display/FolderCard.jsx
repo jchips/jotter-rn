@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 import Popover from 'react-native-popover-view';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
 import { moderateScale } from '../../util/scaling';
-import { FONT, FONTSIZE, BORDER } from '../../styles';
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles';
 
 const screenWidth = Dimensions.get('window').width;
 

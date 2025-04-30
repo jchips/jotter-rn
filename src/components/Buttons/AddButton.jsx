@@ -3,14 +3,13 @@ import { StyleSheet, Image, Pressable, View, Text } from 'react-native';
 import Popover from 'react-native-popover-view';
 import { moderateScale } from '../../util/scaling';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import { BORDER } from '../../styles';
+import { BORDER, useAppStyles } from '../../styles';
 
 const AddButton = ({ setOpenAddTitle, setType }) => {
   const popoverRef = useRef();
   const { COLORS } = useTheme();
-  const { app, buttons } = useAppStyles();
-  const styles = styleSheet(buttons, COLORS);
+  const { app, buttons, POPOVER } = useAppStyles();
+  const styles = styleSheet(buttons, COLORS, POPOVER);
 
   return (
     <Popover
@@ -30,7 +29,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
       offset={7}
       popoverStyle={styles.popover}
     >
-      <View style={styles.popoverContainer}>
+      <View style={POPOVER.popoverContainer}>
         <Pressable
           style={styles.popoverButton}
           onPress={() => {
@@ -70,7 +69,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
   );
 };
 
-const styleSheet = (buttons, COLORS) =>
+const styleSheet = (buttons, COLORS, POPOVER) =>
   StyleSheet.create({
     popover: {
       borderRadius: BORDER.radius,
@@ -85,12 +84,8 @@ const styleSheet = (buttons, COLORS) =>
       paddingVertical: '4%',
     },
     popoverButton: {
-      ...buttons.btn3,
-      flexDirection: 'row',
+      ...POPOVER.button,
       justifyContent: 'space-between',
-      height: moderateScale(48),
-      paddingHorizontal: moderateScale(10),
-      marginVertical: '2%',
     },
   });
 

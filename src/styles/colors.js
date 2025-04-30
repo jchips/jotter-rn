@@ -10,7 +10,7 @@ const COMMON_COLORS = {
   disabled: '#000abc',
   white: '#ffffff',
   black: '#000000',
-  darkTheme: '#111111',
+  darkTheme: '#121212',
 }
 
 const NO_HASH = {
@@ -27,6 +27,7 @@ const light = {
   text2: '#213547',
   cardBg: COMMON_COLORS.white,
   modalBg: COMMON_COLORS.white,
+  popover: COMMON_COLORS.white,
   subtle: '#f4f4f5',
   faded: '#f4f4f4',
   border: '#e4e4e7',
@@ -46,11 +47,12 @@ const light = {
 
 const dark = {
   background: COMMON_COLORS.darkTheme,
-  text: '#f4f4f4',
+  text: '#e4e4e7', // '#f4f4f4'
   text2: COMMON_COLORS.themePurpleText,
-  cardBg: '#161616',
-  modalBg: '#18181b',
-  subtle: '#222222',
+  cardBg: '#18181a',
+  modalBg: '#1a1a1a',
+  popover: '#111111',
+  subtle: '#1d1d1d',
   faded: '#18181b',
   border: '#27272a',
   border2: '#1d1d1d',

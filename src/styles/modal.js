@@ -52,6 +52,8 @@ const MODAL = (COLORS, app) => {
     button: {
       flex: 1,
       marginHorizontal: 5,
+      borderWidth: 1,
+      borderColor: COLORS.border,
     },
     wideButton: {
       width: '90%',

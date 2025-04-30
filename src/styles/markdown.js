@@ -84,6 +84,7 @@ const MARKDOWN = (COLORS) => {
     },
     table: {
       borderWidth: 1,
+      borderBottomWidth: 0,
       borderColor: COLORS.border,
       marginVertical: 20,
       maxWidth: '100%',

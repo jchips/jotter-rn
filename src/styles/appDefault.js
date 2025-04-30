@@ -18,7 +18,7 @@ const app = (COLORS) => StyleSheet.create({
     padding: moderateScale(15),
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: COLORS.border2,
+    borderColor: COLORS.border,
     borderRadius: BORDER.radius,
     backgroundColor: COLORS.cardBg,
     marginVertical: 5,
