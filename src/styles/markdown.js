@@ -84,6 +84,7 @@ const MARKDOWN = (COLORS) => {
     },
     table: {
       borderWidth: 1,
+      borderBottomWidth: 0,
       borderColor: COLORS.border,
       marginVertical: 20,
       maxWidth: '100%',
@@ -121,6 +122,7 @@ const MARKDOWN = (COLORS) => {
     },
     blockquote: {
       backgroundColor: COLORS.block,
+      borderColor: COLORS.themePurple,
     },
     code_inline: {
       backgroundColor: COLORS.block,
@@ -128,10 +130,12 @@ const MARKDOWN = (COLORS) => {
     },
     code_block: {
       backgroundColor: COLORS.block,
+      borderColor: COLORS.themePurple,
       ...textColor,
     },
     fence: {
       backgroundColor: COLORS.block,
+      borderColor: COLORS.themePurple,
       ...textColor,
     },
     hr: {

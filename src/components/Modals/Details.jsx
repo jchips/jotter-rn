@@ -81,7 +81,7 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
             </Text>
           </View>
           <Pressable
-            style={[buttons.btn1, styles.button]}
+            style={[buttons.btn1, MODAL.wideButton]}
             onPress={() => {
               setOpenDetails(!openDetails);
             }}
@@ -96,10 +96,6 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
 
 const styleSheet = (COLORS, MODAL) =>
   StyleSheet.create({
-    button: {
-      width: '90%',
-      marginTop: 20,
-    },
     modal: {
       ...MODAL.modal,
       width: '85%',

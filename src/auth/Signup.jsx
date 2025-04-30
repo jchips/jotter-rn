@@ -1,8 +1,7 @@
 import { StyleSheet, SafeAreaView, Text, Pressable } from 'react-native';
 import JotterText from '../components/JotterText';
 import SignupForm from './SignupForm';
-import { useAppStyles } from '../styles';
-import { FONT, FONTSIZE } from '../styles';
+import { FONT, FONTSIZE, useAppStyles } from '../styles';
 
 const Signup = ({ navigation }) => {
   const { app, buttons, COLORS } = useAppStyles();

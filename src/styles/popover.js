@@ -7,14 +7,14 @@ const POPOVER = (buttons, COLORS) => {
       flexDirection: 'column',
       justifyContent: 'space-evenly',
       paddingVertical: '4%',
-      backgroundColor: COLORS.cardBg,
+      backgroundColor: COLORS.popover,
     },
     button: {
       ...buttons.btn3,
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       height: moderateScale(48),
-      paddingHorizontal: 10,
+      paddingHorizontal: moderateScale(10),
       marginVertical: '2%',
     }
   }

@@ -21,19 +21,25 @@ const buttons = (COLORS) => {
 
   return {
     btn1: {
-      ...button,
+      ...button, // purple btn
     },
     btn2: {
       ...button,
-      backgroundColor: COLORS.text,
+      backgroundColor: COLORS.text, // opposite theme color btn
     },
     btn3: {
       ...button,
-      backgroundColor: COLORS.graySubtle,
+      backgroundColor: COLORS.subtle, // gray (disabled btn)
     },
     outlineBtn1: {
       ...button,
       backgroundColor: COLORS.background,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+    outlineBtn2: {
+      ...button,
+      backgroundColor: COLORS.modalBg,
       borderWidth: 1,
       borderColor: COLORS.border,
     },
@@ -50,19 +56,19 @@ const buttons = (COLORS) => {
       right: 0,
     },
     btnText1: {
-      ...buttonText,
+      ...buttonText, // theme color text
     },
     btnText2: {
       ...buttonText,
-      color: COLORS.themePurpleText,
+      color: COLORS.themePurpleText, // purple text
     },
     btnText3: {
       ...buttonText,
-      color: COLORS.text,
+      color: COLORS.text, // opposite theme color text
     },
     btnText4: {
       ...buttonText,
-      color: COLORS.white,
+      color: COLORS.white, // white text
     }
   };
 }

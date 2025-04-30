@@ -74,6 +74,7 @@ const app = (COLORS) => StyleSheet.create({
     color: COLORS.themePurpleText,
   },
   controllerContainer: {
+    backgroundColor: COLORS.cardBg,
     marginVertical: 8,
     borderWidth: 1,
     borderColor: COLORS.border,

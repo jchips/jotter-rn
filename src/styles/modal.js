@@ -12,7 +12,7 @@ const MODAL = (COLORS, app) => {
     modal: {
       margin: 20,
       width: '90%',
-      backgroundColor: COLORS.background,
+      backgroundColor: COLORS.modalBg,
       borderRadius: BORDER.radius,
       padding: moderateScale(10),
       alignItems: 'center',
@@ -52,6 +52,8 @@ const MODAL = (COLORS, app) => {
     button: {
       flex: 1,
       marginHorizontal: 5,
+      borderWidth: 1,
+      borderColor: COLORS.border,
     },
     wideButton: {
       width: '90%',

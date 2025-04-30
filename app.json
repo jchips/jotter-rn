@@ -28,7 +28,7 @@
           "backgroundColor": "#ffffff",
           "image": "./assets/imgs/jotter-circle2.png",
           "dark": {
-            "backgroundColor": "#18181b",
+            "backgroundColor": "#121212",
             "image": "./assets/imgs/jotter-circle2.png"
           },
           "imageWidth": 200

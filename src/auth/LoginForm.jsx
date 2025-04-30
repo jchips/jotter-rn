@@ -124,7 +124,10 @@ const LoginForm = () => {
 
       <Pressable
         onPress={handleSubmit(onSubmit)}
-        style={styles.button}
+        style={{
+          ...styles.button,
+          backgroundColor: loading ? `${COLORS.mutedBtn}` : `${COLORS.authBtn}`,
+        }}
         disabled={loading}
       >
         <Text style={buttons.btnText4}>Log in</Text>
@@ -146,7 +149,6 @@ const styleSheet = (app, COLORS, buttons) =>
     button: {
       ...buttons.btn2,
       marginHorizontal: 0,
-      backgroundColor: COLORS.authBtn,
     },
   });
 

@@ -243,7 +243,10 @@ const UpdateLogin = ({ navigation }) => {
 
       <Pressable
         onPress={handleSubmit(onSubmit)}
-        style={styles.button}
+        style={{
+          ...styles.button,
+          backgroundColor: loading ? `${COLORS.mutedBtn}` : `${COLORS.authBtn}`,
+        }}
         disabled={loading}
       >
         <Text style={buttons.btnText4}>Update account</Text>
@@ -285,7 +288,6 @@ const styleSheet = (app, COLORS, buttons) =>
     button: {
       ...buttons.btn2,
       marginHorizontal: 0,
-      backgroundColor: COLORS.authBtn,
       marginBottom: moderateScale(50), // keyboard
     },
     changePassword: {
