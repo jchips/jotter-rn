@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/imgs/jotter-squircle3.png",
+        "foregroundImage": "./assets/imgs/jotter-rounded2.png",
         "backgroundColor": "#000000"
       },
       "userInterfaceStyle": "automatic",
@@ -28,7 +28,7 @@
           "backgroundColor": "#ffffff",
           "image": "./assets/imgs/jotter-circle2.png",
           "dark": {
-            "backgroundColor": "#121212",
+            "backgroundColor": "#18181b",
             "image": "./assets/imgs/jotter-circle2.png"
           },
           "imageWidth": 200
