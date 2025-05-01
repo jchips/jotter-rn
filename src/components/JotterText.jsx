@@ -31,7 +31,7 @@ const styleSheet = (COLORS) =>
       alignItems: 'center',
       fontSize: moderateScale(40),
       fontFamily: FONT.bold,
-      color: COLORS.black,
+      color: COLORS.text,
     },
     img: {
       width: moderateScale(27),
