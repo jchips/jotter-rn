@@ -8,11 +8,13 @@ import {
   Pressable,
   Keyboard,
 } from 'react-native';
+import Constants from 'expo-constants';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAppStyles } from '../styles';
-import { API_URL } from '@env';
+
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 
 const SignupForm = () => {
   const [error, setError] = useState('');

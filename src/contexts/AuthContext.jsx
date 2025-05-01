@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Constants from 'expo-constants';
 import { Buffer } from 'buffer';
-import { API_URL } from '@env';
 import { setConfigs } from '../reducers/configReducer';
 import { storeCurrUser, removeCurrUser } from '../util/persist';
 import axios from 'axios';
 import api from '../util/api';
 
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 const AuthContext = React.createContext();
 
 export function useAuth() {

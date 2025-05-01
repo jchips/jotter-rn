@@ -28,7 +28,6 @@
     "react": "18.3.1",
     "react-hook-form": "^7.54.2",
     "react-native": "0.76.9",
-    "react-native-dotenv": "^3.4.11",
     "react-native-fadeview-wrapper": "^1.0.8",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
@@ -44,7 +43,8 @@
     "redux": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "dotenv-cli": "^8.0.0"
   },
   "private": true
 }
