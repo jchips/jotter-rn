@@ -25,7 +25,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.2.6
+## Version: 1.2.5
 
 ## Architecture
 
@@ -33,10 +33,33 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - Languages used: JavaScript
 - Backend uses Nodejs, Express, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
 
+## Jotter markdown features
+
+- Headers
+- Paragraphs
+- Bold, Italics, Strikethrough
+- Ordered and unordered lists
+- Checkboxes
+- Links
+- Blockquotes
+- Inline code
+- Code blocks
+- Tables
+- Images
+- Typographic replacements
+
+## Screenshots
+
+![Jotter note](https://iili.io/3hCwj1f.jpg)
+![Jotter editor light](https://iili.io/3hC7JN2.jpg)
+![Jotter editor](https://iili.io/3hC7qKu.jpg)
+![Jotter dashboard](https://iili.io/3hC5gcJ.jpg)
+![Jotter login](https://iili.io/3hC5bFs.jpg)
+![Jotter settings](https://iili.io/3hCtjte.jpg)
+
 ## Changelog
 
-- **1.2.6** (2025-04-30, 3:30pm) - Minor UI, color improvements.
-- **1.2.5** (2025-04-27, 6:00pm) - Users can update their email and/or passowrd, minor ui improvements.
+- **1.2.5** (2025-04-27, 6:00pm) - Users can update their email and/or password, minor ui improvements.
 - **1.2.4** (2025-04-10, 9:30pm) - Fixed bug where some devices showed a white line on the right of the drawer, fixed bug where loading indictor was appearing cover images.
 - **1.2.3** (2025-04-09, 2:05pm) - Added dark mode option in settings.
 - **1.2.2** (2025-04-05, 5:05pm) - Added details for folders.
