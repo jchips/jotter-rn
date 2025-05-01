@@ -122,7 +122,7 @@ const MARKDOWN = (COLORS) => {
     },
     blockquote: {
       backgroundColor: COLORS.block,
-      borderColor: COLORS.themePurple,
+      borderColor: COLORS.themePurpleText,
     },
     code_inline: {
       backgroundColor: COLORS.block,
@@ -130,12 +130,12 @@ const MARKDOWN = (COLORS) => {
     },
     code_block: {
       backgroundColor: COLORS.block,
-      borderColor: COLORS.themePurple,
+      borderColor: COLORS.themePurpleText,
       ...textColor,
     },
     fence: {
       backgroundColor: COLORS.block,
-      borderColor: COLORS.themePurple,
+      borderColor: COLORS.themePurpleText,
       ...textColor,
     },
     hr: {

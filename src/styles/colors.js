@@ -9,8 +9,11 @@ const COMMON_COLORS = {
   danger: '#dc3545',
   disabled: '#000abc',
   white: '#ffffff',
-  black: '#000000',
-  darkTheme: '#121212',
+  offWhite: '#e4e4e7',
+  black: '#09090B',
+  darkTheme: '#18181b',
+  cardBgDark: '#1f1f23',
+  sectionBg: '#1a1a1d',
 }
 
 const NO_HASH = {
@@ -18,7 +21,8 @@ const NO_HASH = {
   warningYellowNH: 'eed202',
   dangerNH: 'dc3545',
   whiteNH: 'ffffff',
-  blackNH: '000000',
+  offWhiteNH: 'e4e4e7',
+  blackNH: '09090B',
 }
 
 const light = {
@@ -30,8 +34,8 @@ const light = {
   popover: COMMON_COLORS.white,
   subtle: '#f4f4f5',
   faded: '#f4f4f4',
-  border: '#e4e4e7',
-  border2: '#e4e4e7',
+  border: COMMON_COLORS.offWhite,
+  border2: COMMON_COLORS.offWhite,
   borderDark: '#dddddd',
   authBtn: COMMON_COLORS.black,
   mutedBtn: COMMON_COLORS.mutedBlack,
@@ -47,22 +51,22 @@ const light = {
 
 const dark = {
   background: COMMON_COLORS.darkTheme,
-  text: '#e4e4e7', // '#f4f4f4'
+  text: COMMON_COLORS.offWhite, // '#f4f4f4'
   text2: COMMON_COLORS.themePurpleText,
-  cardBg: '#18181a',
-  modalBg: '#1a1a1a',
-  popover: '#18181b',
+  cardBg: COMMON_COLORS.cardBgDark,
+  modalBg: COMMON_COLORS.sectionBg,
+  popover: COMMON_COLORS.sectionBg,
   subtle: '#222228',
-  faded: '#18181b',
+  faded: COMMON_COLORS.cardBgDark,
   border: '#27272a',
-  border2: '#1d1d1d',
-  borderDark: '#18181b',
+  border2: '#242424', // editor divider
+  borderDark: '#161616', // drawer divider
   authBtn: COMMON_COLORS.themePurple,
   mutedBtn: COMMON_COLORS.mutedPurple,
   placeHolderText: '#9CA3AF',
-  block: '#1d1d1d',
+  block: COMMON_COLORS.cardBgDark,
   themeBtnNH: NO_HASH.textNH,
-  noteBtnNH: 'e4e4e7',
+  noteBtnNH: NO_HASH.offWhiteNH,
   errAlert: '#300c0c',
   errText: '#fca5a5',
   ...COMMON_COLORS,
