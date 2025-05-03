@@ -38,8 +38,8 @@ const Editor = ({ navigation, route }) => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
-  const [noteContent, setNoteContent] = useState(note?.content);
-  const [saved, setSaved] = useState(markdown === noteContent);
+  const [noteContent, setNoteContent] = useState(markdown);
+  const [saved, setSaved] = useState(true);
   const [words, setWords] = useState(getWordCount(markdown));
   const { app, buttons } = useAppStyles();
   const { COLORS } = useTheme();
@@ -60,12 +60,22 @@ const Editor = ({ navigation, route }) => {
     []
   );
 
+  useEffect(() => {
+    checkSaved(markdown, noteContent);
+  }, [markdown, noteContent]);
+
   useFocusEffect(
     useCallback(() => {
       const fetchNote = async () => {
-        const res = await api.getNote(note.id);
-        setNoteContent(res.data.content);
-        setSaved(markdown === res.data.content);
+        try {
+          setError('');
+          const res = await api.getNote(note.id);
+          setNoteContent(res.data.content);
+          setSaved(markdown === res.data.content);
+        } catch (err) {
+          setError('Failed to fetch note');
+          console.error('Failed to fetch note -', err);
+        }
       };
 
       fetchNote();
@@ -84,19 +94,19 @@ const Editor = ({ navigation, route }) => {
       note.title.length > 12 &&
       configs?.hideWordCount
     ) {
-      return note.title.substring(0, 10) + '...';
+      return note.title.substring(0, 9) + '...';
     } else if (
       screenWidth < 440 &&
       note.title.length > 12 &&
       !configs?.hideWordCount
     ) {
-      return note.title.substring(0, 9) + '...';
+      return note.title.substring(0, 8) + '...';
     } else if (
       screenWidth < 440 &&
       note.title.length > 14 &&
       configs?.hideWordCount
     ) {
-      return note.title.substring(0, 12) + '...';
+      return note.title.substring(0, 11) + '...';
     } else {
       return note.title;
     }
@@ -108,7 +118,7 @@ const Editor = ({ navigation, route }) => {
       headerRight: () => {
         return (
           <>
-            <NotSavedDot showDot={!saved} COLORS={COLORS} />
+            {!saved ? <NotSavedDot showDot={!saved} COLORS={COLORS} /> : null}
             {!configs?.hideWordCount ? (
               <Text style={styles.words}>{words} words</Text>
             ) : null}
@@ -153,10 +163,6 @@ const Editor = ({ navigation, route }) => {
       },
     });
   }, [navigation, undoStack, redoStack, saved]);
-
-  useEffect(() => {
-    checkSaved(markdown, noteContent);
-  }, [markdown, noteContent]);
 
   // Clean up function to reset undo and redo stacks
   useEffect(() => {
