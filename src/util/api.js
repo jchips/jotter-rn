@@ -36,6 +36,7 @@ api.interceptors.request.use(
 const apiService = {
   setTokenGetter,
   authenticate: () => api.get('/', { withCredentials: true }),
+  getNote: (noteId) => api.get(`/note/${noteId}`),
   getRootNotes: () => api.get('/note'),
   getNotes: (folderId) => api.get(`/note/f/${folderId}`),
   addNote: (body) => api.post('/note', body),

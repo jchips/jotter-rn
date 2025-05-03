@@ -33,7 +33,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - Languages used: JavaScript
 - Backend uses Nodejs, Express, MySQL, Sequelize, Bcrypt, Base-64, and Jsonwebtoken
 
-## Jotter markdown features
+## Included Markdown features
 
 - Headers
 - Paragraphs
@@ -60,6 +60,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
+- **1.2.6** (2025-05-02, 11:00pm) - Added 'not saved' indicator in note editor.
 - **1.2.5** (2025-04-27, 6:00pm) - Users can update their email and/or password, minor ui improvements.
 - **1.2.4** (2025-04-10, 9:30pm) - Bug fixes.
 - **1.2.3** (2025-04-09, 2:05pm) - Added dark mode theme.

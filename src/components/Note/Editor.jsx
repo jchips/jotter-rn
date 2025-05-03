@@ -15,6 +15,7 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import { useFocusEffect } from '@react-navigation/native';
 import { useMarkdown } from '../../contexts/MDContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import Preview from './Preview';
@@ -23,6 +24,7 @@ import NotSavedDot from './NotSavedDot';
 import SaveButton from '../Buttons/SaveButton';
 import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
+import api from '../../util/api';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE, useAppStyles } from '../../styles';
 const screenWidth = Dimensions.get('window').width;
@@ -32,12 +34,12 @@ const Editor = ({ navigation, route }) => {
   const configs = useSelector((state) => state.configs.data);
   const [error, setError] = useState('');
   const [isEditable, setIsEditable] = useState(false);
-  const [saved, setSaved] = useState(true);
   const [showPreview, setShowPreview] = useState(!configs?.hidePreview);
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
-  const [noteContent, setNoteContent] = useState(markdown);
+  const [noteContent, setNoteContent] = useState(note?.content);
+  const [saved, setSaved] = useState(markdown === noteContent);
   const [words, setWords] = useState(getWordCount(markdown));
   const { app, buttons } = useAppStyles();
   const { COLORS } = useTheme();
@@ -56,6 +58,18 @@ const Editor = ({ navigation, route }) => {
         setSaved(isSaved);
       }, 100),
     []
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchNote = async () => {
+        const res = await api.getNote(note.id);
+        setNoteContent(res.data.content);
+        setSaved(markdown === res.data.content);
+      };
+
+      fetchNote();
+    }, [note.id, markdown])
   );
 
   const calculateHeaderLength = () => {
