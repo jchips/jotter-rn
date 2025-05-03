@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import debounce from 'lodash/debounce';
 import { useSelector } from 'react-redux';
 import {
   StyleSheet,
@@ -18,6 +19,7 @@ import { useMarkdown } from '../../contexts/MDContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import Preview from './Preview';
 import EditNote from './EditNote';
+import NotSavedDot from './NotSavedDot';
 import SaveButton from '../Buttons/SaveButton';
 import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
@@ -30,10 +32,12 @@ const Editor = ({ navigation, route }) => {
   const configs = useSelector((state) => state.configs.data);
   const [error, setError] = useState('');
   const [isEditable, setIsEditable] = useState(false);
+  const [saved, setSaved] = useState(true);
   const [showPreview, setShowPreview] = useState(!configs?.hidePreview);
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
+  const [noteContent, setNoteContent] = useState(markdown);
   const [words, setWords] = useState(getWordCount(markdown));
   const { app, buttons } = useAppStyles();
   const { COLORS } = useTheme();
@@ -44,6 +48,15 @@ const Editor = ({ navigation, route }) => {
     .onEnd(() => {
       runOnJS(setIsEditable)(true);
     });
+
+  const checkSaved = useMemo(
+    () =>
+      debounce((currentMarkdown, savedNote) => {
+        const isSaved = currentMarkdown === savedNote;
+        setSaved(isSaved);
+      }, 100),
+    []
+  );
 
   const calculateHeaderLength = () => {
     if (
@@ -81,6 +94,7 @@ const Editor = ({ navigation, route }) => {
       headerRight: () => {
         return (
           <>
+            <NotSavedDot showDot={!saved} COLORS={COLORS} />
             {!configs?.hideWordCount ? (
               <Text style={styles.words}>{words} words</Text>
             ) : null}
@@ -124,13 +138,18 @@ const Editor = ({ navigation, route }) => {
         );
       },
     });
-  }, [navigation, undoStack, redoStack]);
+  }, [navigation, undoStack, redoStack, saved]);
+
+  useEffect(() => {
+    checkSaved(markdown, noteContent);
+  }, [markdown, noteContent]);
 
   // Clean up function to reset undo and redo stacks
   useEffect(() => {
     return () => {
       setUndoStack([]);
       setRedoStack([]);
+      checkSaved.cancel();
     };
   }, []);
 
@@ -252,7 +271,13 @@ const Editor = ({ navigation, route }) => {
         >
           <TogglePreview showPreview={showPreview} />
         </Pressable>
-        <SaveButton note={note} markdown={markdown} setError={setError} />
+        <SaveButton
+          note={note}
+          markdown={markdown}
+          setError={setError}
+          setSaved={setSaved}
+          setNoteContent={setNoteContent}
+        />
       </View>
     </GestureHandlerRootView>
   );
