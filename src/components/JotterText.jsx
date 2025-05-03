@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { moderateScale } from '../util/scaling';
-import { useAppStyles } from '../styles';
-import { FONT } from '../styles';
+import { FONT, useAppStyles } from '../styles';
 
 const JotterText = () => {
   const { COLORS } = useAppStyles();

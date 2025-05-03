@@ -25,11 +25,7 @@ const EditNote = (props) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior='position'
-      style={{ flex: 1 }}
-      // keyboardVerticalOffset={15}
-    >
+    <KeyboardAvoidingView behavior='position' style={{ flex: 1 }}>
       {!isEditable ? (
         <ScrollView style={{ marginBottom: 15 }}>
           <View style={{ flex: 1 }}>
