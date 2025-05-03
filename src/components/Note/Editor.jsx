@@ -1,29 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import debounce from 'lodash/debounce';
 import { useSelector } from 'react-redux';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-  Image,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
+import { useFocusEffect } from '@react-navigation/native';
 import { useMarkdown } from '../../contexts/MDContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import Preview from './Preview';
 import EditNote from './EditNote';
+import NotSavedDot from './NotSavedDot';
 import SaveButton from '../Buttons/SaveButton';
 import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
+import api from '../../util/api';
 import { moderateScale } from '../../util/scaling';
+import calculateHeaderLength from '../../util/calEditorHeaderLength';
 import { FONT, FONTSIZE, useAppStyles } from '../../styles';
-const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {
   const { note } = route.params;
@@ -34,6 +31,8 @@ const Editor = ({ navigation, route }) => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const { markdown, setMarkdown } = useMarkdown();
+  const [noteContent, setNoteContent] = useState(markdown);
+  const [saved, setSaved] = useState(true);
   const [words, setWords] = useState(getWordCount(markdown));
   const { app, buttons } = useAppStyles();
   const { COLORS } = useTheme();
@@ -45,42 +44,47 @@ const Editor = ({ navigation, route }) => {
       runOnJS(setIsEditable)(true);
     });
 
-  const calculateHeaderLength = () => {
-    if (
-      screenWidth < 380 &&
-      note.title.length > 10 &&
-      !configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 8) + '...';
-    } else if (
-      screenWidth < 380 &&
-      note.title.length > 12 &&
-      configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 10) + '...';
-    } else if (
-      screenWidth < 440 &&
-      note.title.length > 12 &&
-      !configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 9) + '...';
-    } else if (
-      screenWidth < 440 &&
-      note.title.length > 14 &&
-      configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 12) + '...';
-    } else {
-      return note.title;
-    }
-  };
+  const checkSaved = useMemo(
+    () =>
+      debounce((currentMarkdown, savedNote) => {
+        const isSaved = currentMarkdown === savedNote;
+        setSaved(isSaved);
+      }, 100),
+    []
+  );
+
+  useEffect(() => {
+    checkSaved(markdown, noteContent);
+  }, [markdown, noteContent]);
+
+  // 'not saved' indicator
+  useFocusEffect(
+    useCallback(() => {
+      const fetchNote = async () => {
+        try {
+          setError('');
+          const res = await api.getNote(note.id);
+          setNoteContent(res.data.content);
+          setSaved(markdown === res.data.content);
+        } catch (err) {
+          setError('Failed to fetch note');
+          console.error('Failed to fetch note -', err);
+        }
+      };
+
+      fetchNote();
+    }, [note.id, markdown])
+  );
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: calculateHeaderLength(),
+      headerTitle: calculateHeaderLength(note?.title, configs),
       headerRight: () => {
         return (
           <>
+            {!saved ? (
+              <NotSavedDot showDot={!saved} COLORS={COLORS} configs={configs} />
+            ) : null}
             {!configs?.hideWordCount ? (
               <Text style={styles.words}>{words} words</Text>
             ) : null}
@@ -124,13 +128,14 @@ const Editor = ({ navigation, route }) => {
         );
       },
     });
-  }, [navigation, undoStack, redoStack]);
+  }, [navigation, undoStack, redoStack, saved]);
 
-  // Clean up function to reset undo and redo stacks
+  // Clean up function to reset undo and redo stacks and 'not saved' indicator
   useEffect(() => {
     return () => {
       setUndoStack([]);
       setRedoStack([]);
+      checkSaved.cancel();
     };
   }, []);
 
@@ -252,7 +257,13 @@ const Editor = ({ navigation, route }) => {
         >
           <TogglePreview showPreview={showPreview} />
         </Pressable>
-        <SaveButton note={note} markdown={markdown} setError={setError} />
+        <SaveButton
+          note={note}
+          markdown={markdown}
+          setError={setError}
+          setSaved={setSaved}
+          setNoteContent={setNoteContent}
+        />
       </View>
     </GestureHandlerRootView>
   );
