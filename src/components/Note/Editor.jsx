@@ -16,14 +16,13 @@ import {
 import { runOnJS } from 'react-native-reanimated';
 import { useMarkdown } from '../../contexts/MDContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
 import Preview from './Preview';
 import EditNote from './EditNote';
 import SaveButton from '../Buttons/SaveButton';
 import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
 import { moderateScale } from '../../util/scaling';
-import { FONT, FONTSIZE } from '../../styles';
+import { FONT, FONTSIZE, useAppStyles } from '../../styles';
 const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {

@@ -56,14 +56,15 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 ![Jotter dashboard](https://iili.io/3hC5gcJ.jpg)
 ![Jotter login](https://iili.io/3hC5bFs.jpg)
 ![Jotter settings](https://iili.io/3hCtjte.jpg)
+![Jotter account](https://iili.io/3hC5X8x.jpg)
 
 ## Changelog
 
 - **1.2.5** (2025-04-27, 6:00pm) - Users can update their email and/or password, minor ui improvements.
-- **1.2.4** (2025-04-10, 9:30pm) - Fixed bug where some devices showed a white line on the right of the drawer, fixed bug where loading indictor was appearing cover images.
-- **1.2.3** (2025-04-09, 2:05pm) - Added dark mode option in settings.
+- **1.2.4** (2025-04-10, 9:30pm) - Bug fixes.
+- **1.2.3** (2025-04-09, 2:05pm) - Added dark mode theme.
 - **1.2.2** (2025-04-05, 5:05pm) - Added details for folders.
-- **1.2.1** (2025-04-01, 6:40pm) - Added Settings options to hide word count and editor preview, improved animations, improved device scaling.
+- **1.2.1** (2025-04-01, 6:40pm) - Added settings options to hide word count and editor preview, improved animations, improved device scaling.
 - **1.2.0** (2025-03-01, 1:15pm) - Persist user while logged in when app is closed.
 - **1.1.9** (2025-02-27, 10:17pm) - Improved device scaling.
 - **1.1.8** (2025-01-31, 3:05pm) - User can change grid size of folders and notes.
@@ -71,18 +72,17 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - **1.1.6** (2025-01-21, 10:46pm) - Added note/folder sort.
 - **1.1.5** (2025-01-12, 5:58pm) - Fixed bug where numbers in lists were not showing up.
 - **1.1.4** (2025-01-12, 12:58am) - Added 'view details' option for notes, improved device scaling.
-- **1.1.3** (2025-01-11, 10:19pm) - Support for nested bullet points, fixed cropping bullet point text bug.
+- **1.1.3** (2025-01-11, 10:19pm) - Support for nested bullets, fixed bullet point cropped bug.
 - **1.1.2** (2025-01-11, 3:24am) - Changed font, minor design improvements.
 - **1.1.1** (2025-01-10, 10:29pm) - Fixed bug where checkboxes removed styling from list items.
 - **1.1.0** (2025-01-10, 4:05pm) - Added support for markdown checkboxes.
-- **1.0.1** (2025-01-09, 8:55pm) - Minor improvements.
 - **1.0.0** (2025-01-06, 2:35am) - Users can create an account, improved editor, design improvements.
 - **0.0.7** (2025-01-05, 11:16pm) - Users can delete notes and folders.
-- **0.0.6** (2025-01-05, 6:23am) - Added undo/redo functionality in editor, fixed editor bug when making lists.
+- **0.0.6** (2025-01-05, 6:23am) - Added undo/redo functionality in editor, fixed editor bug when creating lists.
 - **0.0.5** (2025-01-04, 5:13am) - Improved editor, added breadcrumbs to drawer.
-- **0.0.4** (2025-01-03, 9:33pm) - Users can move notes and folders to other folders.
-- **0.0.3** (2025-01-02, 2:38pm) - Users can add new notes and folders, preview toggle.
-- **0.0.2** (2025-01-01, 11:11pm) - Users can preview and edit notes.
+- **0.0.4** (2025-01-03, 9:33pm) - Users can move notes and folders into other folders.
+- **0.0.3** (2025-01-02, 2:38pm) - Users can create notes and folders, added preview toggle.
+- **0.0.2** (2025-01-01, 11:11pm) - Users can view and edit notes.
 - **0.0.1** (2024-12-28, 9:48pm) - Working auth.
 
 ## Resources

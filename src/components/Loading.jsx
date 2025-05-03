@@ -2,7 +2,7 @@ import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 
 /**
- * Adds a loading symbol while the video is loading.
+ * Displays loading symbol while page is loading.
  * @returns {Component} - A component with the loading symbol
  */
 const Loading = () => {

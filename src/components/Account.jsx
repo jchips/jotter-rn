@@ -1,8 +1,7 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAppStyles } from '../styles';
-import { FONT, FONTSIZE } from '../styles';
+import { FONT, FONTSIZE, useAppStyles } from '../styles';
 
 const Account = ({ navigation }) => {
   const { user, logout } = useAuth();

@@ -10,8 +10,7 @@ import FitImage from 'react-native-fit-image';
 import Markdown from 'react-native-markdown-display';
 import { extractText } from '../../util/extract';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import { noteView } from '../../styles';
+import { noteView, useAppStyles } from '../../styles';
 
 const Preview = ({ markdown }) => {
   const { COLORS } = useTheme();
@@ -129,7 +128,7 @@ const Preview = ({ markdown }) => {
     ) => {
       const { src, alt } = node.attributes;
 
-      // we check that the source starts with at least one of the elements in allowedImageHandlers
+      // check that the source starts with at least one of the elements in allowedImageHandlers
       const show =
         allowedImageHandlers.filter((value) => {
           return src.toLowerCase().startsWith(value.toLowerCase());
