@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-const NotSavedDot = ({ showDot, COLORS }) => {
+const NotSavedDot = ({ showDot, COLORS, configs }) => {
   const scale = useSharedValue(1);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const NotSavedDot = ({ showDot, COLORS }) => {
           height: 8,
           borderRadius: 4,
           backgroundColor: COLORS.themePurple,
-          marginLeft: 6,
+          marginHorizontal: !configs?.hideWordCount ? 0 : 10,
         },
         animatedStyle,
       ]}

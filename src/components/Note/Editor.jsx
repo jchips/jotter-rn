@@ -1,14 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import { useSelector } from 'react-redux';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-  Image,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -26,8 +19,8 @@ import TogglePreview from '../Buttons/TogglePreview';
 import getWordCount from '../../util/getWordCount';
 import api from '../../util/api';
 import { moderateScale } from '../../util/scaling';
+import calculateHeaderLength from '../../util/calEditorHeaderLength';
 import { FONT, FONTSIZE, useAppStyles } from '../../styles';
-const screenWidth = Dimensions.get('window').width;
 
 const Editor = ({ navigation, route }) => {
   const { note } = route.params;
@@ -64,6 +57,7 @@ const Editor = ({ navigation, route }) => {
     checkSaved(markdown, noteContent);
   }, [markdown, noteContent]);
 
+  // 'not saved' indicator
   useFocusEffect(
     useCallback(() => {
       const fetchNote = async () => {
@@ -82,43 +76,15 @@ const Editor = ({ navigation, route }) => {
     }, [note.id, markdown])
   );
 
-  const calculateHeaderLength = () => {
-    if (
-      screenWidth < 380 &&
-      note.title.length > 10 &&
-      !configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 8) + '...';
-    } else if (
-      screenWidth < 380 &&
-      note.title.length > 12 &&
-      configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 9) + '...';
-    } else if (
-      screenWidth < 440 &&
-      note.title.length > 12 &&
-      !configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 8) + '...';
-    } else if (
-      screenWidth < 440 &&
-      note.title.length > 14 &&
-      configs?.hideWordCount
-    ) {
-      return note.title.substring(0, 11) + '...';
-    } else {
-      return note.title;
-    }
-  };
-
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: calculateHeaderLength(),
+      headerTitle: calculateHeaderLength(note?.title, configs),
       headerRight: () => {
         return (
           <>
-            {!saved ? <NotSavedDot showDot={!saved} COLORS={COLORS} /> : null}
+            {!saved ? (
+              <NotSavedDot showDot={!saved} COLORS={COLORS} configs={configs} />
+            ) : null}
             {!configs?.hideWordCount ? (
               <Text style={styles.words}>{words} words</Text>
             ) : null}
@@ -164,7 +130,7 @@ const Editor = ({ navigation, route }) => {
     });
   }, [navigation, undoStack, redoStack, saved]);
 
-  // Clean up function to reset undo and redo stacks
+  // Clean up function to reset undo and redo stacks and 'not saved' indicator
   useEffect(() => {
     return () => {
       setUndoStack([]);
