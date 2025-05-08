@@ -3,7 +3,7 @@
     "name": "Jotter",
     "slug": "jotter-rn",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/imgs/jotter-circle2.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
