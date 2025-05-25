@@ -62,6 +62,7 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
             key={numColumns}
             renderItem={renderItem}
             numColumns={numColumns}
+            scrollEnabled={false}
             keyExtractor={(item) => item.id}
             columnWrapperStyle={
               numColumns > 1 ? { justifyContent: 'space-between' } : undefined

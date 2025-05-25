@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
+  ScrollView,
   View,
   Pressable,
   Image,
@@ -150,23 +151,28 @@ const Dashboard = ({ route }) => {
 
   return !loading ? (
     <View style={styles.container}>
-      {folders ? (
-        <DisplayFolders
-          folders={folders}
-          setFolders={setFolders}
-          gridSize={data?.gridSize}
-          error={error}
-        />
-      ) : null}
-      {notes ? (
-        <DisplayNotes
-          notes={notes}
-          setNotes={setNotes}
-          folders={folders}
-          gridSize={data?.gridSize}
-          error={error}
-        />
-      ) : null}
+      <ScrollView
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+      >
+        {folders ? (
+          <DisplayFolders
+            folders={folders}
+            setFolders={setFolders}
+            gridSize={data?.gridSize}
+            error={error}
+          />
+        ) : null}
+        {notes ? (
+          <DisplayNotes
+            notes={notes}
+            setNotes={setNotes}
+            folders={folders}
+            gridSize={data?.gridSize}
+            error={error}
+          />
+        ) : null}
+      </ScrollView>
       <AddButton setOpenAddTitle={setOpenAddTitle} setType={setType} />
       <AddTitle
         openAddTitle={openAddTitle}
