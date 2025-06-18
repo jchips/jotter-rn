@@ -6,17 +6,6 @@
 
 Tired of searching for the perfect tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking app that combines the simplicity of Markdown with the power of organization.
 
-**Why Choose Jotter?**
-
-- **Stay Organized Your Way**: Create folders to neatly categorize your notes. Move notes and folders effortlessly to stay on top of your workflow.
-- **Markdown Made Easy**: Use Markdown to format your notes quickly and beautifully, whether it’s for lists, headings, code snippets, and more.
-- **Personalized Accounts**: Sign up and securely log in on browser or mobile device to access your notes anywhere, anytime.
-- **Seamless Note Management**: Create, save, edit, and delete notes and folders with ease.
-- **Adaptive Themes**: Whether your device is set to light or dark mode, **Jotter** adapts to your preferences, keeping your note-taking experience easy on the eyes.
-- **A Minimalist Design**: No clutter, no distractions—just you and your thoughts, perfectly synced.
-
-Whether you're a student, professional, or creative thinker, **Jotter** empowers you to take control of your notes and ideas with precision and style.
-
 Try **Jotter** today and elevate your note-taking game!
 
 TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
