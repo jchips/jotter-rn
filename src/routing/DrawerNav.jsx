@@ -18,6 +18,7 @@ import Account from '../components/Account'
 import Dashboard from '../components/Dashboard'
 import Settings from '../components/Settings.jsx'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
+import { getFolderTitle } from '../util/getFolder.js'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -33,8 +34,19 @@ function DrawerNav({ navigation }) {
   const styles = styleSheet(COLORS)
 
   useEffect(() => {
+    let path
     if (folder?.id) {
       setCurrentFolder(folder)
+      const formatPath = async () => {
+        for (let i = 0; i < folder.path.length; i++) {
+          // loop path ids
+          folder.path[i]['title'] = await getFolderTitle(folder.path[i].id)
+        }
+      }
+      formatPath()
+      path = folder.path
+    } else {
+      path = []
     }
   }, [folder?.id])
 
@@ -115,7 +127,7 @@ function DrawerNav({ navigation }) {
                         screen: 'Home',
                         params: {
                           folderId: pathItem.id,
-                          folderTitle: pathItem.title,
+                          // folderTitle: pathItem.title,
                         },
                       })
                     }

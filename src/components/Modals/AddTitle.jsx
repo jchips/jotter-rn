@@ -62,7 +62,7 @@ const AddTitle = (props) => {
     if (currentFolder !== ROOT_FOLDER) {
       path.push({
         id: currentFolder.id,
-        title: currentFolder.title,
+        // title: currentFolder.title,
       })
     }
     try {

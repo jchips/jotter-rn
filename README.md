@@ -52,7 +52,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
-- **1.2.9** (2025-10-12, 2:15am) - Bug fixes.
+- **1.2.9** (2025-10-12, 12:20pm) - Bug fixes and improved security.
 - **1.2.8** (2025-08-31, 10:35pm) - Updated packages.
 - **1.2.7** (2025-05-25, 4:10pm) - Bug fix.
 - **1.2.6** (2025-05-02, 11:00pm) - Added 'not saved' indicator in note editor.

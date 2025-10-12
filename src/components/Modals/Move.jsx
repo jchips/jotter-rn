@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import {
   Modal,
   StyleSheet,
@@ -6,24 +6,25 @@ import {
   Text,
   Pressable,
   ActivityIndicator,
-} from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
-import api from '../../util/api';
-import DropdownBtn from '../Buttons/DropdownBtn';
-import { useFolder } from '../../hooks/useFolder';
-import { useTheme } from '../../contexts/ThemeContext';
-import { FONT, FONTSIZE, useAppStyles } from '../../styles';
+} from 'react-native'
+import SelectDropdown from 'react-native-select-dropdown'
+import api from '../../util/api'
+import DropdownBtn from '../Buttons/DropdownBtn'
+import { useFolder } from '../../hooks/useFolder'
+import { useTheme } from '../../contexts/ThemeContext'
+import { FONT, FONTSIZE, useAppStyles } from '../../styles'
+import { getFolderTitle } from '../../util/getFolder'
 
 const Move = (props) => {
-  const { navigation, openMove, setOpenMove, type, note, folder } = props;
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [formattedFolders, setFormattedFolders] = useState([]);
-  const { app, MODAL, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
-  const { childFolders } = useFolder(folder ? folder.id : null);
-  let folders = childFolders.data;
+  const { navigation, openMove, setOpenMove, type, note, folder } = props
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [formattedFolders, setFormattedFolders] = useState([])
+  const { app, MODAL, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
+  const { childFolders } = useFolder(folder ? folder.id : null)
+  let folders = childFolders.data
 
   /**
    * Fetch all folders that the user can move current folder to
@@ -32,47 +33,57 @@ const Move = (props) => {
    * folder (because it's already in that one)
    */
   useEffect(() => {
-    let folderId = note?.folderId || folder?.id;
-    let parentId = note?.folderId || folder?.parentId;
+    let folderId = note?.folderId || folder?.id
+    let parentId = note?.folderId || folder?.parentId
     const getAllFolders = async () => {
       try {
-        let res = await api.getAllFolders(folderId ? folderId : 'null', type);
+        let res = await api.getAllFolders(folderId ? folderId : 'null', type)
         let formatFolders = res.data
           .map((folder) => {
             let parsedPath =
               typeof folder.path === 'string'
                 ? JSON.parse(folder.path)
-                : folder.path;
+                : folder.path
             return {
               label: folder.title,
               value: folder.id,
               path: parsedPath,
-            };
+            }
           })
-          .filter((formattedFolder) => formattedFolder.value !== parentId); // filter out parent folder
-        setFormattedFolders(formatFolders);
-      } catch (err) {
-        console.error('Failed to fetch folders: ', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    note || folder ? getAllFolders() : null;
-  }, [note, folder, folders, type]);
+          .filter((formattedFolder) => formattedFolder.value !== parentId) // filter out parent folder
 
-  let folderOpts;
+        for (let i = 0; i < formatFolders.length; i++) {
+          // loop folders
+          for (let j = 0; j < formatFolders[i].path.length; j++) {
+            // loop path ids
+            formatFolders[i].path[j]['title'] = await getFolderTitle(
+              formatFolders[i].path[j].id
+            )
+          }
+        }
+        setFormattedFolders(formatFolders)
+      } catch (err) {
+        console.error('Failed to fetch folders: ', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    note || folder ? getAllFolders() : null
+  }, [note, folder, folders, type])
+
+  let folderOpts
 
   // If user is already in root folder, do not add it as an option
   if (type === 'note') {
     folderOpts =
       !note?.folderId || note?.folderId === 'null'
         ? [...formattedFolders]
-        : [{ label: 'Home', value: 'null', path: [] }, ...formattedFolders];
+        : [{ label: 'Home', value: 'null', path: [] }, ...formattedFolders]
   } else {
     folderOpts =
       !folder || !folder?.parentId || folder?.parentId === 'null'
         ? [...formattedFolders]
-        : [{ label: 'Home', value: 'null', path: [] }, ...formattedFolders];
+        : [{ label: 'Home', value: 'null', path: [] }, ...formattedFolders]
   }
 
   /**
@@ -81,12 +92,12 @@ const Move = (props) => {
    */
   const move = async (folderTarget) => {
     try {
-      setSaving(true);
-      let moveToFolder = await getFolder(folderTarget.value);
+      setSaving(true)
+      let moveToFolder = await getFolder(folderTarget.value)
       let parsedTargetPath =
         typeof moveToFolder.path === 'string'
           ? JSON.parse(moveToFolder.path)
-          : moveToFolder.path;
+          : moveToFolder.path
       switch (type) {
         case 'note':
           await api.updateNote(
@@ -95,8 +106,8 @@ const Move = (props) => {
                 folderTarget.value === 'null' ? null : folderTarget.value,
             },
             note.id
-          );
-          break;
+          )
+          break
         case 'folder':
           let res = await api.updateFolder(
             {
@@ -105,39 +116,37 @@ const Move = (props) => {
               path: moveToFolder
                 ? [
                     ...parsedTargetPath,
-                    { id: moveToFolder.id, title: moveToFolder.title },
+                    {
+                      id: moveToFolder.id,
+                      //  title: moveToFolder.title
+                    },
                   ]
                 : [],
             },
             folder.id
-          );
+          )
           let updatedFolderPath =
             typeof res.data.path === 'string'
               ? JSON.parse(res.data.path)
-              : res.data.path;
+              : res.data.path
           folders?.length !== 0 &&
-            getChildren(
-              folder.id,
-              moveToFolder,
-              updatedFolderPath,
-              folder.path
-            );
-          break;
+            getChildren(folder.id, moveToFolder, updatedFolderPath, folder.path)
+          break
       }
-      setOpenMove(false);
+      setOpenMove(false)
       navigation.push('Drawer', {
         screen: 'Home',
         params: {
           folderId: folderTarget.value,
           folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
         },
-      });
+      })
     } catch (err) {
-      setError('Failed to move folder');
-      console.error('Failed to move folder - ', err);
+      setError('Failed to move folder')
+      console.error('Failed to move folder - ', err)
     }
-    setSaving(false);
-  };
+    setSaving(false)
+  }
 
   /**
    * Gets the folder that item will be moved to
@@ -146,13 +155,13 @@ const Move = (props) => {
    */
   const getFolder = async (moveFolderId) => {
     try {
-      let res = await api.getFolder(moveFolderId);
-      return res.data;
+      let res = await api.getFolder(moveFolderId)
+      return res.data
     } catch (err) {
-      console.error('Failed to fetch folder - ', err);
-      return {};
+      console.error('Failed to fetch folder - ', err)
+      return {}
     }
-  };
+  }
 
   /**
    * Updates the path of the child folder given
@@ -167,31 +176,38 @@ const Move = (props) => {
     folderPath,
     orgFolderPath
   ) => {
-    let path;
+    let path
     let childPath =
-      typeof child.path === 'string' ? JSON.parse(child.path) : child.path;
+      typeof child.path === 'string' ? JSON.parse(child.path) : child.path
     let parsedTargetPath =
       typeof moveToFolder.path === 'string'
         ? JSON.parse(moveToFolder.path)
-        : moveToFolder.path;
+        : moveToFolder.path
     let index = childPath.findIndex(
-      (pathItem) => pathItem.id === folder.id && pathItem.title === folder.title
-    );
-    let updatedChildPath = childPath.slice(index + 1);
+      (pathItem) => pathItem.id === folder.id
+      // (pathItem) => pathItem.id === folder.id && pathItem.title === folder.title
+    )
+    let updatedChildPath = childPath.slice(index + 1)
     if (orgFolderPath.length === 0 && moveToFolder) {
       // Moving from root to a new folder
       path = [
         ...parsedTargetPath,
-        { id: moveToFolder.id, title: moveToFolder.title },
+        {
+          id: moveToFolder.id,
+          // title: moveToFolder.title
+        },
         ...updatedChildPath,
-      ];
+      ]
     } else {
       // Moving from one folder to another
       path = [
         ...folderPath,
-        { id: folder.id, title: folder.title },
+        {
+          id: folder.id,
+          // title: folder.title
+        },
         ...updatedChildPath,
-      ];
+      ]
     }
     try {
       await api.updateFolder(
@@ -199,11 +215,11 @@ const Move = (props) => {
           path: path,
         },
         child.id
-      );
+      )
     } catch (err) {
-      console.error('Failed to update path - ', child.title, child.id, err);
+      console.error('Failed to update path - ', child.title, child.id, err)
     }
-  };
+  }
 
   /**
    * Gets the child folders of the current folder and updates their paths.
@@ -220,20 +236,20 @@ const Move = (props) => {
     orgFolderPath
   ) => {
     try {
-      let children = await api.getFolders(parentId);
-      children = children.data;
+      let children = await api.getFolders(parentId)
+      children = children.data
       if (children.length === 0) {
-        return;
+        return
       } else {
         for (const child of children) {
-          await updateInnerPath(child, moveToFolder, folderPath, orgFolderPath);
-          await getChildren(child.id, moveToFolder, folderPath, orgFolderPath);
+          await updateInnerPath(child, moveToFolder, folderPath, orgFolderPath)
+          await getChildren(child.id, moveToFolder, folderPath, orgFolderPath)
         }
       }
     } catch (err) {
-      console.error('Failed to fetch child folders', err);
+      console.error('Failed to fetch child folders', err)
     }
-  };
+  }
 
   // Dropdown button default text
   const dropdownBtnText = () => {
@@ -245,8 +261,8 @@ const Move = (props) => {
         </Text>{' '}
         to
       </Text>
-    );
-  };
+    )
+  }
 
   /**
    * Renders a folder option
@@ -270,8 +286,8 @@ const Move = (props) => {
           </Text>
         </Text>
       </View>
-    );
-  };
+    )
+  }
 
   return note || folder ? (
     !loading ? (
@@ -280,7 +296,7 @@ const Move = (props) => {
         transparent={true}
         visible={openMove}
         onRequestClose={() => {
-          setOpenMove(!openMove);
+          setOpenMove(!openMove)
         }}
       >
         <View style={MODAL.centeredView}>
@@ -299,7 +315,7 @@ const Move = (props) => {
               <SelectDropdown
                 data={folderOpts}
                 onSelect={(selection, index) => {
-                  move(selection);
+                  move(selection)
                 }}
                 renderButton={(selectedItem, isOpened) =>
                   DropdownBtn(
@@ -326,7 +342,7 @@ const Move = (props) => {
             <Pressable
               style={[buttons.btn1, MODAL.wideButton]}
               onPress={() => {
-                setOpenMove(!openMove);
+                setOpenMove(!openMove)
               }}
             >
               <Text style={buttons.btnText1}>Close</Text>
@@ -335,13 +351,13 @@ const Move = (props) => {
         </View>
       </Modal>
     ) : null
-  ) : null;
-};
+  ) : null
+}
 
 const styles = StyleSheet.create({
   noMoveOptions: {
     padding: 10,
   },
-});
+})
 
-export default Move;
+export default Move
