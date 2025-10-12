@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Modal,
   StyleSheet,
@@ -6,13 +6,13 @@ import {
   Text,
   Pressable,
   TextInput,
-} from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import { ROOT_FOLDER } from '../../hooks/useFolder';
-import api from '../../util/api';
+} from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { useAuth } from '../../contexts/AuthContext'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
+import { ROOT_FOLDER } from '../../hooks/useFolder'
+import api from '../../util/api'
 
 const AddTitle = (props) => {
   const {
@@ -23,13 +23,13 @@ const AddTitle = (props) => {
     setNotes,
     folders,
     setFolders,
-  } = props;
-  let { currentFolder } = props;
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
-  const { user } = useAuth();
-  const { app, MODAL, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
+  } = props
+  let { currentFolder } = props
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const { user } = useAuth()
+  const { app, MODAL, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
   const {
     control,
     handleSubmit,
@@ -39,7 +39,7 @@ const AddTitle = (props) => {
     defaultValues: {
       title: '',
     },
-  });
+  })
 
   /**
    * Adds a title to a note or folder
@@ -48,27 +48,27 @@ const AddTitle = (props) => {
    * @returns - exits the function if there is no current folder
    */
   const onSubmit = async (titleControl) => {
-    if (currentFolder === null) return;
-    currentFolder = currentFolder?.data ? currentFolder.data : currentFolder;
-    let path = currentFolder === ROOT_FOLDER ? [] : [ROOT_FOLDER];
+    if (currentFolder === null) return
+    currentFolder = currentFolder?.data ? currentFolder.data : currentFolder
+    let path = currentFolder === ROOT_FOLDER ? [] : [ROOT_FOLDER]
     let parsedPath =
       typeof currentFolder.path === 'string'
         ? JSON.parse(currentFolder.path)
-        : currentFolder.path;
-    let currentFolderPath = currentFolder !== ROOT_FOLDER ? parsedPath : path; // parse from db
-    path = [...currentFolderPath];
+        : currentFolder.path
+    let currentFolderPath = currentFolder !== ROOT_FOLDER ? parsedPath : path // parse from db
+    path = [...currentFolderPath]
 
     // Adds current folder to the path
     if (currentFolder !== ROOT_FOLDER) {
       path.push({
         id: currentFolder.id,
         title: currentFolder.title,
-      });
+      })
     }
     try {
-      setError('');
-      setSaving(true);
-      let res;
+      setError('')
+      setSaving(true)
+      let res
       switch (type) {
         // add note
         case 'note':
@@ -77,9 +77,9 @@ const AddTitle = (props) => {
             content: '',
             userId: user.id,
             folderId: currentFolder.id,
-          });
-          setNotes([res.data, ...notes]);
-          break;
+          })
+          setNotes([res.data, ...notes])
+          break
         // add folder
         case 'folder':
           res = await api.addFolder({
@@ -87,20 +87,20 @@ const AddTitle = (props) => {
             userId: user.id,
             parentId: currentFolder.id,
             path,
-          });
-          setFolders([res.data, ...folders]);
-          break;
+          })
+          setFolders([res.data, ...folders])
+          break
       }
-      setOpenAddTitle(false);
+      setOpenAddTitle(false)
     } catch (err) {
-      setError('Failed to create ' + type);
-      console.error(err);
+      setError('Failed to create ' + type)
+      console.error(err)
     }
     reset({
       title: '',
-    });
-    setSaving(false);
-  };
+    })
+    setSaving(false)
+  }
 
   return (
     <Modal
@@ -108,7 +108,7 @@ const AddTitle = (props) => {
       transparent={true}
       visible={openAddTitle}
       onRequestClose={() => {
-        setOpenAddTitle(!openAddTitle);
+        setOpenAddTitle(!openAddTitle)
       }}
     >
       <View style={MODAL.centeredView}>
@@ -119,6 +119,8 @@ const AddTitle = (props) => {
               <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
+
+          {/* Add note title */}
           <View style={MODAL.controllerContainer}>
             <Controller
               name='title'
@@ -144,6 +146,8 @@ const AddTitle = (props) => {
               <Text style={app.formErrorText}>This field is required.</Text>
             )}
           </View>
+
+          {/* Options */}
           <View style={MODAL.buttons}>
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
@@ -166,9 +170,9 @@ const AddTitle = (props) => {
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default AddTitle;
+export default AddTitle

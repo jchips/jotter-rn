@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   ScrollView,
@@ -7,56 +7,57 @@ import {
   Image,
   Dimensions,
   useColorScheme,
-} from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchConfigs } from '../reducers/configReducer';
-import { useMarkdown } from '../contexts/MDContext';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { useFolder } from '../hooks/useFolder';
-import { useAppStyles } from '../styles';
-import Loading from './Loading';
-import DisplayFolders from './Display/DisplayFolders';
-import DisplayNotes from './Display/DisplayNotes';
-import AddButton from './Buttons/AddButton';
-import Sort from './Modals/Sort';
-import Grid from './Modals/Grid';
-import AddTitle from './Modals/AddTitle';
-import api from '../util/api';
+} from 'react-native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchConfigs } from '../reducers/configReducer'
+import { useMarkdown } from '../contexts/MDContext'
+import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { useFolder } from '../hooks/useFolder'
+import { useAppStyles } from '../styles'
+import Loading from './Loading'
+import DisplayFolders from './Display/DisplayFolders'
+import DisplayNotes from './Display/DisplayNotes'
+import AddButton from './Buttons/AddButton'
+import Sort from './Modals/Sort'
+import Grid from './Modals/Grid'
+import AddTitle from './Modals/AddTitle'
+import api from '../util/api'
 
 const Dashboard = ({ route }) => {
-  const { folderId, folderTitle } = route.params;
-  const [notes, setNotes] = useState();
-  const [folders, setFolders] = useState();
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [type, setType] = useState(null);
-  const [openSort, setOpenSort] = useState(false);
-  const [openGrid, setOpenGrid] = useState(false);
-  const [openAddTitle, setOpenAddTitle] = useState(false);
-  const { COLORS, theme } = useTheme();
-  const { token, logout } = useAuth();
-  const { setMarkdown } = useMarkdown();
-  const navigation = useNavigation();
-  const { data } = useSelector((state) => state.configs);
-  const dispatch = useDispatch();
-  const { folder } = useFolder(folderId);
-  const { app, buttons } = useAppStyles();
-  const systemTheme = useColorScheme();
-  const styles = styleSheet(app, buttons, COLORS);
-  const screenWidth = Dimensions.get('window').width;
+  const { folderId, folderTitle } = route.params
+  const [notes, setNotes] = useState()
+  const [folders, setFolders] = useState()
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [type, setType] = useState(null)
+  const [openSort, setOpenSort] = useState(false)
+  const [openGrid, setOpenGrid] = useState(false)
+  const [openAddTitle, setOpenAddTitle] = useState(false)
+  const { COLORS, theme } = useTheme()
+  const { token, logout } = useAuth()
+  const { setMarkdown } = useMarkdown()
+  const navigation = useNavigation()
+  const { data } = useSelector((state) => state.configs)
+  const dispatch = useDispatch()
+  const { folder } = useFolder(folderId)
+  const { app, buttons } = useAppStyles()
+  const systemTheme = useColorScheme()
+  const styles = styleSheet(app, buttons, COLORS)
+  const screenWidth = Dimensions.get('window').width
 
   useEffect(() => {
-    dispatch(fetchConfigs(token));
-  }, [dispatch]);
+    dispatch(fetchConfigs(token))
+  }, [dispatch])
 
   useEffect(() => {
-    setMarkdown('');
-  }, []);
+    setMarkdown('')
+  }, [])
 
   useFocusEffect(
     React.useCallback(() => {
+      // Header settings
       navigation.setOptions({
         headerTitle:
           screenWidth < 440 && folderTitle.length > 20
@@ -67,7 +68,7 @@ const Dashboard = ({ route }) => {
             <View style={{ flexDirection: 'row' }}>
               <Pressable
                 onPress={() => {
-                  setOpenGrid(true);
+                  setOpenGrid(true)
                 }}
                 style={styles.headerButton}
               >
@@ -84,7 +85,7 @@ const Dashboard = ({ route }) => {
               </Pressable>
               <Pressable
                 onPress={() => {
-                  setOpenSort(true);
+                  setOpenSort(true)
                 }}
                 style={styles.headerButton}
               >
@@ -97,11 +98,11 @@ const Dashboard = ({ route }) => {
                 />
               </Pressable>
             </View>
-          );
+          )
         },
-      });
+      })
     }, [navigation, route, data, systemTheme, theme])
-  );
+  )
 
   /**
    * DB fetch for all folders and notes in the current folder
@@ -109,44 +110,44 @@ const Dashboard = ({ route }) => {
    */
   const refresh = async (folder_id) => {
     try {
-      setError('');
+      setError('')
       const [foldersRes, notesRes] = await Promise.all([
         api.getFolders(folder_id),
         folder_id ? api.getNotes(folder_id) : api.getRootNotes(),
-      ]);
-      setFolders(foldersRes.data);
-      setNotes(notesRes.data);
+      ])
+      setFolders(foldersRes.data)
+      setNotes(notesRes.data)
     } catch (err) {
-      console.error(err);
+      console.error(err)
       if (err.response?.data?.message === 'jwt expired') {
-        logUserOut();
+        logUserOut()
       } else {
-        setError('Could not fetch content');
+        setError('Could not fetch content')
       }
     }
-  };
+  }
 
   /** For Drawer breadcrumbs */
   useFocusEffect(
     React.useCallback(() => {
       const fetchContent = async () => {
-        setLoading(true);
-        let folder_id = !folderId ? null : folderId;
-        await refresh(folder_id);
-        setLoading(false);
-      };
-      fetchContent();
+        setLoading(true)
+        let folder_id = !folderId ? null : folderId
+        await refresh(folder_id)
+        setLoading(false)
+      }
+      fetchContent()
     }, [folderId])
-  );
+  )
 
   // Logs the user out
   const logUserOut = () => {
-    logout();
-  };
+    logout()
+  }
 
   // Loading circle
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   return !loading ? (
@@ -194,8 +195,8 @@ const Dashboard = ({ route }) => {
       />
       <Grid openGrid={openGrid} setOpenGrid={setOpenGrid} />
     </View>
-  ) : null;
-};
+  ) : null
+}
 
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
@@ -209,6 +210,6 @@ const styleSheet = (app, buttons, COLORS) =>
       margin: 0,
       paddingLeft: 0,
     },
-  });
+  })
 
-export default Dashboard;
+export default Dashboard
