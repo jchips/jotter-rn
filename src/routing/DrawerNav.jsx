@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,62 +6,63 @@ import {
   Pressable,
   Image,
   Dimensions,
-} from 'react-native';
-import { useRoute, useFocusEffect } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { useFolder } from '../hooks/useFolder.js';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { moderateScale } from '../util/scaling.js';
-import Account from '../components/Account';
-import Dashboard from '../components/Dashboard';
-import Settings from '../components/Settings.jsx';
-import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles';
+} from 'react-native'
+import { useRoute, useFocusEffect } from '@react-navigation/native'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import { DrawerContentScrollView } from '@react-navigation/drawer'
+import { useFolder } from '../hooks/useFolder.js'
+import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { moderateScale } from '../util/scaling.js'
+import Account from '../components/Account'
+import Dashboard from '../components/Dashboard'
+import Settings from '../components/Settings.jsx'
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get('window').width
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator()
 
 function DrawerNav({ navigation }) {
-  const [currentFolder, setCurrentFolder] = useState(null);
-  const { user, logout } = useAuth();
-  const route = useRoute();
-  const { folder } = useFolder(route?.params?.params?.folderId);
-  const { buttons } = useAppStyles();
-  const { COLORS } = useTheme();
-  const styles = styleSheet(COLORS);
+  const [currentFolder, setCurrentFolder] = useState(null)
+  const { user, logout } = useAuth()
+  const route = useRoute()
+  const { folder } = useFolder(route?.params?.params?.folderId)
+  const { buttons } = useAppStyles()
+  const { COLORS } = useTheme()
+  const styles = styleSheet(COLORS)
 
   useEffect(() => {
     if (folder?.id) {
-      setCurrentFolder(folder);
+      setCurrentFolder(folder)
     }
-  }, [folder?.id]);
+  }, [folder?.id])
 
   useFocusEffect(
     useCallback(() => {
       navigation.setOptions({
         headerTitle: currentFolder ? currentFolder.title : 'Home',
-      });
+      })
     }, [navigation])
-  );
+  )
 
   // log user out
   const logUserOut = () => {
-    logout();
-  };
+    logout()
+  }
 
   const DrawerContent = (props) => {
-    const { state, descriptors, navigation } = props;
-    let currentFolderPath;
+    const { state, descriptors, navigation } = props
+    let currentFolderPath
     if (currentFolder && currentFolder?.path) {
       currentFolderPath =
         typeof currentFolder.path === 'string'
           ? JSON.parse(currentFolder.path)
-          : currentFolder.path;
+          : currentFolder.path
     }
     return (
       <View style={styles.drawerContainer}>
+        {/* App icon */}
         <View style={styles.header}>
           <Image
             source={require('../../assets/imgs/jotter-circle.png')}
@@ -71,13 +72,15 @@ function DrawerNav({ navigation }) {
           <Text style={styles.headerText}>Jotter</Text>
           <Text style={styles.headerEmail}>{user?.email}</Text>
         </View>
+
+        {/* Navigation */}
         <DrawerContentScrollView
           {...props}
           contentContainerStyle={styles.drawerWrapper}
         >
           {/* Home, Account, and Settings items */}
           {state.routes.map((route, index) => {
-            const isActive = state.index === index;
+            const isActive = state.index === index
             return (
               <Pressable
                 key={index}
@@ -90,7 +93,7 @@ function DrawerNav({ navigation }) {
                   {descriptors[route.key].options.drawerLabel || route.name}
                 </Text>
               </Pressable>
-            );
+            )
           })}
           {currentFolder ? (
             <Text style={styles.foldersTitle}>Open folders</Text>
@@ -99,7 +102,7 @@ function DrawerNav({ navigation }) {
           {/* Breadcrumbs */}
           {currentFolder && currentFolderPath && currentFolderPath.length !== 0
             ? currentFolderPath.map((pathItem, index) => {
-                const isActive = state.index === index + 2;
+                const isActive = state.index === index + 2
                 return (
                   <Pressable
                     key={pathItem.id}
@@ -126,7 +129,7 @@ function DrawerNav({ navigation }) {
                       {pathItem.title}
                     </Text>
                   </Pressable>
-                );
+                )
               })
             : null}
           {/* current folder */}
@@ -154,8 +157,8 @@ function DrawerNav({ navigation }) {
           </Pressable>
         </DrawerContentScrollView>
       </View>
-    );
-  };
+    )
+  }
 
   const headerOptions = {
     headerShadowVisible: false,
@@ -166,7 +169,7 @@ function DrawerNav({ navigation }) {
       backgroundColor: COLORS.background,
     },
     headerTintColor: COLORS.text2,
-  };
+  }
 
   return (
     <Drawer.Navigator
@@ -189,7 +192,7 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen name='Account' component={Account} />
       <Drawer.Screen name='Settings' component={Settings} />
     </Drawer.Navigator>
-  );
+  )
 }
 
 const styleSheet = (COLORS) =>
@@ -259,6 +262,6 @@ const styleSheet = (COLORS) =>
     activeLabel: {
       color: COLORS.text, // Active label (text) color
     },
-  });
+  })
 
-export default DrawerNav;
+export default DrawerNav

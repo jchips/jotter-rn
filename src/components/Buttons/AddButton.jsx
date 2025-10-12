@@ -1,15 +1,15 @@
-import { useRef } from 'react';
-import { StyleSheet, Image, Pressable, View, Text } from 'react-native';
-import Popover from 'react-native-popover-view';
-import { moderateScale } from '../../util/scaling';
-import { useTheme } from '../../contexts/ThemeContext';
-import { BORDER, useAppStyles } from '../../styles';
+import { useRef } from 'react'
+import { StyleSheet, Image, Pressable, View, Text } from 'react-native'
+import Popover from 'react-native-popover-view'
+import { moderateScale } from '../../util/scaling'
+import { useTheme } from '../../contexts/ThemeContext'
+import { BORDER, useAppStyles } from '../../styles'
 
 const AddButton = ({ setOpenAddTitle, setType }) => {
-  const popoverRef = useRef();
-  const { COLORS } = useTheme();
-  const { app, buttons, POPOVER } = useAppStyles();
-  const styles = styleSheet(buttons, COLORS, POPOVER);
+  const popoverRef = useRef()
+  const { COLORS } = useTheme()
+  const { app, buttons, POPOVER } = useAppStyles()
+  const styles = styleSheet(buttons, COLORS, POPOVER)
 
   return (
     <Popover
@@ -30,12 +30,13 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
       popoverStyle={styles.popover}
     >
       <View style={POPOVER.popoverContainer}>
+        {/* Add folder */}
         <Pressable
           style={styles.popoverButton}
           onPress={() => {
-            setType('folder');
-            setOpenAddTitle(true);
-            popoverRef.current.requestClose();
+            setType('folder')
+            setOpenAddTitle(true)
+            popoverRef.current.requestClose()
           }}
         >
           <Image
@@ -47,12 +48,14 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
           />
           <Text style={buttons.btnText2}>New Folder</Text>
         </Pressable>
+
+        {/* Add note */}
         <Pressable
           style={styles.popoverButton}
           onPress={() => {
-            setType('note');
-            setOpenAddTitle(true);
-            popoverRef.current.requestClose();
+            setType('note')
+            setOpenAddTitle(true)
+            popoverRef.current.requestClose()
           }}
         >
           <Image
@@ -66,8 +69,8 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         </Pressable>
       </View>
     </Popover>
-  );
-};
+  )
+}
 
 const styleSheet = (buttons, COLORS, POPOVER) =>
   StyleSheet.create({
@@ -87,6 +90,6 @@ const styleSheet = (buttons, COLORS, POPOVER) =>
       ...POPOVER.button,
       justifyContent: 'space-between',
     },
-  });
+  })
 
-export default AddButton;
+export default AddButton
