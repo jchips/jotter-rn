@@ -43,9 +43,6 @@
         }
       ],
       [
-        "expo-asset"
-      ],
-      [
         "expo-font",
         {
           "fonts": [
