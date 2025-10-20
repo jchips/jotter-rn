@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native'
 import { moderateScale } from '../../util/scaling'
 import { useTheme } from '../../contexts/ThemeContext'
 import { FONT, FONTSIZE } from '../../styles'
 
 const EditNote = (props) => {
-  const { isEditable, markdown, update } = props
-  const [selection, setSelection] = useState({
-    start: 0,
-    end: 0,
-  })
+  const { isEditable, markdown, update, selection, setSelection } = props
+  // const [selection, setSelection] = useState({
+  //   start: 0,
+  //   end: 0,
+  // })
   const { COLORS } = useTheme()
   const styles = styleSheet(COLORS)
 
@@ -36,6 +36,7 @@ const EditNote = (props) => {
         multiline
         value={markdown}
         onChangeText={update}
+        textAlignVertical='top'
         selection={selection}
         onSelectionChange={handleSelectionChange}
         placeholder='Add markdown...'
@@ -72,6 +73,7 @@ const styleSheet = (COLORS) =>
       fontSize: moderateScale(FONTSIZE.small),
     },
     textInput: {
+      minHeight: '100%',
       color: COLORS.text,
       fontFamily: FONT.code,
       fontSize: moderateScale(FONTSIZE.regular),
