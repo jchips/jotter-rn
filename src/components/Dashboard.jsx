@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   StyleSheet,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   useColorScheme,
+  RefreshControl,
 } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useSelector, useDispatch } from 'react-redux'
@@ -35,6 +36,7 @@ const Dashboard = ({ route }) => {
   const [openSort, setOpenSort] = useState(false)
   const [openGrid, setOpenGrid] = useState(false)
   const [openAddTitle, setOpenAddTitle] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const { COLORS, theme } = useTheme()
   const { token, logout } = useAuth()
   const { setMarkdown } = useMarkdown()
@@ -140,6 +142,24 @@ const Dashboard = ({ route }) => {
     }, [folderId])
   )
 
+  // Pull-to-refresh
+  const onRefresh = React.useCallback(() => {
+    const refreshContent = async () => {
+      try {
+        setRefreshing(true)
+        setError('')
+        let folder_id = !folderId ? null : folderId
+        await refresh(folder_id)
+      } catch (err) {
+        console.error(err)
+        setError('Failed refresh')
+      } finally {
+        setRefreshing(false)
+      }
+    }
+    refreshContent()
+  }, [])
+
   // Logs the user out
   const logUserOut = () => {
     logout()
@@ -155,6 +175,14 @@ const Dashboard = ({ route }) => {
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[COLORS.themePurple]}
+            progressBackgroundColor={COLORS.background}
+          />
+        }
       >
         {folders ? (
           <DisplayFolders

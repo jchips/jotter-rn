@@ -1,4 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+  useRef,
+} from 'react'
 import debounce from 'lodash/debounce'
 import { useSelector } from 'react-redux'
 import {
@@ -43,6 +50,11 @@ const Editor = ({ navigation, route }) => {
   const [noteContent, setNoteContent] = useState(markdown)
   const [saved, setSaved] = useState(true)
   const [words, setWords] = useState(getWordCount(markdown))
+  const [selection, setSelection] = useState({
+    start: 0,
+    end: 0,
+  })
+  const pendingSelection = useRef(null)
   const { app, buttons } = useAppStyles()
   const { COLORS } = useTheme()
   const styles = styleSheet(app, buttons, COLORS)
@@ -61,6 +73,13 @@ const Editor = ({ navigation, route }) => {
       }, 100),
     []
   )
+
+  useLayoutEffect(() => {
+    if (pendingSelection.current) {
+      setSelection(pendingSelection.current)
+      pendingSelection.current = null
+    }
+  }, [markdown])
 
   useEffect(() => {
     checkSaved(markdown, noteContent)
@@ -186,11 +205,19 @@ const Editor = ({ navigation, route }) => {
         if (secondLastLine.startsWith('* ')) {
           const newValue = value + '* '
           setMarkdown(newValue)
+          pendingSelection.current = {
+            start: newValue.length,
+            end: newValue.length,
+          }
           return
         }
         if (secondLastLine.startsWith('- ')) {
           const newValue = value + '- '
           setMarkdown(newValue)
+          pendingSelection.current = {
+            start: newValue.length,
+            end: newValue.length,
+          }
           return
         }
         const match = secondLastLine.match(/^(\d+)\. /)
@@ -198,6 +225,10 @@ const Editor = ({ navigation, route }) => {
           const count = parseInt(match[1], 10)
           const newValue = value + `${count + 1}. `
           setMarkdown(newValue)
+          pendingSelection.current = {
+            start: newValue.length,
+            end: newValue.length,
+          }
           return
         }
       } else if (secondLastLine === '-' && lastLine === '') {
@@ -275,6 +306,8 @@ const Editor = ({ navigation, route }) => {
               setIsEditable={setIsEditable}
               update={update}
               doubleTap={doubleTap}
+              selection={selection}
+              setSelection={setSelection}
             />
           </View>
         </GestureDetector>
