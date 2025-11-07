@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native'
-import { useRoute, useFocusEffect } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useFolder } from '../hooks/useFolder.js'
@@ -26,6 +26,7 @@ const Drawer = createDrawerNavigator()
 
 function DrawerNav({ navigation }) {
   const [currentFolder, setCurrentFolder] = useState(null)
+  const [breadcrumbPath, setBreadcrumbPath] = useState([])
   const { user, logout } = useAuth()
   const route = useRoute()
   const { folder } = useFolder(route?.params?.params?.folderId)
@@ -34,29 +35,30 @@ function DrawerNav({ navigation }) {
   const styles = styleSheet(COLORS)
 
   useEffect(() => {
-    let path
+    navigation.setOptions({
+      headerTitle: folder ? folder?.title : 'Home',
+    })
     if (folder?.id) {
       setCurrentFolder(folder)
       const formatPath = async () => {
-        for (let i = 0; i < folder.path.length; i++) {
-          // loop path ids
-          folder.path[i]['title'] = await getFolderTitle(folder.path[i].id)
-        }
+        let currentFolderPath =
+          typeof folder.path === 'string'
+            ? JSON.parse(folder.path)
+            : folder.path
+        const pathWithTitles = await currentFolderPath.reduce(
+          async (accPromise, item) => {
+            const acc = await accPromise
+            const title = await getFolderTitle(item.id)
+            acc.push({ ...item, title })
+            return acc
+          },
+          Promise.resolve([])
+        )
+        setBreadcrumbPath(pathWithTitles)
       }
       formatPath()
-      path = folder.path
-    } else {
-      path = []
     }
   }, [folder?.id])
-
-  useFocusEffect(
-    useCallback(() => {
-      navigation.setOptions({
-        headerTitle: currentFolder ? currentFolder.title : 'Home',
-      })
-    }, [navigation])
-  )
 
   // log user out
   const logUserOut = () => {
@@ -65,13 +67,6 @@ function DrawerNav({ navigation }) {
 
   const DrawerContent = (props) => {
     const { state, descriptors, navigation } = props
-    let currentFolderPath
-    if (currentFolder && currentFolder?.path) {
-      currentFolderPath =
-        typeof currentFolder.path === 'string'
-          ? JSON.parse(currentFolder.path)
-          : currentFolder.path
-    }
     return (
       <View style={styles.drawerContainer}>
         {/* App icon */}
@@ -108,12 +103,12 @@ function DrawerNav({ navigation }) {
             )
           })}
           {currentFolder ? (
-            <Text style={styles.foldersTitle}>Open folders</Text>
+            <Text style={styles.foldersTitle}>Recent folders</Text>
           ) : null}
 
           {/* Breadcrumbs */}
-          {currentFolder && currentFolderPath && currentFolderPath.length !== 0
-            ? currentFolderPath.map((pathItem, index) => {
+          {currentFolder && breadcrumbPath.length > 0
+            ? breadcrumbPath.map((pathItem, index) => {
                 const isActive = state.index === index + 2
                 return (
                   <Pressable
@@ -127,7 +122,7 @@ function DrawerNav({ navigation }) {
                         screen: 'Home',
                         params: {
                           folderId: pathItem.id,
-                          // folderTitle: pathItem.title,
+                          folderTitle: pathItem.title,
                         },
                       })
                     }

@@ -6,7 +6,7 @@ export async function getFolderTitle(folderId) {
     let folderTitle = res?.data?.title
     return folderTitle;
   } catch (err) {
-    console.error(err);
-    throw new Error('Could not find folder');
+    console.error('Could not find folder', err);
+    return 'Unknown title'
   }
 }

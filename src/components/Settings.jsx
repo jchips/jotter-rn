@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Switch, Linking } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import SelectDropdown from 'react-native-select-dropdown';
-import { fetchConfigs, setConfigs } from '../reducers/configReducer';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import api from '../util/api';
-import { moderateScale } from '../util/scaling';
-import DropdownBtn from './Buttons/DropdownBtn';
-import { FONTSIZE, FONT, useAppStyles } from '../styles';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, Switch, Linking } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
+import SelectDropdown from 'react-native-select-dropdown'
+import { fetchConfigs, setConfigs } from '../reducers/configReducer'
+import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import api from '../util/api'
+import { moderateScale } from '../util/scaling'
+import DropdownBtn from './Buttons/DropdownBtn'
+import { FONTSIZE, FONT, useAppStyles } from '../styles'
 
 const Settings = ({ navigation }) => {
-  const { data: configs } = useSelector((state) => state.configs);
-  const [hideWordCount, setHideWordCount] = useState(configs?.hideWordCount);
-  const [hidePreview, setHidePreview] = useState(configs?.hidePreview);
-  const { COLORS, changeTheme, theme } = useTheme();
-  const { app, MODAL } = useAppStyles();
-  const { token } = useAuth();
-  const dispatch = useDispatch();
-  const styles = styleSheet(app, COLORS);
+  const { data: configs } = useSelector((state) => state.configs)
+  const [hideWordCount, setHideWordCount] = useState(configs?.hideWordCount)
+  const [hidePreview, setHidePreview] = useState(configs?.hidePreview)
+  const { COLORS, changeTheme, theme } = useTheme()
+  const { app, MODAL } = useAppStyles()
+  const { token } = useAuth()
+  const dispatch = useDispatch()
+  const styles = styleSheet(app, COLORS)
 
   useEffect(() => {
-    dispatch(fetchConfigs(token));
-  }, [dispatch, navigation]);
+    dispatch(fetchConfigs(token))
+  }, [dispatch, navigation])
 
   /**
    * Adds the new config changes to the database
@@ -30,12 +30,12 @@ const Settings = ({ navigation }) => {
    */
   const dbUpdate = async (updates) => {
     try {
-      let res = await api.updateConfigs(updates);
-      dispatch(setConfigs({ ...res.data, ...updates }));
+      let res = await api.updateConfigs(updates)
+      dispatch(setConfigs({ ...res.data, ...updates }))
     } catch (err) {
-      console.error('Failed to update user configs -', err);
+      console.error('Failed to update user configs -', err)
     }
-  };
+  }
 
   /**
    * Updates the configs based on user changes
@@ -45,17 +45,17 @@ const Settings = ({ navigation }) => {
   const updateSettings = (setting) => {
     switch (setting) {
       case 'toggleWordCount':
-        const hideWordCountState = hideWordCount ? false : true;
-        setHideWordCount(hideWordCountState);
-        return dbUpdate({ hideWordCount: hideWordCountState });
+        const hideWordCountState = hideWordCount ? false : true
+        setHideWordCount(hideWordCountState)
+        return dbUpdate({ hideWordCount: hideWordCountState })
       case 'togglePreview':
-        const previewState = hidePreview ? false : true;
-        setHidePreview(previewState);
-        return dbUpdate({ hidePreview: previewState });
+        const previewState = hidePreview ? false : true
+        setHidePreview(previewState)
+        return dbUpdate({ hidePreview: previewState })
     }
-  };
+  }
 
-  const themes = [{ label: 'light' }, { label: 'dark' }, { label: 'system' }];
+  const themes = [{ label: 'light' }, { label: 'dark' }, { label: 'system' }]
 
   /**
    * Renders a theme option
@@ -74,13 +74,13 @@ const Settings = ({ navigation }) => {
       >
         <Text style={MODAL.dropdownItemTxtStyle}>{item.label}</Text>
       </View>
-    );
-  };
+    )
+  }
 
   // Dropdown button default text
   const dropdownBtnText = () => {
-    return <Text>Select theme</Text>;
-  };
+    return <Text>Select theme</Text>
+  }
 
   return (
     <View style={app.container}>
@@ -89,7 +89,7 @@ const Settings = ({ navigation }) => {
         <SelectDropdown
           data={themes}
           onSelect={(selection, index) => {
-            changeTheme(selection.label);
+            changeTheme(selection.label)
           }}
           defaultValue={{ label: theme }}
           renderItem={renderItem}
@@ -136,7 +136,7 @@ const Settings = ({ navigation }) => {
             fontFamily: FONT.semiBold,
           }}
         >
-          To export notes or delete account, log in to web version.
+          To export notes, import notes, or delete account, log in to web.
         </Text>
       </View>
       <View style={styles.credits}>
@@ -152,8 +152,8 @@ const Settings = ({ navigation }) => {
         </Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -187,6 +187,6 @@ const styleSheet = (app, COLORS) =>
       color: COLORS.themePurpleText,
       fontFamily: FONT.semiBold,
     },
-  });
+  })
 
-export default Settings;
+export default Settings
