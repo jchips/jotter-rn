@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,11 +6,11 @@ import {
   Text,
   TextInput,
   Pressable,
-} from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import api from '../../util/api';
+} from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
+import api from '../../util/api'
 
 const Rename = ({
   openRename,
@@ -22,16 +22,16 @@ const Rename = ({
   setFolders,
   folder,
 }) => {
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
-  const { app, MODAL, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
+  } = useForm()
+  const { app, MODAL, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
 
   /**
    * Changes the title of a note or folder
@@ -39,9 +39,9 @@ const Rename = ({
    */
   const onSubmit = async (title) => {
     try {
-      setError('');
-      setSaving(true);
-      let res;
+      setError('')
+      setSaving(true)
+      let res
       if (note) {
         res = await api.updateNote(
           {
@@ -49,10 +49,10 @@ const Rename = ({
             updatedAt: Date.now(),
           },
           note.id
-        );
-        let notesCopy = [...notes];
-        notesCopy.splice(notes.indexOf(note), 1, res.data);
-        setNotes(notesCopy);
+        )
+        let notesCopy = [...notes]
+        notesCopy.splice(notes.indexOf(note), 1, res.data)
+        setNotes(notesCopy)
       } else if (folder) {
         res = await api.updateFolder(
           {
@@ -60,21 +60,21 @@ const Rename = ({
             updatedAt: Date.now(),
           },
           folder.id
-        );
-        let foldersCopy = [...folders];
-        foldersCopy.splice(folders.indexOf(folder), 1, res.data);
-        setFolders(foldersCopy);
+        )
+        let foldersCopy = [...folders]
+        foldersCopy.splice(folders.indexOf(folder), 1, res.data)
+        setFolders(foldersCopy)
       }
     } catch (err) {
-      setError('Failed to rename');
-      console.error('Failed to rename: ', err);
+      setError('Failed to rename')
+      console.error('Failed to rename: ', err)
     }
     reset({
       title: '',
-    });
-    setOpenRename(false);
-    setSaving(false);
-  };
+    })
+    setOpenRename(false)
+    setSaving(false)
+  }
 
   return (
     <Modal
@@ -82,7 +82,7 @@ const Rename = ({
       transparent={true}
       visible={openRename}
       onRequestClose={() => {
-        setOpenRename(!openRename);
+        setOpenRename(!openRename)
       }}
     >
       <View style={MODAL.centeredView}>
@@ -126,8 +126,8 @@ const Rename = ({
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
-                setOpenRename(!openRename);
-                setError('');
+                setOpenRename(!openRename)
+                setError('')
               }}
             >
               <Text style={buttons.btnText2}>Cancel</Text>
@@ -147,9 +147,9 @@ const Rename = ({
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default Rename;
+export default Rename
