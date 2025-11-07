@@ -1,4 +1,3 @@
-import { useState, useCallback } from 'react'
 import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native'
 import { moderateScale } from '../../util/scaling'
 import { useTheme } from '../../contexts/ThemeContext'
@@ -6,10 +5,6 @@ import { FONT, FONTSIZE } from '../../styles'
 
 const EditNote = (props) => {
   const { isEditable, markdown, update, selection, setSelection } = props
-  // const [selection, setSelection] = useState({
-  //   start: 0,
-  //   end: 0,
-  // })
   const { COLORS } = useTheme()
   const styles = styleSheet(COLORS)
 
