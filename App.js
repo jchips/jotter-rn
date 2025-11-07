@@ -1,12 +1,13 @@
 import './gesture-handler';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, Platform } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { ThemeProvider } from './src/contexts/ThemeContext';
 import { MarkdownProvider } from './src/contexts/MDContext';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Router from './src/routing/Router';
 import store from './src/store';
 
@@ -45,7 +46,15 @@ export default function App() {
       <ReduxProvider store={store}>
         <AuthProvider>
           <MarkdownProvider>
-            <Router />
+            {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
+            <SafeAreaProvider>
+              {Platform.OS === 'android' && Platform.Version <= 33 ? (
+                <SafeAreaView style={{ flex: 1 }}>
+                  <Router />
+                </SafeAreaView>
+              ) :
+                <Router />}
+            </SafeAreaProvider>
           </MarkdownProvider>
         </AuthProvider>
       </ReduxProvider>

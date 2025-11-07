@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, View, Platform, useColorScheme } from 'react-native'
+import {
+  StyleSheet,
+  StatusBar as RNStatusBar,
+  View,
+  Platform,
+  useColorScheme,
+} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -54,6 +60,17 @@ const Router = () => {
   useEffect(() => {
     try {
       const navigationBg = async () => {
+        if (theme === 'system') {
+          if (systemTheme === 'light') {
+            await NavigationBar.setButtonStyleAsync('dark')
+          } else {
+            await NavigationBar.setButtonStyleAsync('light')
+          }
+        } else {
+          await NavigationBar.setButtonStyleAsync(
+            theme === 'dark' ? 'light' : 'dark'
+          )
+        }
         await SystemUI.setBackgroundColorAsync(COLORS.background)
       }
       Platform.OS === 'android' ? navigationBg() : null
@@ -62,21 +79,27 @@ const Router = () => {
     }
   }, [NavigationBar, theme, systemTheme])
 
-  // Sets the status bar theme
-  const statusBarTheme = () => {
-    if (theme === 'system') {
-      return 'auto'
-    } else if (theme === 'dark') {
-      return 'light'
-    } else {
-      return 'dark'
-    }
-  }
+  // Sets the status bar text theme
+  const statusBarTextStyle =
+    theme === 'system'
+      ? systemTheme === 'light'
+        ? 'dark'
+        : 'light'
+      : theme === 'dark'
+      ? 'light'
+      : 'dark'
 
   return (
     !loading && (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-        <StatusBar style={statusBarTheme()} />
+        {Platform.OS === 'android' && Platform.Version <= 33 ? (
+          <>
+            <RNStatusBar hidden />
+            <StatusBar hidden />
+          </>
+        ) : (
+          <StatusBar style={statusBarTextStyle} />
+        )}
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
