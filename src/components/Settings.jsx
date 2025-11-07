@@ -136,8 +136,7 @@ const Settings = ({ navigation }) => {
             fontFamily: FONT.semiBold,
           }}
         >
-          To export notes, import notes, or delete account, log in to web
-          version.
+          To export notes, import notes, or delete account, log in to web.
         </Text>
       </View>
       <View style={styles.credits}>
