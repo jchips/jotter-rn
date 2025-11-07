@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,20 +6,20 @@ import {
   TextInput,
   Pressable,
   Keyboard,
-} from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { useAppStyles } from '../styles';
+} from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { useAppStyles } from '../styles'
 
 const LoginForm = () => {
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login, setIsLoggedIn } = useAuth();
-  const { COLORS } = useTheme();
-  const { app, buttons } = useAppStyles();
-  const styles = styleSheet(app, COLORS, buttons);
-  const fieldRequired = 'This field is required';
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { login, setIsLoggedIn } = useAuth()
+  const { COLORS } = useTheme()
+  const { app, buttons } = useAppStyles()
+  const styles = styleSheet(app, COLORS, buttons)
+  const fieldRequired = 'This field is required'
 
   const {
     control,
@@ -31,7 +31,7 @@ const LoginForm = () => {
       email: '',
       password: '',
     },
-  });
+  })
 
   /**
    * Logs user into Jotter
@@ -39,30 +39,30 @@ const LoginForm = () => {
    */
   const onSubmit = async (formData) => {
     try {
-      setLoading(true);
-      setError('');
-      let res = await login(formData.email, formData.password);
+      setLoading(true)
+      setError('')
+      let res = await login(formData.email, formData.password)
       if (res?.response?.data === 'Invalid login') {
-        setIsLoggedIn(false);
-        setError('Incorrect email or password');
+        setIsLoggedIn(false)
+        setError('Incorrect email or password')
       }
     } catch (err) {
-      setIsLoggedIn(false);
+      setIsLoggedIn(false)
       setError(
         error.message === 'Request failed with status code 403'
           ? 'Incorrect email or password'
           : 'Sorry, there has been a server error :('
-      );
-      console.error(err);
+      )
+      console.error(err)
     } finally {
       reset({
         email: '',
         password: '',
-      });
-      setLoading(false);
-      Keyboard.dismiss();
+      })
+      setLoading(false)
+      Keyboard.dismiss()
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -71,6 +71,7 @@ const LoginForm = () => {
           <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
+
       <View style={app.controllerContainer}>
         <Controller
           name='email'
@@ -133,8 +134,8 @@ const LoginForm = () => {
         <Text style={buttons.btnText4}>Log in</Text>
       </Pressable>
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS, buttons) =>
   StyleSheet.create({
@@ -150,6 +151,6 @@ const styleSheet = (app, COLORS, buttons) =>
       ...buttons.btn2,
       marginHorizontal: 0,
     },
-  });
+  })
 
-export default LoginForm;
+export default LoginForm
