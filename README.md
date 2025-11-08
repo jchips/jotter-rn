@@ -4,7 +4,7 @@
   <img src='./assets/imgs/jotter-circle.png#jotter' alt='Jotter logo' height='50px' width='50px'/>
 </center>
 
-Tired of searching for the perfect tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking app that combines the simplicity of Markdown with the power of organization. All your notes are encrypted.
+Tired of searching for the perfect tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking app that combines the simplicity of Markdown with the power of organization. **All your notes are encrypted.**
 
 Try **Jotter** today!
 
@@ -16,7 +16,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.3.3
+## Version: 1.3.4
 
 ## Architecture
 
@@ -52,6 +52,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
+- **1.3.4** (2025-11-08, 12:55am) - Caches data to improve app performance.
 - **1.3.3** (2025-11-07, 12:55am) - Fixed breadcrumbs bug, fix keyboard covering up inputs on auth page bug.
 - **1.3.2** (2025-10-19, 10:25pm) - Fixed bullet point bug where cursor displays before bullet.
 - **1.3.1** (2025-10-15, 10:40pm) - Fixed text flickering bug with creating newlines.
@@ -89,6 +90,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - [React Navigation](https://reactnavigation.org/)
 - [React hook form](https://react-hook-form.com/)
 - [react-native-markdown-display](https://github.com/iamacup/react-native-markdown-display/tree/master)
+- [tanstack/react-query](https://tanstack.com/query/latest)
 - [react-native-popover-view](https://www.npmjs.com/package/react-native-popover-view)
 - [react-native-select-dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown?tab=readme-ov-file)
 - [react-native-keyboard-aware-scroll-view](https://www.npmjs.com/package/react-native-keyboard-aware-scroll-view)
