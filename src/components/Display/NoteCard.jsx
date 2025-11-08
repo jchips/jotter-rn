@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,15 +6,15 @@ import {
   Pressable,
   Image,
   Dimensions,
-} from 'react-native';
-import Popover from 'react-native-popover-view';
-import { useTheme } from '../../contexts/ThemeContext';
-import formatDate from '../../util/formatDate';
-import { moderateScale } from '../../util/scaling';
-import { useAppStyles } from '../../styles';
-import { FONT, FONTSIZE, BORDER } from '../../styles';
+} from 'react-native'
+import Popover from 'react-native-popover-view'
+import { useTheme } from '../../contexts/ThemeContext'
+import formatDate from '../../util/formatDate'
+import { moderateScale } from '../../util/scaling'
+import { useAppStyles } from '../../styles'
+import { FONT, FONTSIZE, BORDER } from '../../styles'
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get('window').width
 
 const NoteCard = (props) => {
   const {
@@ -25,15 +25,15 @@ const NoteCard = (props) => {
     setOpenDelete,
     setOpenDetails,
     numColumns,
-  } = props;
-  const popoverRef = useRef();
-  const { app, POPOVER, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
-  const styles = styleSheet(app, COLORS);
+  } = props
+  const popoverRef = useRef()
+  const { app, POPOVER, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
+  const styles = styleSheet(app, COLORS)
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
-    numColumns;
+    numColumns
 
   return (
     <View style={[styles.container, { width: itemWidth }]}>
@@ -59,9 +59,9 @@ const NoteCard = (props) => {
             <Pressable
               style={POPOVER.button}
               onPress={() => {
-                setSelectedNote(note);
-                setOpenRename(true);
-                popoverRef.current.requestClose();
+                setSelectedNote(note)
+                setOpenRename(true)
+                popoverRef.current.requestClose()
               }}
             >
               <Image
@@ -76,9 +76,9 @@ const NoteCard = (props) => {
             <Pressable
               style={POPOVER.button}
               onPress={() => {
-                setSelectedNote(note);
-                setOpenDetails(true);
-                popoverRef.current.requestClose();
+                setSelectedNote(note)
+                setOpenDetails(true)
+                popoverRef.current.requestClose()
               }}
             >
               <Image
@@ -93,9 +93,9 @@ const NoteCard = (props) => {
             <Pressable
               style={POPOVER.button}
               onPress={() => {
-                setSelectedNote(note);
-                setOpenMove(true);
-                popoverRef.current.requestClose();
+                setSelectedNote(note)
+                setOpenMove(true)
+                popoverRef.current.requestClose()
               }}
             >
               <Image
@@ -110,9 +110,9 @@ const NoteCard = (props) => {
             <Pressable
               style={POPOVER.button}
               onPress={() => {
-                setSelectedNote(note);
-                setOpenDelete(true);
-                popoverRef.current.requestClose();
+                setSelectedNote(note)
+                setOpenDelete(true)
+                popoverRef.current.requestClose()
               }}
             >
               <Image
@@ -132,8 +132,8 @@ const NoteCard = (props) => {
         <Text style={styles.metaData}>{formatDate(note.updatedAt)}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -163,6 +163,6 @@ const styleSheet = (app, COLORS) =>
       width: moderateScale(170),
       backgroundColor: COLORS.cardBg,
     },
-  });
+  })
 
-export default NoteCard;
+export default NoteCard

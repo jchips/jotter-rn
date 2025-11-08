@@ -2,9 +2,13 @@ import './gesture-handler';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, Platform } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { AuthProvider } from './src/contexts/AuthContext';
+import { AuthProvider, queryClient } from './src/contexts/AuthContext';
 import { ThemeProvider } from './src/contexts/ThemeContext';
 import { MarkdownProvider } from './src/contexts/MDContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -41,20 +45,31 @@ export default function App() {
     return null;
   }
 
+  const asyncStoragePersister = createAsyncStoragePersister({
+    storage: AsyncStorage,
+  })
+
+  persistQueryClient({
+    queryClient,
+    persister: asyncStoragePersister,
+  })
+
   return fontsLoaded ? (
     <ThemeProvider>
       <ReduxProvider store={store}>
         <AuthProvider>
           <MarkdownProvider>
-            {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
-            <SafeAreaProvider>
-              {Platform.OS === 'android' && Platform.Version <= 33 ? (
-                <SafeAreaView style={{ flex: 1 }}>
-                  <Router />
-                </SafeAreaView>
-              ) :
-                <Router />}
-            </SafeAreaProvider>
+            <QueryClientProvider client={queryClient}>
+              {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
+              <SafeAreaProvider>
+                {Platform.OS === 'android' && Platform.Version <= 33 ? (
+                  <SafeAreaView style={{ flex: 1 }}>
+                    <Router />
+                  </SafeAreaView>
+                ) :
+                  <Router />}
+              </SafeAreaProvider>
+            </QueryClientProvider>
           </MarkdownProvider>
         </AuthProvider>
       </ReduxProvider>

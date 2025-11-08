@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useAppStyles } from '../../styles';
-import Delete from '../Modals/Delete';
-import FolderCard from './FolderCard';
-import Move from '../Modals/Move';
-import Rename from '../Modals/Rename';
-import Details from '../Modals/Details';
+import { useState } from 'react'
+import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { useAppStyles } from '../../styles'
+import Delete from '../Modals/Delete'
+import FolderCard from './FolderCard'
+import Move from '../Modals/Move'
+import Rename from '../Modals/Rename'
+import Details from '../Modals/Details'
 
 const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
-  const [openMove, setOpenMove] = useState(false);
-  const [openRename, setOpenRename] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState(null);
-  const { app } = useAppStyles();
-  const navigation = useNavigation();
-  const numColumns = Number(gridSize) || 1;
+  const [openMove, setOpenMove] = useState(false)
+  const [openRename, setOpenRename] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openDetails, setOpenDetails] = useState(false)
+  const [selectedFolder, setSelectedFolder] = useState(null)
+  const { app } = useAppStyles()
+  const navigation = useNavigation()
+  const numColumns = Number(gridSize) || 1
 
   /**
    * Renders list of folders
@@ -24,14 +24,14 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
    * @returns - a folder card that navigates inside folder
    */
   const renderItem = ({ item }) => {
-    const folder = item;
+    const folder = item
     return (
       <Pressable
         onPress={() => {
           navigation.push('Drawer', {
             screen: 'Home',
             params: { folderId: folder.id, folderTitle: folder.title },
-          });
+          })
         }}
       >
         <FolderCard
@@ -44,10 +44,10 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
           numColumns={numColumns}
         />
       </Pressable>
-    );
-  };
+    )
+  }
 
-  return folders.length > 0 ? (
+  return folders?.length > 0 ? (
     <View>
       {error ? (
         <View style={app.errorAlert}>
@@ -64,6 +64,7 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         columnWrapperStyle={
           numColumns > 1 ? { justifyContent: 'space-between' } : undefined
         }
+        removeClippedSubviews={false}
       />
       <Rename
         openRename={openRename}
@@ -95,9 +96,9 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         navigation={navigation}
       />
     </View>
-  ) : null;
-};
+  ) : null
+}
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default DisplayFolders;
+export default DisplayFolders

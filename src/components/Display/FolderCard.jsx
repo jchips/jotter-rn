@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,13 +6,13 @@ import {
   Image,
   Pressable,
   Dimensions,
-} from 'react-native';
-import Popover from 'react-native-popover-view';
-import { useTheme } from '../../contexts/ThemeContext';
-import { moderateScale } from '../../util/scaling';
-import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles';
+} from 'react-native'
+import Popover from 'react-native-popover-view'
+import { useTheme } from '../../contexts/ThemeContext'
+import { moderateScale } from '../../util/scaling'
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles'
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get('window').width
 
 const FolderCard = (props) => {
   const {
@@ -23,15 +23,15 @@ const FolderCard = (props) => {
     setOpenMove,
     setOpenDetails,
     numColumns,
-  } = props;
-  const popoverRef = useRef();
-  const { COLORS } = useTheme();
-  const { app, buttons, POPOVER } = useAppStyles();
-  const styles = styleSheet(app, COLORS);
+  } = props
+  const popoverRef = useRef()
+  const { COLORS } = useTheme()
+  const { app, buttons, POPOVER } = useAppStyles()
+  const styles = styleSheet(app, COLORS)
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
-    numColumns;
+    numColumns
 
   return (
     <View style={[styles.container, { width: itemWidth }]}>
@@ -65,9 +65,9 @@ const FolderCard = (props) => {
           <Pressable
             style={POPOVER.button}
             onPress={() => {
-              setSelectedFolder(folder);
-              setOpenRename(true);
-              popoverRef.current.requestClose();
+              setSelectedFolder(folder)
+              setOpenRename(true)
+              popoverRef.current.requestClose()
             }}
           >
             <Image
@@ -82,9 +82,9 @@ const FolderCard = (props) => {
           <Pressable
             style={POPOVER.button}
             onPress={() => {
-              setSelectedFolder(folder);
-              setOpenDetails(true);
-              popoverRef.current.requestClose();
+              setSelectedFolder(folder)
+              setOpenDetails(true)
+              popoverRef.current.requestClose()
             }}
           >
             <Image
@@ -99,9 +99,9 @@ const FolderCard = (props) => {
           <Pressable
             style={POPOVER.button}
             onPress={() => {
-              setSelectedFolder(folder);
-              setOpenMove(true);
-              popoverRef.current.requestClose();
+              setSelectedFolder(folder)
+              setOpenMove(true)
+              popoverRef.current.requestClose()
             }}
           >
             <Image
@@ -116,9 +116,9 @@ const FolderCard = (props) => {
           <Pressable
             style={POPOVER.button}
             onPress={() => {
-              setSelectedFolder(folder);
-              setOpenDelete(true);
-              popoverRef.current.requestClose();
+              setSelectedFolder(folder)
+              setOpenDelete(true)
+              popoverRef.current.requestClose()
             }}
           >
             <Image
@@ -133,8 +133,8 @@ const FolderCard = (props) => {
         </View>
       </Popover>
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -163,6 +163,6 @@ const styleSheet = (app, COLORS) =>
       width: moderateScale(172),
       backgroundColor: COLORS.cardBg,
     },
-  });
+  })
 
-export default FolderCard;
+export default FolderCard
