@@ -1,17 +1,20 @@
-import { useState } from 'react';
-import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native';
-import api from '../../util/api';
-import { moderateScale } from '../../util/scaling';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
-import { FONT, FONTSIZE } from '../../styles';
+import { useState } from 'react'
+import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native'
+import { useMutation } from '@tanstack/react-query'
+import { queryClient, useAuth } from '../../contexts/AuthContext'
+import api from '../../util/api'
+import { moderateScale } from '../../util/scaling'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
+import { FONT, FONTSIZE } from '../../styles'
 
 const Delete = (props) => {
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
-  const { app, MODAL, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
-  const styles = styleSheet(app, COLORS);
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const { app, MODAL, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
+  const { user } = useAuth()
+  const styles = styleSheet(app, COLORS)
   const {
     openDelete,
     setOpenDelete,
@@ -21,38 +24,105 @@ const Delete = (props) => {
     folders,
     setFolders,
     folder,
-  } = props;
+  } = props
+
+  /* Delete note */
+  const deleteNoteMutation = useMutation({
+    mutationFn: async (note) => {
+      await api.deleteNote(note.id)
+      return note
+    },
+    onMutate: async (note) => {
+      await queryClient.cancelQueries(['notes', user?.id, note.id])
+      const previousNotes = queryClient.getQueryData([
+        'notes',
+        user?.id,
+        note.id,
+      ])
+
+      queryClient.setQueryData(
+        ['notes', user?.id, note.folderId],
+        (oldNotes = []) => oldNotes.filter((n) => n.id !== note.id)
+      )
+
+      return { previousNotes }
+    },
+    onSuccess: () => {
+      setError('')
+      setOpenDelete(false)
+    },
+    onError: (err, note, context) => {
+      if (context?.previousNotes) {
+        queryClient.setQueryData(
+          ['notes', user?.id, note.id],
+          context.previousNotes
+        )
+      }
+      console.error('Delete note failed:', err)
+      setError('Failed to delete ' + note ? 'note' : 'folder')
+    },
+  })
+
+  /* Delete folder */
+  const deleteFolderMutation = useMutation({
+    mutationFn: async ({ folderId, folder }) => {
+      await api.deleteFolder(folderId)
+      return { folderId, folder }
+    },
+    onMutate: async ({ folderId, folder }) => {
+      await queryClient.cancelQueries(['folders', user?.id, folderId])
+      const previousFolders = queryClient.getQueryData([
+        'folders',
+        user?.id,
+        folderId,
+      ])
+
+      queryClient.setQueryData(
+        ['folders', user?.id, folder.parentId],
+        (oldFolders = []) => oldFolders.filter((f) => f.id !== folderId)
+      )
+
+      return { previousFolders }
+    },
+    onSuccess: () => {
+      setError('')
+      setOpenDelete(false)
+    },
+    onError: (err, folderId, context) => {
+      if (context?.previousFolders) {
+        queryClient.setQueryData(
+          ['folders', user?.id, folderId],
+          context.previousFolders
+        )
+      }
+      console.error('Delete folder failed:', err)
+      setError('Failed to delete ' + note ? 'note' : 'folder')
+    },
+  })
 
   // Deletes the note or folder (and all its contents)
   const handleSubmit = async () => {
     try {
-      setError('');
-      setSaving(true);
+      setSaving(true)
       if (note) {
-        await api.deleteNote(note.id);
-        let notesCopy = [...notes];
-        notesCopy.splice(notes.indexOf(note), 1);
-        setNotes(notesCopy);
+        deleteNoteMutation.mutate(note)
       } else {
-        await api.deleteFolder(folder.id);
-        let foldersCopy = [...folders];
-        foldersCopy.splice(folders.indexOf(folder), 1);
-        setFolders(foldersCopy);
+        deleteFolderMutation.mutate({ folderId: folder.id, folder })
       }
-      setOpenDelete(false);
+      // setOpenDelete(false)
     } catch (err) {
-      setError('Failed to delete ' + note ? 'note' : 'folder');
-      console.error('Failed to delete note', err);
+      setError('Failed to delete ' + note ? 'note' : 'folder')
+      console.error('Failed to delete note', err)
     }
-    setSaving(false);
-  };
+    setSaving(false)
+  }
   return (
     <Modal
       animationType='fade'
       transparent={true}
       visible={openDelete}
       onRequestClose={() => {
-        setOpenDelete(!openDelete);
+        setOpenDelete(!openDelete)
       }}
     >
       <View style={MODAL.centeredView}>
@@ -98,8 +168,8 @@ const Delete = (props) => {
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
-                setOpenDelete(!openDelete);
-                setError('');
+                setOpenDelete(!openDelete)
+                setError('')
               }}
             >
               <Text style={buttons.btnText2}>Cancel</Text>
@@ -119,8 +189,8 @@ const Delete = (props) => {
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -156,6 +226,6 @@ const styleSheet = (app, COLORS) =>
       width: 27,
       marginRight: 3,
     },
-  });
+  })
 
-export default Delete;
+export default Delete

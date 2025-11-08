@@ -1,4 +1,3 @@
-
 /* Code inspired by https://medium.com/soluto-engineering/size-matters-5aeeb462900a */
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');

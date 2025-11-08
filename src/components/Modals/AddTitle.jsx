@@ -8,7 +8,8 @@ import {
   TextInput,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
-import { useAuth } from '../../contexts/AuthContext'
+import { useMutation } from '@tanstack/react-query'
+import { useAuth, queryClient } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
 import { useAppStyles } from '../../styles'
 import { ROOT_FOLDER } from '../../hooks/useFolder'
@@ -41,6 +42,25 @@ const AddTitle = (props) => {
     },
   })
 
+  const createNoteMutation = useMutation({
+    mutationFn: (newNote) => api.addNote(newNote),
+    onSuccess: (res, newNote) => {
+      queryClient.setQueryData(['notes', user?.id, newNote.folderId], (old) =>
+        old ? [...old, res.data] : [res.data]
+      )
+    },
+  })
+
+  const createFolderMutation = useMutation({
+    mutationFn: (newFolder) => api.addFolder(newFolder),
+    onSuccess: (res, newFolder) => {
+      queryClient.setQueryData(
+        ['folders', user?.id, newFolder.parentId],
+        (old) => (old ? [...old, res.data] : [res.data])
+      )
+    },
+  })
+
   /**
    * Adds a title to a note or folder
    * Then creates the note or folder
@@ -62,33 +82,31 @@ const AddTitle = (props) => {
     if (currentFolder !== ROOT_FOLDER) {
       path.push({
         id: currentFolder.id,
-        // title: currentFolder.title,
       })
     }
     try {
       setError('')
       setSaving(true)
-      let res
       switch (type) {
         // add note
         case 'note':
-          res = await api.addNote({
+          const newNote = {
             title: titleControl.title,
             content: '',
             userId: user.id,
             folderId: currentFolder.id,
-          })
-          setNotes([res.data, ...notes])
+          }
+          createNoteMutation.mutate(newNote)
           break
         // add folder
         case 'folder':
-          res = await api.addFolder({
+          const newFolder = {
             title: titleControl.title,
             userId: user.id,
             parentId: currentFolder.id,
             path,
-          })
-          setFolders([res.data, ...folders])
+          }
+          createFolderMutation.mutate(newFolder)
           break
       }
       setOpenAddTitle(false)

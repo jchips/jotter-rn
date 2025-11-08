@@ -8,6 +8,8 @@ import {
   Pressable,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { queryClient, useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
 import { useAppStyles } from '../../styles'
 import api from '../../util/api'
@@ -30,8 +32,61 @@ const Rename = ({
     reset,
     formState: { errors },
   } = useForm()
+  const { user } = useAuth()
   const { app, MODAL, buttons } = useAppStyles()
   const { COLORS } = useTheme()
+
+  // Update note in database and cache
+  const updateNoteMutation = useMutation({
+    mutationFn: async ({ noteId, title }) =>
+      await api.updateNote(
+        {
+          title: title.rename,
+          updatedAt: Date.now(),
+        },
+        noteId
+      ),
+    onSuccess: (res) => {
+      queryClient.setQueryData(
+        ['notes', user?.id, res.data.folderId],
+        (oldNotes) =>
+          oldNotes.map((note) => (note.id === res.data.id ? res.data : note))
+      )
+      setOpenRename(false)
+    },
+    onError: (err) => {
+      console.error('Failed to rename note', err)
+      setError('Failed to rename note')
+      setSaving(false)
+    },
+  })
+
+  // Update folder in database and cache
+  const updateFolderMutation = useMutation({
+    mutationFn: async ({ folderId, title }) =>
+      await api.updateFolder(
+        {
+          title: title.rename,
+          updatedAt: Date.now(),
+        },
+        folderId
+      ),
+    onSuccess: (res) => {
+      queryClient.setQueryData(
+        ['folders', user?.id, res.data.parentId],
+        (oldFolders) =>
+          oldFolders.map((folder) =>
+            folder.id === res.data.id ? res.data : folder
+          )
+      )
+      setOpenRename(false)
+    },
+    onError: (err) => {
+      console.error('Failed to rename folder', err)
+      setError('Failed to rename folder')
+      setSaving(false)
+    },
+  })
 
   /**
    * Changes the title of a note or folder
@@ -41,29 +96,12 @@ const Rename = ({
     try {
       setError('')
       setSaving(true)
-      let res
       if (note) {
-        res = await api.updateNote(
-          {
-            title: title.rename,
-            updatedAt: Date.now(),
-          },
-          note.id
-        )
-        let notesCopy = [...notes]
-        notesCopy.splice(notes.indexOf(note), 1, res.data)
-        setNotes(notesCopy)
+        const noteId = note.id
+        updateNoteMutation.mutate({ noteId, title })
       } else if (folder) {
-        res = await api.updateFolder(
-          {
-            title: title.rename,
-            updatedAt: Date.now(),
-          },
-          folder.id
-        )
-        let foldersCopy = [...folders]
-        foldersCopy.splice(folders.indexOf(folder), 1, res.data)
-        setFolders(foldersCopy)
+        const folderId = folder.id
+        updateFolderMutation.mutate({ folderId, title })
       }
     } catch (err) {
       setError('Failed to rename')
@@ -72,7 +110,6 @@ const Rename = ({
     reset({
       title: '',
     })
-    setOpenRename(false)
     setSaving(false)
   }
 

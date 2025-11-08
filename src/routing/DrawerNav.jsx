@@ -5,7 +5,7 @@ import {
   View,
   Pressable,
   Image,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -20,11 +20,10 @@ import Settings from '../components/Settings.jsx'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 import { getFolderTitle } from '../util/getFolder.js'
 
-const screenWidth = Dimensions.get('window').width
-
 const Drawer = createDrawerNavigator()
 
 function DrawerNav({ navigation }) {
+  const { width: screenWidth } = useWindowDimensions()
   const [currentFolder, setCurrentFolder] = useState(null)
   const [breadcrumbPath, setBreadcrumbPath] = useState([])
   const { user, logout } = useAuth()

@@ -1,22 +1,38 @@
-import { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useAppStyles } from '../../styles';
-import NoteCard from './NoteCard';
-import Move from '../Modals/Move';
-import Rename from '../Modals/Rename';
-import Delete from '../Modals/Delete';
-import Details from '../Modals/Details';
+import { useState, useEffect } from 'react'
+import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { useAppStyles } from '../../styles'
+import NoteCard from './NoteCard'
+import Move from '../Modals/Move'
+import Rename from '../Modals/Rename'
+import Delete from '../Modals/Delete'
+import Details from '../Modals/Details'
 
-const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
-  const [openMove, setOpenMove] = useState(false);
-  const [openRename, setOpenRename] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-  const [selectedNote, setSelectedNote] = useState(null);
-  const navigation = useNavigation();
-  const { app, COLORS } = useAppStyles();
-  const numColumns = Number(gridSize) || 1;
+const DisplayNotes = ({
+  notes,
+  setNotes,
+  folders,
+  error,
+  gridSize,
+  refreshKey,
+  isFocused,
+}) => {
+  const [focusKey, setFocusKey] = useState(0)
+  const [openMove, setOpenMove] = useState(false)
+  const [openRename, setOpenRename] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openDetails, setOpenDetails] = useState(false)
+  const [selectedNote, setSelectedNote] = useState(null)
+  const navigation = useNavigation()
+  const { app, COLORS } = useAppStyles()
+  const numColumns = Number(gridSize) || 1
+
+  // re-measure layout
+  useEffect(() => {
+    if (isFocused) {
+      setFocusKey((prev) => prev + 1)
+    }
+  }, [isFocused])
 
   /**
    * Renders a list of notes
@@ -24,11 +40,11 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
    * @returns - a note card that navigates to the note
    */
   const renderItem = ({ item }) => {
-    const note = item;
+    const note = item
     return (
       <Pressable
         onPress={() => {
-          navigation.navigate('View', { note: note });
+          navigation.navigate('View', { note: note })
         }}
       >
         <NoteCard
@@ -41,12 +57,12 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
           numColumns={numColumns}
         />
       </Pressable>
-    );
-  };
+    )
+  }
 
   return (
     <View>
-      {notes.length === 0 && folders.length === 0 ? (
+      {notes?.length === 0 && folders?.length === 0 ? (
         <View style={{ marginHorizontal: 10 }}>
           <Text style={{ color: COLORS.text }}>No notes.</Text>
         </View>
@@ -57,17 +73,20 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
               <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
-          <FlatList
-            data={notes}
-            key={numColumns}
-            renderItem={renderItem}
-            numColumns={numColumns}
-            scrollEnabled={false}
-            keyExtractor={(item) => item.id}
-            columnWrapperStyle={
-              numColumns > 1 ? { justifyContent: 'space-between' } : undefined
-            }
-          />
+          <View>
+            <FlatList
+              data={notes}
+              key={`${numColumns}-${refreshKey}-${focusKey}`}
+              renderItem={renderItem}
+              numColumns={numColumns}
+              scrollEnabled={false}
+              keyExtractor={(item) => item.id}
+              columnWrapperStyle={
+                numColumns > 1 ? { justifyContent: 'space-between' } : undefined
+              }
+              removeClippedSubviews={false}
+            />
+          </View>
         </View>
       )}
       <Rename
@@ -101,9 +120,9 @@ const DisplayNotes = ({ notes, setNotes, folders, error, gridSize }) => {
         navigation={navigation}
       />
     </View>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default DisplayNotes;
+export default DisplayNotes

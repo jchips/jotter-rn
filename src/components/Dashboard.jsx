@@ -5,12 +5,17 @@ import {
   View,
   Pressable,
   Image,
-  Dimensions,
   useColorScheme,
   RefreshControl,
+  Dimensions,
 } from 'react-native'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useNavigation,
+  useIsFocused,
+} from '@react-navigation/native'
 import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from '@tanstack/react-query'
 import { fetchConfigs } from '../reducers/configReducer'
 import { useMarkdown } from '../contexts/MDContext'
 import { useAuth } from '../contexts/AuthContext'
@@ -36,9 +41,9 @@ const Dashboard = ({ route }) => {
   const [openSort, setOpenSort] = useState(false)
   const [openGrid, setOpenGrid] = useState(false)
   const [openAddTitle, setOpenAddTitle] = useState(false)
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
   const { COLORS, theme } = useTheme()
-  const { token, logout } = useAuth()
+  const { token, logout, user } = useAuth()
   const { setMarkdown } = useMarkdown()
   const navigation = useNavigation()
   const { data } = useSelector((state) => state.configs)
@@ -46,6 +51,7 @@ const Dashboard = ({ route }) => {
   const { folder } = useFolder(folderId)
   const { app, buttons } = useAppStyles()
   const systemTheme = useColorScheme()
+  const isFocused = useIsFocused()
   const styles = styleSheet(app, buttons, COLORS)
   const screenWidth = Dimensions.get('window').width
 
@@ -106,59 +112,77 @@ const Dashboard = ({ route }) => {
     }, [navigation, route, data, systemTheme, theme])
   )
 
-  /**
-   * DB fetch for all folders and notes in the current folder
-   * @param {Number} folder_id
-   */
-  const refresh = async (folder_id) => {
-    try {
-      setError('')
-      const [foldersRes, notesRes] = await Promise.all([
-        api.getFolders(folder_id),
-        folder_id ? api.getNotes(folder_id) : api.getRootNotes(),
-      ])
-      setFolders(foldersRes.data)
-      setNotes(notesRes.data)
-    } catch (err) {
-      console.error(err)
-      if (err.response?.data?.message === 'jwt expired') {
+  const userId = !user?.id ? null : user.id
+  let folder_id = !folderId ? null : folderId
+
+  const {
+    data: cachedFolders,
+    error: foldersError,
+    isLoading: foldersLoading,
+    refetch: refetchFolders,
+  } = useQuery({
+    queryKey: ['folders', userId, folder_id],
+    queryFn: async () => {
+      const res = await api.getFolders(folder_id)
+      return res.data
+    },
+    staleTime: 2 * 60 * 1000, // 2 min
+    onError: (err) => {
+      if (err?.response?.data?.message === 'jwt expired') {
         logUserOut()
       } else {
-        setError('Could not fetch content')
+        setError('Could not fetch folders', err)
       }
-    }
+    },
+  })
+
+  const {
+    data: cachedNotes,
+    error: notesError,
+    isLoading: notesLoading,
+    refetch: refetchNotes,
+  } = useQuery({
+    queryKey: ['notes', userId, folder_id],
+    queryFn: async () => {
+      let res
+      if (folder_id) {
+        res = await api.getNotes(folder_id)
+      } else {
+        res = await api.getRootNotes()
+      }
+      return res.data
+    },
+    staleTime: 2 * 60 * 1000, // 2 min
+    onError: (err) => {
+      if (err?.response?.data?.message === 'jwt expired') {
+        logUserOut()
+      } else {
+        setError('Could not fetch notes', err)
+      }
+    },
+  })
+
+  // Sync cache data
+  useEffect(() => {
+    setLoading(true)
+    if (cachedFolders) setFolders(cachedFolders)
+    setLoading(false)
+  }, [cachedFolders])
+
+  useEffect(() => {
+    setLoading(true)
+    if (cachedNotes) setNotes(cachedNotes)
+    setLoading(false)
+  }, [cachedNotes])
+
+  const isLoading = foldersLoading || notesLoading
+
+  const onRefresh = async () => {
+    setLoading(true)
+    await Promise.all([refetchFolders(), refetchNotes()])
+    setRefreshKey((prev) => prev + 1)
+    setLoading(false)
   }
-
-  /** For Drawer breadcrumbs */
-  useFocusEffect(
-    React.useCallback(() => {
-      const fetchContent = async () => {
-        setLoading(true)
-        let folder_id = !folderId ? null : folderId
-        await refresh(folder_id)
-        setLoading(false)
-      }
-      fetchContent()
-    }, [folderId])
-  )
-
-  // Pull-to-refresh
-  const onRefresh = React.useCallback(() => {
-    const refreshContent = async () => {
-      try {
-        setRefreshing(true)
-        setError('')
-        let folder_id = !folderId ? null : folderId
-        await refresh(folder_id)
-      } catch (err) {
-        console.error(err)
-        setError('Failed refresh')
-      } finally {
-        setRefreshing(false)
-      }
-    }
-    refreshContent()
-  }, [])
 
   // Logs the user out
   const logUserOut = () => {
@@ -166,18 +190,18 @@ const Dashboard = ({ route }) => {
   }
 
   // Loading circle
-  if (loading) {
+  if (isLoading || loading) {
     return <Loading />
   }
 
-  return !loading ? (
+  return !isLoading && !loading ? (
     <View style={styles.container}>
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={false}
             onRefresh={onRefresh}
             colors={[COLORS.themePurple]}
             progressBackgroundColor={COLORS.background}
@@ -199,6 +223,8 @@ const Dashboard = ({ route }) => {
             folders={folders}
             gridSize={data?.gridSize}
             error={error}
+            refreshKey={refreshKey}
+            isFocused={isFocused}
           />
         ) : null}
       </ScrollView>

@@ -14,6 +14,8 @@ import { useFolder } from '../../hooks/useFolder'
 import { useTheme } from '../../contexts/ThemeContext'
 import { FONT, FONTSIZE, useAppStyles } from '../../styles'
 import { getFolderTitle } from '../../util/getFolder'
+import { useMutation } from '@tanstack/react-query'
+import { queryClient, useAuth } from '../../contexts/AuthContext'
 
 const Move = (props) => {
   const { navigation, openMove, setOpenMove, type, note, folder } = props
@@ -21,6 +23,7 @@ const Move = (props) => {
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [formattedFolders, setFormattedFolders] = useState([])
+  const { user } = useAuth()
   const { app, MODAL, buttons } = useAppStyles()
   const { COLORS } = useTheme()
   const { childFolders } = useFolder(folder ? folder.id : null)
@@ -86,6 +89,113 @@ const Move = (props) => {
         : [{ label: 'Home', value: 'null', path: [] }, ...formattedFolders]
   }
 
+  // Move note mutation
+  const moveNoteMutation = useMutation({
+    mutationFn: async ({ folderTarget, note }) =>
+      await api.updateNote(
+        {
+          folderId: folderTarget.value === 'null' ? null : folderTarget.value,
+        },
+        note.id
+      ),
+    onSuccess: (res) => {
+      const sourceFolderId = note.folderId || null
+      // Remove note from the old folder’s cache
+      queryClient.setQueryData(
+        ['notes', user?.id, sourceFolderId],
+        (oldNotes = []) => oldNotes.filter((n) => n.id !== res.data.id)
+      )
+
+      // Add note to the new folder’s cache
+      queryClient.setQueryData(
+        ['notes', user?.id, res.data.folderId],
+        (oldNotes = []) => [...(oldNotes || []), res.data]
+      )
+
+      // Prefetch target folder to guarantee refresh
+      queryClient.prefetchQuery({
+        queryKey: ['notes', user?.id, res.data.folderId],
+        queryFn: () =>
+          api.getFolders(res.data.folderId).then((res2) => res2.data),
+      })
+    },
+  })
+
+  // Move folder mutation
+  const moveFolderMutation = useMutation({
+    mutationFn: async ({
+      folderTarget,
+      parsedTargetPath,
+      moveToFolder,
+      folder,
+      folders,
+    }) => {
+      const res = await api.updateFolder(
+        {
+          parentId: folderTarget.value === 'null' ? null : folderTarget.value,
+          path: moveToFolder
+            ? [
+                ...parsedTargetPath,
+                {
+                  id: moveToFolder.id,
+                },
+              ]
+            : [],
+        },
+        folder.id
+      )
+      let updatedFolderPath =
+        typeof res.data.path === 'string'
+          ? JSON.parse(res.data.path)
+          : res.data.path
+      folders?.length !== 0 &&
+        getChildren(folder.id, moveToFolder, updatedFolderPath, folder.path)
+      return { movedFolder: res.data, moveToFolder }
+    },
+    onSuccess: ({ movedFolder, moveToFolder }) => {
+      const targetFolderId = moveToFolder?.id || null
+      const sourceFolderId = folder.parentId || null
+
+      // Remove folder from the old folder’s cache
+      queryClient.setQueryData(
+        ['folders', user?.id, sourceFolderId],
+        (oldFolders = []) => oldFolders.filter((f) => f.id !== movedFolder.id)
+      )
+
+      // Add folder to the new folder’s cache
+      queryClient.setQueryData(
+        ['folders', user?.id, targetFolderId],
+        (oldFolders = []) => [...(oldFolders || []), movedFolder]
+      )
+
+      // Prefetch target folder to guarantee refresh
+      queryClient.prefetchQuery({
+        queryKey: ['folders', user?.id, targetFolderId],
+        queryFn: () => api.getFolders(targetFolderId).then((res) => res.data),
+      })
+    },
+  })
+
+  // Update path mutation
+  const updatePathMutation = useMutation({
+    mutationFn: async ({ path, child }) =>
+      await api.updateFolder(
+        {
+          path: path,
+        },
+        child.id
+      ),
+    onSuccess: (res) => {
+      queryClient.setQueryData(
+        ['folders', user?.id, res.data.parentId],
+        (oldFolders) =>
+          oldFolders.map((folder) =>
+            folder.id === res.data.id ? res.data : folder
+          )
+      )
+    },
+  })
+
   /**
    * Moves the note or folder to chosen location
    * @param {Object} folderTarget - The folder to move to
@@ -100,37 +210,16 @@ const Move = (props) => {
           : moveToFolder.path
       switch (type) {
         case 'note':
-          await api.updateNote(
-            {
-              folderId:
-                folderTarget.value === 'null' ? null : folderTarget.value,
-            },
-            note.id
-          )
+          moveNoteMutation.mutate({ folderTarget, note })
           break
         case 'folder':
-          let res = await api.updateFolder(
-            {
-              parentId:
-                folderTarget.value === 'null' ? null : folderTarget.value,
-              path: moveToFolder
-                ? [
-                    ...parsedTargetPath,
-                    {
-                      id: moveToFolder.id,
-                      //  title: moveToFolder.title
-                    },
-                  ]
-                : [],
-            },
-            folder.id
-          )
-          let updatedFolderPath =
-            typeof res.data.path === 'string'
-              ? JSON.parse(res.data.path)
-              : res.data.path
-          folders?.length !== 0 &&
-            getChildren(folder.id, moveToFolder, updatedFolderPath, folder.path)
+          moveFolderMutation.mutate({
+            folderTarget,
+            parsedTargetPath,
+            moveToFolder,
+            folder,
+            folders,
+          })
           break
       }
       setOpenMove(false)
@@ -183,10 +272,7 @@ const Move = (props) => {
       typeof moveToFolder.path === 'string'
         ? JSON.parse(moveToFolder.path)
         : moveToFolder.path
-    let index = childPath.findIndex(
-      (pathItem) => pathItem.id === folder.id
-      // (pathItem) => pathItem.id === folder.id && pathItem.title === folder.title
-    )
+    let index = childPath.findIndex((pathItem) => pathItem.id === folder.id)
     let updatedChildPath = childPath.slice(index + 1)
     if (orgFolderPath.length === 0 && moveToFolder) {
       // Moving from root to a new folder
@@ -194,7 +280,6 @@ const Move = (props) => {
         ...parsedTargetPath,
         {
           id: moveToFolder.id,
-          // title: moveToFolder.title
         },
         ...updatedChildPath,
       ]
@@ -204,18 +289,12 @@ const Move = (props) => {
         ...folderPath,
         {
           id: folder.id,
-          // title: folder.title
         },
         ...updatedChildPath,
       ]
     }
     try {
-      await api.updateFolder(
-        {
-          path: path,
-        },
-        child.id
-      )
+      updatePathMutation.mutate({ path, child })
     } catch (err) {
       console.error('Failed to update path - ', child.title, child.id, err)
     }
