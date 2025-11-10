@@ -14,6 +14,7 @@ const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
   const styles = styleSheet(buttons)
   const userId = !user?.id ? null : user.id
 
+  // Update Notes cache (refresh screen instantly)
   const updateNoteMutation = useMutation({
     mutationFn: async ({ noteId, markdown }) => {
       setSaving(true)

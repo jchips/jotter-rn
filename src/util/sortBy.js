@@ -1,47 +1,53 @@
+import sortMethods from './sortMethods';
+
+const sortMethodSwitch = sortMethods // Sort methods object
+
 /**
- * Sorts the user's notes and folders by their chosen sort value
+ * Sorts the user's notes by their chosen sort value
  * @param {String} value - Chosen sort value
- * @param {Object} sortMethod - the sort methods object
  * @param {Object[]} notes - The user's notes
- * @param {Object[]} folders - The user's folders
- * @param {Function} sortNotes - Sets the user's notes (once sorted)
- * @param {Function} sortFolders - Sets the user's folders (once sorted)
+ * @returns {Object[]} - Sorted notes
  */
-const sortBy = (value, sortMethod, notes, folders, sortNotes, sortFolders) => {
-  let sortedNotes;
-  let sortedFolders;
+export const sortNotes = (value, notes) => {
   switch (value) {
     case '1':
-      sortedNotes = sortMethod.sortByCreatedAsc(notes);
-      sortedFolders = sortMethod.sortByCreatedAsc(folders);
-      break;
+      return sortMethodSwitch.sortByCreatedAsc(notes);
     case '2':
-      sortedNotes = sortMethod.sortByCreatedDesc(notes);
-      sortedFolders = sortMethod.sortByCreatedDesc(folders);
-      break;
+      return sortMethodSwitch.sortByCreatedDesc(notes);
     case '3':
-      sortedNotes = sortMethod.sortByTitleDesc(notes);
-      sortedFolders = sortMethod.sortByTitleDesc(folders);
-      break;
+      return sortMethodSwitch.sortByTitleDesc(notes);
     case '4':
-      sortedNotes = sortMethod.sortByTitleAsc(notes);
-      sortedFolders = sortMethod.sortByTitleAsc(folders);
-      break;
-    case '6':
-      sortedNotes = sortMethod.sortByUpdatedDesc(notes);
-      sortedFolders = sortMethod.sortByUpdatedDesc(folders);
-      break;
+      return sortMethodSwitch.sortByTitleAsc(notes);
     case '5':
-      sortedNotes = sortMethod.sortByUpdatedAsc(notes);
-      sortedFolders = sortMethod.sortByUpdatedAsc(folders);
-      break;
+      return sortMethodSwitch.sortByUpdatedAsc(notes);
+    case '6':
+      return sortMethodSwitch.sortByUpdatedDesc(notes);
     default:
-      sortedNotes = sortMethod.sortByCreatedAsc(notes);
-      sortedFolders = sortMethod.sortByCreatedAsc(folders);
-      break;
+      return sortMethodSwitch.sortByCreatedAsc(notes);
   }
-  sortNotes(sortedNotes);
-  sortFolders(sortedFolders);
-};
+}
 
-export default sortBy;
+/**
+ * Sorts the user's folders by their chosen sort value
+ * @param {String} value - Chosen sort value
+ * @param {Object[]} folders - The user's folders
+ * @returns {Object[]} - Sorted folders
+ */
+export const sortFolders = (value, folders) => {
+  switch (value) {
+    case '1':
+      return sortMethodSwitch.sortByCreatedAsc(folders);
+    case '2':
+      return sortMethodSwitch.sortByCreatedDesc(folders);
+    case '3':
+      return sortMethodSwitch.sortByTitleDesc(folders);
+    case '4':
+      return sortMethodSwitch.sortByTitleAsc(folders);
+    case '5':
+      return sortMethodSwitch.sortByUpdatedAsc(folders);
+    case '6':
+      return sortMethodSwitch.sortByUpdatedDesc(folders);
+    default:
+      return sortMethodSwitch.sortByCreatedAsc(folders);
+  }
+}

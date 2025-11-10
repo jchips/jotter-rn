@@ -30,6 +30,7 @@ import Sort from './Modals/Sort'
 import Grid from './Modals/Grid'
 import AddTitle from './Modals/AddTitle'
 import api from '../util/api'
+import { sortFolders, sortNotes } from '../util/sortBy'
 
 const Dashboard = ({ route }) => {
   const { folderId, folderTitle } = route.params
@@ -54,6 +55,8 @@ const Dashboard = ({ route }) => {
   const isFocused = useIsFocused()
   const styles = styleSheet(app, buttons, COLORS)
   const screenWidth = Dimensions.get('window').width
+  const userId = !user?.id ? null : user.id
+  let folder_id = !folderId ? null : folderId
 
   useEffect(() => {
     dispatch(fetchConfigs(token))
@@ -63,6 +66,7 @@ const Dashboard = ({ route }) => {
     setMarkdown('')
   }, [])
 
+  // Header
   useFocusEffect(
     React.useCallback(() => {
       // Header settings
@@ -112,9 +116,7 @@ const Dashboard = ({ route }) => {
     }, [navigation, route, data, systemTheme, theme])
   )
 
-  const userId = !user?.id ? null : user.id
-  let folder_id = !folderId ? null : folderId
-
+  // Fetch and cache folders
   const {
     data: cachedFolders,
     error: foldersError,
@@ -126,6 +128,10 @@ const Dashboard = ({ route }) => {
       const res = await api.getFolders(folder_id)
       return res.data
     },
+    select: (foldersRes) => {
+      const sortedFolders = sortFolders(data?.sort, foldersRes)
+      return sortedFolders
+    },
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
@@ -136,6 +142,7 @@ const Dashboard = ({ route }) => {
     },
   })
 
+  // Fetch and cache notes
   const {
     data: cachedNotes,
     error: notesError,
@@ -152,6 +159,10 @@ const Dashboard = ({ route }) => {
       }
       return res.data
     },
+    select: (notesRes) => {
+      const sortedNotes = sortNotes(data?.sort, notesRes)
+      return sortedNotes
+    },
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
@@ -162,13 +173,14 @@ const Dashboard = ({ route }) => {
     },
   })
 
-  // Sync cache data
+  // Sync folder cache data
   useEffect(() => {
     setLoading(true)
     if (cachedFolders) setFolders(cachedFolders)
     setLoading(false)
   }, [cachedFolders])
 
+  // Sync note cache data
   useEffect(() => {
     setLoading(true)
     if (cachedNotes) setNotes(cachedNotes)
@@ -177,6 +189,7 @@ const Dashboard = ({ route }) => {
 
   const isLoading = foldersLoading || notesLoading
 
+  // Reset cache
   const onRefresh = async () => {
     setLoading(true)
     await Promise.all([refetchFolders(), refetchNotes()])
@@ -242,10 +255,7 @@ const Dashboard = ({ route }) => {
       <Sort
         openSort={openSort}
         setOpenSort={setOpenSort}
-        folders={folders}
-        notes={notes}
-        setNotes={setNotes}
-        setFolders={setFolders}
+        currentSort={data?.sort}
       />
       <Grid openGrid={openGrid} setOpenGrid={setOpenGrid} />
     </View>
