@@ -1,14 +1,11 @@
-import { useState } from 'react';
-import { Modal, StyleSheet, View, Text, Pressable } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import SelectDropdown from 'react-native-select-dropdown';
-import DropdownBtn from '../Buttons/DropdownBtn';
-import sortMethods from '../../util/sortMethods';
-import api from '../../util/api';
-import sortBy from '../../util/sortBy';
-import { setConfigs } from '../../reducers/configReducer';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppStyles } from '../../styles';
+import { Modal, StyleSheet, View, Text, Pressable } from 'react-native'
+import { useDispatch } from 'react-redux'
+import SelectDropdown from 'react-native-select-dropdown'
+import DropdownBtn from '../Buttons/DropdownBtn'
+import api from '../../util/api'
+import { setConfigs } from '../../reducers/configReducer'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
 
 let sortOptions = [
   { label: 'Last created', value: '1' },
@@ -17,21 +14,14 @@ let sortOptions = [
   { label: 'Title - ZA', value: '4' },
   { label: 'Recently updated', value: '5' },
   { label: 'Oldest updated', value: '6' },
-];
+]
 
 const Sort = (props) => {
-  const { openSort, setOpenSort, notes, folders, setNotes, setFolders } = props;
-  const configs = useSelector((state) => state.configs.data);
-  const [sort, setSort] = useState(configs?.sort);
-  const { app, MODAL, buttons } = useAppStyles();
-  const { COLORS } = useTheme();
-  const styles = styleSheet(COLORS, MODAL);
-  const dispatch = useDispatch();
-  const sortMethod = sortMethods;
-
-  // Sorts notes and folders
-  const sortNotes = (notes) => setNotes(notes);
-  const sortFolders = (folders) => setFolders(folders);
+  const { openSort, setOpenSort, currentSort } = props
+  const { app, MODAL, buttons } = useAppStyles()
+  const { COLORS } = useTheme()
+  const styles = styleSheet(COLORS, MODAL)
+  const dispatch = useDispatch() // Switch statement to perform chosen sort
 
   /**
    * Updates the user's new sort option in the db, global state,
@@ -40,21 +30,24 @@ const Sort = (props) => {
    */
   const setUConfigs = (sortOption) => {
     const updateSort = async (sortOption) => {
-      let configObj = { sort: sortOption };
+      let configObj = { sort: sortOption }
       try {
-        let res = await api.updateConfigs(configObj);
-        dispatch(setConfigs({ ...res.data, ...configObj }));
+        let res = await api.updateConfigs(configObj)
+        dispatch(setConfigs({ ...res.data, ...configObj }))
       } catch (err) {
-        console.error('Failed to update sort -', err);
+        console.error('Failed to update sort -', err)
       }
-    };
-    updateSort(sortOption);
-  };
+    }
+    updateSort(sortOption)
+  }
 
-  // Dropdown button default text
+  /**
+   * Dropdown button default text
+   * @returns <Text> element
+   */
   const dropdownBtnText = () => {
-    return <Text>Choose sort</Text>;
-  };
+    return <Text>Choose sort</Text>
+  }
 
   /**
    * Renders a sort option
@@ -73,8 +66,8 @@ const Sort = (props) => {
       >
         <Text style={styles.dropdownItemTxtStyle}>{item.label}</Text>
       </View>
-    );
-  };
+    )
+  }
 
   return (
     <Modal
@@ -82,7 +75,7 @@ const Sort = (props) => {
       transparent={true}
       visible={openSort}
       onRequestClose={() => {
-        setOpenSort(!openSort);
+        setOpenSort(!openSort)
       }}
     >
       <View style={MODAL.centeredView}>
@@ -90,20 +83,10 @@ const Sort = (props) => {
           <Text style={app.header}>Sort</Text>
           <SelectDropdown
             data={sortOptions}
-            defaultValueByIndex={sort - 1}
+            defaultValueByIndex={currentSort - 1}
             onSelect={(selection, index) => {
-              setSort(selection.value);
-              sortBy(
-                selection.value,
-                sortMethod,
-                notes,
-                folders,
-                sortNotes,
-                sortFolders,
-                setUConfigs
-              );
-              setUConfigs(selection.value);
-              setOpenSort(false);
+              setUConfigs(selection.value)
+              setOpenSort(false)
             }}
             renderButton={(selectedItem, isOpened) =>
               DropdownBtn(
@@ -122,7 +105,7 @@ const Sort = (props) => {
           <Pressable
             style={[buttons.btn1, MODAL.wideButton]}
             onPress={() => {
-              setOpenSort(!openSort);
+              setOpenSort(!openSort)
             }}
           >
             <Text style={buttons.btnText1}>Close</Text>
@@ -130,8 +113,8 @@ const Sort = (props) => {
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
 const styleSheet = (COLORS, MODAL) =>
   StyleSheet.create({
@@ -139,6 +122,6 @@ const styleSheet = (COLORS, MODAL) =>
       ...MODAL.dropdownItemTxtStyle,
       color: COLORS.themePurpleText,
     },
-  });
+  })
 
-export default Sort;
+export default Sort
