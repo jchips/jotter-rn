@@ -10,7 +10,6 @@ import Details from '../Modals/Details'
 
 const DisplayNotes = ({
   notes,
-  setNotes,
   folders,
   error,
   gridSize,
@@ -92,8 +91,6 @@ const DisplayNotes = ({
       <Rename
         openRename={openRename}
         setOpenRename={setOpenRename}
-        notes={notes}
-        setNotes={setNotes}
         note={selectedNote}
       />
       <Details
@@ -107,17 +104,11 @@ const DisplayNotes = ({
         setOpenMove={setOpenMove}
         type='note'
         note={selectedNote}
-        allNotes={notes}
-        setNotes={setNotes}
-        folders={{}}
       />
       <Delete
         openDelete={openDelete}
         setOpenDelete={setOpenDelete}
-        notes={notes}
-        setNotes={setNotes}
         note={selectedNote}
-        navigation={navigation}
       />
     </View>
   )

@@ -8,7 +8,7 @@ import Move from '../Modals/Move'
 import Rename from '../Modals/Rename'
 import Details from '../Modals/Details'
 
-const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
+const DisplayFolders = ({ folders, error, gridSize }) => {
   const [openMove, setOpenMove] = useState(false)
   const [openRename, setOpenRename] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -69,8 +69,6 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
       <Rename
         openRename={openRename}
         setOpenRename={setOpenRename}
-        folders={folders}
-        setFolders={setFolders}
         folder={selectedFolder}
       />
       <Move
@@ -79,8 +77,6 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
         setOpenMove={setOpenMove}
         type='folder'
         folder={selectedFolder}
-        allFolders={folders}
-        setFolders={setFolders}
       />
       <Details
         folder={selectedFolder}
@@ -90,10 +86,7 @@ const DisplayFolders = ({ folders, setFolders, error, gridSize }) => {
       <Delete
         openDelete={openDelete}
         setOpenDelete={setOpenDelete}
-        folders={folders}
-        setFolders={setFolders}
         folder={selectedFolder}
-        navigation={navigation}
       />
     </View>
   ) : null

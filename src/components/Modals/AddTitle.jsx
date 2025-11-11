@@ -16,15 +16,7 @@ import { ROOT_FOLDER } from '../../hooks/useFolder'
 import api from '../../util/api'
 
 const AddTitle = (props) => {
-  const {
-    openAddTitle,
-    setOpenAddTitle,
-    type,
-    notes,
-    setNotes,
-    folders,
-    setFolders,
-  } = props
+  const { openAddTitle, setOpenAddTitle, type } = props
   let { currentFolder } = props
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)

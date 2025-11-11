@@ -224,7 +224,6 @@ const Dashboard = ({ route }) => {
         {folders ? (
           <DisplayFolders
             folders={folders}
-            setFolders={setFolders}
             gridSize={data?.gridSize}
             error={error}
           />
@@ -232,7 +231,6 @@ const Dashboard = ({ route }) => {
         {notes ? (
           <DisplayNotes
             notes={notes}
-            setNotes={setNotes}
             folders={folders}
             gridSize={data?.gridSize}
             error={error}
@@ -246,10 +244,6 @@ const Dashboard = ({ route }) => {
         openAddTitle={openAddTitle}
         setOpenAddTitle={setOpenAddTitle}
         type={type}
-        notes={notes}
-        setNotes={setNotes}
-        folders={folders}
-        setFolders={setFolders}
         currentFolder={folder}
       />
       <Sort
