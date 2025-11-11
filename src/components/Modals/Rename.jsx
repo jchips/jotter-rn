@@ -14,16 +14,7 @@ import { useTheme } from '../../contexts/ThemeContext'
 import { useAppStyles } from '../../styles'
 import api from '../../util/api'
 
-const Rename = ({
-  openRename,
-  setOpenRename,
-  notes,
-  setNotes,
-  note,
-  folders,
-  setFolders,
-  folder,
-}) => {
+const Rename = ({ openRename, setOpenRename, note, folder }) => {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const {

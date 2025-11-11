@@ -15,16 +15,7 @@ const Delete = (props) => {
   const { COLORS } = useTheme()
   const { user } = useAuth()
   const styles = styleSheet(app, COLORS)
-  const {
-    openDelete,
-    setOpenDelete,
-    notes,
-    setNotes,
-    note,
-    folders,
-    setFolders,
-    folder,
-  } = props
+  const { openDelete, setOpenDelete, note, folder } = props
 
   /* Delete note */
   const deleteNoteMutation = useMutation({
