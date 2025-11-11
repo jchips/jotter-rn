@@ -50,17 +50,17 @@ const Delete = (props) => {
         )
       }
       console.error('Delete note failed:', err)
-      setError('Failed to delete ' + note ? 'note' : 'folder')
+      setError('Failed to delete ' + (note ? 'note' : 'folder'))
     },
   })
 
   /* Delete folder */
   const deleteFolderMutation = useMutation({
-    mutationFn: async ({ folderId, folder }) => {
+    mutationFn: async ({ folderId }) => {
       await api.deleteFolder(folderId)
       return { folderId, folder }
     },
-    onMutate: async ({ folderId, folder }) => {
+    onMutate: async ({ folderId }) => {
       await queryClient.cancelQueries(['folders', user?.id, folderId])
       const previousFolders = queryClient.getQueryData([
         'folders',
@@ -69,7 +69,7 @@ const Delete = (props) => {
       ])
 
       queryClient.setQueryData(
-        ['folders', user?.id, folder.parentId],
+        ['folders', user?.id, folderId],
         (oldFolders = []) => oldFolders.filter((f) => f.id !== folderId)
       )
 
@@ -79,7 +79,7 @@ const Delete = (props) => {
       setError('')
       setOpenDelete(false)
     },
-    onError: (err, folderId, context) => {
+    onError: (err, { folderId }, context) => {
       if (context?.previousFolders) {
         queryClient.setQueryData(
           ['folders', user?.id, folderId],
@@ -87,7 +87,7 @@ const Delete = (props) => {
         )
       }
       console.error('Delete folder failed:', err)
-      setError('Failed to delete ' + note ? 'note' : 'folder')
+      setError('Failed to delete ' + (note ? 'note' : 'folder'))
     },
   })
 
@@ -96,17 +96,17 @@ const Delete = (props) => {
     try {
       setSaving(true)
       if (note) {
-        deleteNoteMutation.mutate(note)
+        await deleteNoteMutation.mutateAsync(note)
       } else {
-        deleteFolderMutation.mutate({ folderId: folder.id, folder })
+        await deleteFolderMutation.mutateAsync({ folderId: folder.id })
       }
-      // setOpenDelete(false)
     } catch (err) {
-      setError('Failed to delete ' + note ? 'note' : 'folder')
-      console.error('Failed to delete note', err)
+      // Handled in onError
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
   }
+
   return (
     <Modal
       animationType='fade'
@@ -120,11 +120,13 @@ const Delete = (props) => {
         <View style={MODAL.modal}>
           <Text style={styles.header}>Delete</Text>
           <View style={styles.modalContainer}>
+            {/* Err message */}
             {error ? (
               <View style={app.errorAlert}>
                 <Text style={app.errorText}>{error}</Text>
               </View>
             ) : null}
+
             <Text style={styles.modalText}>
               Are you sure that you want to delete{' '}
               <Text style={{ color: COLORS.themePurpleText, ...app.boldText }}>

@@ -62,7 +62,7 @@ const app = (COLORS) => StyleSheet.create({
     backgroundColor: COLORS.errAlert,
     padding: 16,
     borderRadius: 8,
-    margin: 10,
+    // margin: 10,
     width: '100%',
   },
   errorText: {
