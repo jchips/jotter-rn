@@ -91,15 +91,15 @@ const Move = (props) => {
 
   // Move note mutation
   const moveNoteMutation = useMutation({
-    mutationFn: async ({ folderTarget, note }) =>
+    mutationFn: async ({ folderTarget, note, moveToFolder }) =>
       await api.updateNote(
         {
           folderId: folderTarget.value === 'null' ? null : folderTarget.value,
         },
         note.id
       ),
-    onSuccess: (res) => {
-      const sourceFolderId = note.folderId || null
+    onSuccess: (res, folderTarget, moveToFolder) => {
+      const sourceFolderId = note.folderId || null // null is Home folder
       // Remove note from the old folder’s cache
       queryClient.setQueryData(
         ['notes', user?.id, sourceFolderId],
@@ -118,6 +118,18 @@ const Move = (props) => {
         queryFn: () =>
           api.getFolders(res.data.folderId).then((res2) => res2.data),
       })
+      setOpenMove(false)
+      navigation.push('Drawer', {
+        screen: 'Home',
+        params: {
+          folderId: moveToFolder?.id || 0,
+          folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
+        },
+      })
+    },
+    onError: (err) => {
+      setError('Failed to move note')
+      console.error('Failed to move note -', err)
     },
   })
 
@@ -132,8 +144,8 @@ const Move = (props) => {
     }) => {
       const res = await api.updateFolder(
         {
-          parentId: folderTarget.value === 'null' ? null : folderTarget.value,
-          path: moveToFolder
+          parentId: folderTarget?.value === 'null' ? null : folderTarget?.value,
+          path: moveToFolder?.id
             ? [
                 ...parsedTargetPath,
                 {
@@ -150,11 +162,11 @@ const Move = (props) => {
           : res.data.path
       folders?.length !== 0 &&
         getChildren(folder.id, moveToFolder, updatedFolderPath, folder.path)
-      return { movedFolder: res.data, moveToFolder }
+      return { movedFolder: res.data, moveToFolder, folderTarget }
     },
-    onSuccess: ({ movedFolder, moveToFolder }) => {
-      const targetFolderId = moveToFolder?.id || null
-      const sourceFolderId = folder.parentId || null
+    onSuccess: ({ movedFolder, moveToFolder, folderTarget }) => {
+      const targetFolderId = moveToFolder?.id || 'null' // null is Home folder
+      const sourceFolderId = folder?.parentId || 'null' // null is Home folder
 
       // Remove folder from the old folder’s cache
       queryClient.setQueryData(
@@ -171,8 +183,21 @@ const Move = (props) => {
       // Prefetch target folder to guarantee refresh
       queryClient.prefetchQuery({
         queryKey: ['folders', user?.id, targetFolderId],
-        queryFn: () => api.getFolders(targetFolderId).then((res) => res.data),
+        queryFn: () => api.getFolders(targetFolderId).then((res2) => res2.data),
       })
+
+      setOpenMove(false)
+      navigation.push('Drawer', {
+        screen: 'Home',
+        params: {
+          folderId: folderTarget.value,
+          folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
+        },
+      })
+    },
+    onError: (err) => {
+      setError('Failed to move folder')
+      console.error('Failed to move folder -', err)
     },
   })
 
@@ -203,6 +228,7 @@ const Move = (props) => {
   const move = async (folderTarget) => {
     try {
       setSaving(true)
+      setError('')
       let moveToFolder = await getFolder(folderTarget.value)
       let parsedTargetPath =
         typeof moveToFolder.path === 'string'
@@ -210,7 +236,7 @@ const Move = (props) => {
           : moveToFolder.path
       switch (type) {
         case 'note':
-          moveNoteMutation.mutate({ folderTarget, note })
+          moveNoteMutation.mutate({ folderTarget, note, moveToFolder })
           break
         case 'folder':
           moveFolderMutation.mutate({
@@ -222,24 +248,16 @@ const Move = (props) => {
           })
           break
       }
-      setOpenMove(false)
-      navigation.push('Drawer', {
-        screen: 'Home',
-        params: {
-          folderId: folderTarget.value,
-          folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
-        },
-      })
     } catch (err) {
-      setError('Failed to move folder')
-      console.error('Failed to move folder - ', err)
+      // Handled in onError
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
   }
 
   /**
    * Gets the folder that item will be moved to
-   * @param {Integer} moveFolderId - The id of the folder to move to
+   * @param {Integer | null} moveFolderId - The id of the folder to move to
    * @returns {Object} - The folder object
    */
   const getFolder = async (moveFolderId) => {
@@ -248,7 +266,7 @@ const Move = (props) => {
       return res.data
     } catch (err) {
       console.error('Failed to fetch folder - ', err)
-      return {}
+      return { id: null }
     }
   }
 
