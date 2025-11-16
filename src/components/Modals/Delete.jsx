@@ -28,7 +28,7 @@ const Delete = (props) => {
       const previousNotes = queryClient.getQueryData([
         'notes',
         user?.id,
-        note.id,
+        note.folderId,
       ])
 
       queryClient.setQueryData(
@@ -44,7 +44,7 @@ const Delete = (props) => {
     onError: (err, note, context) => {
       if (context?.previousNotes) {
         queryClient.setQueryData(
-          ['notes', user?.id, note.id],
+          ['notes', user?.id, note.folderId],
           context.previousNotes
         )
       }
@@ -55,20 +55,20 @@ const Delete = (props) => {
 
   /* Delete folder */
   const deleteFolderMutation = useMutation({
-    mutationFn: async ({ folderId }) => {
+    mutationFn: async ({ folderId, folder }) => {
       await api.deleteFolder(folderId)
       return { folderId, folder }
     },
-    onMutate: async ({ folderId }) => {
+    onMutate: async ({ folderId, folder }) => {
       await queryClient.cancelQueries(['folders', user?.id, folderId])
       const previousFolders = queryClient.getQueryData([
         'folders',
         user?.id,
-        folderId,
+        folder.parentId,
       ])
 
       queryClient.setQueryData(
-        ['folders', user?.id, folderId],
+        ['folders', user?.id, folder.parentId],
         (oldFolders = []) => oldFolders.filter((f) => f.id !== folderId)
       )
 
@@ -77,10 +77,10 @@ const Delete = (props) => {
     onSuccess: () => {
       setOpenDelete(false)
     },
-    onError: (err, { folderId }, context) => {
+    onError: (err, { folder }, context) => {
       if (context?.previousFolders) {
         queryClient.setQueryData(
-          ['folders', user?.id, folderId],
+          ['folders', user?.id, folder.parentId],
           context.previousFolders
         )
       }
@@ -97,7 +97,7 @@ const Delete = (props) => {
       if (note) {
         await deleteNoteMutation.mutateAsync(note)
       } else {
-        await deleteFolderMutation.mutateAsync({ folderId: folder.id })
+        await deleteFolderMutation.mutateAsync({ folderId: folder.id, folder })
       }
     } catch (err) {
       // Handled in onError

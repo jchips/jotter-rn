@@ -15,11 +15,6 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Router from './src/routing/Router';
 import store from './src/store';
 
-SplashScreen.setOptions({
-  duration: 200,
-  fade: true,
-});
-
 SplashScreen.preventAutoHideAsync();
 export default function App() {
   Text.defaultProps = Text.defaultProps || {};
