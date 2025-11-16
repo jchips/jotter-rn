@@ -122,7 +122,8 @@ const Move = (props) => {
       navigation.push('Drawer', {
         screen: 'Home',
         params: {
-          folderId: moveToFolder?.id || 0,
+          folderId: folderTarget.value,
+          // folderId: moveToFolder?.id || 0,
           folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
         },
       })
@@ -165,8 +166,8 @@ const Move = (props) => {
       return { movedFolder: res.data, moveToFolder, folderTarget }
     },
     onSuccess: ({ movedFolder, moveToFolder, folderTarget }) => {
-      const targetFolderId = moveToFolder?.id || 'null' // null is Home folder
-      const sourceFolderId = folder?.parentId || 'null' // null is Home folder
+      const targetFolderId = moveToFolder?.id || null // null is Home folder
+      const sourceFolderId = folder?.parentId || null // null is Home folder
 
       // Remove folder from the old folder’s cache
       queryClient.setQueryData(
@@ -265,7 +266,7 @@ const Move = (props) => {
       let res = await api.getFolder(moveFolderId)
       return res.data
     } catch (err) {
-      console.error('Failed to fetch folder - ', err)
+      // console.error('Failed to fetch folder - ', err)
       return { id: null }
     }
   }
