@@ -35,21 +35,31 @@ const AddTitle = (props) => {
   })
 
   const createNoteMutation = useMutation({
-    mutationFn: (newNote) => api.addNote(newNote),
+    mutationFn: async (newNote) => await api.addNote(newNote),
     onSuccess: (res, newNote) => {
       queryClient.setQueryData(['notes', user?.id, newNote.folderId], (old) =>
         old ? [...old, res.data] : [res.data]
       )
+      setOpenAddTitle(false)
+    },
+    onError: (err) => {
+      setError('Failed to create ' + type)
+      console.error(err)
     },
   })
 
   const createFolderMutation = useMutation({
-    mutationFn: (newFolder) => api.addFolder(newFolder),
+    mutationFn: async (newFolder) => await api.addFolder(newFolder),
     onSuccess: (res, newFolder) => {
       queryClient.setQueryData(
         ['folders', user?.id, newFolder.parentId],
         (old) => (old ? [...old, res.data] : [res.data])
       )
+      setOpenAddTitle(false)
+    },
+    onError: (err) => {
+      setError('Failed to create ' + type)
+      console.error(err)
     },
   })
 
@@ -88,7 +98,7 @@ const AddTitle = (props) => {
             userId: user.id,
             folderId: currentFolder.id,
           }
-          createNoteMutation.mutate(newNote)
+          await createNoteMutation.mutateAsync(newNote)
           break
         // add folder
         case 'folder':
@@ -98,13 +108,11 @@ const AddTitle = (props) => {
             parentId: currentFolder.id,
             path,
           }
-          createFolderMutation.mutate(newFolder)
+          await createFolderMutation.mutateAsync(newFolder)
           break
       }
-      setOpenAddTitle(false)
     } catch (err) {
-      setError('Failed to create ' + type)
-      console.error(err)
+      // Handled in onError
     }
     reset({
       title: '',
@@ -157,14 +165,20 @@ const AddTitle = (props) => {
             )}
           </View>
 
-          {/* Options */}
+          {/* Modal footer */}
           <View style={MODAL.buttons}>
+            {/* Cancel button */}
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
-              onPress={() => setOpenAddTitle(!openAddTitle)}
+              onPress={() => {
+                setOpenAddTitle(!openAddTitle)
+                setError('')
+              }}
             >
               <Text style={buttons.btnText2}>Cancel</Text>
             </Pressable>
+
+            {/* Submit button */}
             <Pressable
               style={{
                 ...buttons.btn1,

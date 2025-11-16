@@ -95,8 +95,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         updateFolderMutation.mutate({ folderId, title })
       }
     } catch (err) {
-      setError('Failed to rename')
-      console.error('Failed to rename: ', err)
+      // Handled in onError
     }
     reset({
       title: '',
@@ -150,7 +149,10 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
               <Text style={app.formErrorText}>This field is required.</Text>
             )}
           </View>
+
+          {/* Modal footer */}
           <View style={MODAL.buttons}>
+            {/* Cancel button */}
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
@@ -160,6 +162,8 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
             >
               <Text style={buttons.btnText2}>Cancel</Text>
             </Pressable>
+
+            {/* Submit button */}
             <Pressable
               style={{
                 ...buttons.btn1,

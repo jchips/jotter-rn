@@ -39,7 +39,6 @@ const Delete = (props) => {
       return { previousNotes }
     },
     onSuccess: () => {
-      setError('')
       setOpenDelete(false)
     },
     onError: (err, note, context) => {
@@ -76,7 +75,6 @@ const Delete = (props) => {
       return { previousFolders }
     },
     onSuccess: () => {
-      setError('')
       setOpenDelete(false)
     },
     onError: (err, { folderId }, context) => {
@@ -94,6 +92,7 @@ const Delete = (props) => {
   // Deletes the note or folder (and all its contents)
   const handleSubmit = async () => {
     try {
+      setError('')
       setSaving(true)
       if (note) {
         await deleteNoteMutation.mutateAsync(note)
@@ -157,7 +156,10 @@ const Delete = (props) => {
               )}
             </View>
           </View>
+
+          {/* Modal footer */}
           <View style={MODAL.buttons}>
+            {/* Cancel button */}
             <Pressable
               style={[buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
@@ -167,6 +169,8 @@ const Delete = (props) => {
             >
               <Text style={buttons.btnText2}>Cancel</Text>
             </Pressable>
+
+            {/* Submit button */}
             <Pressable
               style={{
                 ...buttons.btn1,
