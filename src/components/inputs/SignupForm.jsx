@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useState } from 'react';
+import axios from 'axios'
+import { useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -7,23 +7,23 @@ import {
   TextInput,
   Pressable,
   Keyboard,
-} from 'react-native';
-import Constants from 'expo-constants';
-import { useForm, Controller } from 'react-hook-form';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { useAppStyles } from '../styles';
+} from 'react-native'
+import Constants from 'expo-constants'
+import { useForm, Controller } from 'react-hook-form'
+import { useAuth } from '../../contexts/AuthContext'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
 
-const API_URL = Constants.expoConfig?.extra?.API_URL;
+const API_URL = Constants.expoConfig?.extra?.API_URL
 
 const SignupForm = () => {
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login, setIsLoggedIn } = useAuth();
-  const { COLORS } = useTheme();
-  const { app, buttons } = useAppStyles();
-  const styles = styleSheet(app, COLORS, buttons);
-  const fieldRequired = 'This field is required';
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { login, setIsLoggedIn } = useAuth()
+  const { COLORS } = useTheme()
+  const { app, buttons } = useAppStyles()
+  const styles = styleSheet(app, COLORS, buttons)
+  const fieldRequired = 'This field is required'
   const {
     control,
     handleSubmit,
@@ -35,7 +35,7 @@ const SignupForm = () => {
       password: '',
       confirmPassword: '',
     },
-  });
+  })
 
   /**
    * Creates an account for new user
@@ -43,42 +43,42 @@ const SignupForm = () => {
    */
   const onSubmit = async (formData) => {
     try {
-      setLoading(true);
-      setError('');
+      setLoading(true)
+      setError('')
       if (formData.password !== formData.confirmPassword) {
-        setLoading(false);
-        return setError('Passwords do not match');
+        setLoading(false)
+        return setError('Passwords do not match')
       }
       const isEmailAddr =
-        /^[a-zA-z]+(\.)*(-)*(_)*[a-zA-z]*(@)[a-zA-z]+(\.)[a-zA-z]+$/gm;
+        /^[a-zA-z]+(\.)*(-)*(_)*[a-zA-z]*(@)[a-zA-z]+(\.)[a-zA-z]+$/gm
       if (!isEmailAddr.test(formData.email)) {
-        setLoading(false);
-        return setError('Must use a valid email address');
+        setLoading(false)
+        return setError('Must use a valid email address')
       }
       const signupInfo = {
         email: formData.email,
         password: formData.password,
-      };
-      let requestUrl = `${API_URL}/jotter/signup`;
-      let res = await axios.post(requestUrl, signupInfo);
-      if (res.data.message) {
-        return setError(res.data.message);
       }
-      await login(signupInfo.email, signupInfo.password); // log user in
+      let requestUrl = `${API_URL}/jotter/signup`
+      let res = await axios.post(requestUrl, signupInfo)
+      if (res.data.message) {
+        return setError(res.data.message)
+      }
+      await login(signupInfo.email, signupInfo.password) // log user in
     } catch (err) {
-      setIsLoggedIn(false);
-      setError('Failed to sign up');
-      console.error('Failed to sign up', err);
+      setIsLoggedIn(false)
+      setError('Failed to sign up')
+      console.error('Failed to sign up', err)
     } finally {
       reset({
         email: '',
         password: '',
         confirmPassword: '',
-      });
-      setLoading(false);
-      Keyboard.dismiss();
+      })
+      setLoading(false)
+      Keyboard.dismiss()
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -174,8 +174,8 @@ const SignupForm = () => {
         <Text style={buttons.btnText4}>Sign up</Text>
       </Pressable>
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS, buttons) =>
   StyleSheet.create({
@@ -191,6 +191,6 @@ const styleSheet = (app, COLORS, buttons) =>
       ...buttons.btn2,
       marginHorizontal: 0,
     },
-  });
+  })
 
-export default SignupForm;
+export default SignupForm

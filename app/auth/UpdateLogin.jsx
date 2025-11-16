@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,24 +6,24 @@ import {
   TextInput,
   Pressable,
   Keyboard,
-} from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useForm, Controller } from 'react-hook-form';
-import api from '../util/api';
-import { storeCurrUser } from '../util/persist';
-import { moderateScale } from '../util/scaling';
-import { useAuth } from '../contexts/AuthContext';
-import JotterText from '../components/JotterText';
-import { FONT, FONTSIZE, useAppStyles } from '../styles';
+} from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useForm, Controller } from 'react-hook-form'
+import api from '../../src/util/api'
+import { storeCurrUser } from '../../src/util/persist'
+import { moderateScale } from '../../src/util/scaling'
+import { useAuth } from '../../src/contexts/AuthContext'
+import JotterText from '../../src/components/JotterText'
+import { FONT, FONTSIZE, useAppStyles } from '../../src/styles'
 
 const UpdateLogin = ({ navigation }) => {
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showChangePassword, setShowChangePassword] = useState(false);
-  const { user, setUser, setToken } = useAuth();
-  const { app, buttons, COLORS } = useAppStyles();
-  const fieldRequired = 'This field is required';
-  const styles = styleSheet(app, COLORS, buttons);
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [showChangePassword, setShowChangePassword] = useState(false)
+  const { user, setUser, setToken } = useAuth()
+  const { app, buttons, COLORS } = useAppStyles()
+  const fieldRequired = 'This field is required'
+  const styles = styleSheet(app, COLORS, buttons)
   const {
     control,
     handleSubmit,
@@ -36,7 +36,7 @@ const UpdateLogin = ({ navigation }) => {
       confirmPassword: '',
       password: '',
     },
-  });
+  })
 
   /**
    * Updates the user's account information
@@ -44,52 +44,52 @@ const UpdateLogin = ({ navigation }) => {
    */
   const onSubmit = async (formData) => {
     try {
-      setLoading(true);
-      setError('');
+      setLoading(true)
+      setError('')
       if (formData.newPassword !== formData.confirmPassword) {
-        setLoading(false);
-        return setError('New password does not match');
+        setLoading(false)
+        return setError('New password does not match')
       }
-      let updates = {};
+      let updates = {}
       if (formData.email.trim() !== user.email) {
         const isEmailAddr =
-          /^[a-zA-z]+(\.)*(-)*(_)*[a-zA-z]*(@)[a-zA-z]+(\.)[a-zA-z]+$/gm;
+          /^[a-zA-z]+(\.)*(-)*(_)*[a-zA-z]*(@)[a-zA-z]+(\.)[a-zA-z]+$/gm
         if (!isEmailAddr.test(formData.email)) {
-          setLoading(false);
-          return setError('Must use a valid email address');
+          setLoading(false)
+          return setError('Must use a valid email address')
         }
-        updates.email = formData.email.trim();
+        updates.email = formData.email.trim()
       }
       if (formData.newPassword) {
-        updates.newPassword = formData.newPassword;
+        updates.newPassword = formData.newPassword
       }
-      updates.password = formData.password;
-      let res = await api.updateUser(updates, user.id);
+      updates.password = formData.password
+      let res = await api.updateUser(updates, user.id)
       if (res.status !== 200) {
-        return setError(res.data.message);
+        return setError(res.data.message)
       }
-      setUser(res.data);
-      setToken(res.data.token);
-      storeCurrUser(res.data);
-      navigation.navigate('Drawer', { screen: 'Account' });
+      setUser(res.data)
+      setToken(res.data.token)
+      storeCurrUser(res.data)
+      navigation.navigate('Drawer', { screen: 'Account' })
     } catch (err) {
       if (err.status === 404) {
-        setError('Incorrect password');
+        setError('Incorrect password')
       } else {
-        setError(err.message);
+        setError(err.message)
       }
-      console.error('Failed to update account -', err);
+      console.error('Failed to update account -', err)
     } finally {
       reset({
         email: user.email,
         newPassword: '',
         confirmPassword: '',
         password: '',
-      });
-      setLoading(false);
-      Keyboard.dismiss();
+      })
+      setLoading(false)
+      Keyboard.dismiss()
     }
-  };
+  }
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -252,8 +252,8 @@ const UpdateLogin = ({ navigation }) => {
         <Text style={buttons.btnText4}>Update account</Text>
       </Pressable>
     </KeyboardAwareScrollView>
-  );
-};
+  )
+}
 
 const styleSheet = (app, COLORS, buttons) =>
   StyleSheet.create({
@@ -295,6 +295,6 @@ const styleSheet = (app, COLORS, buttons) =>
       width: '100%',
       marginHorizontal: 0,
     },
-  });
+  })
 
-export default UpdateLogin;
+export default UpdateLogin

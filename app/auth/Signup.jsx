@@ -1,10 +1,10 @@
 import { StyleSheet, Text, Pressable, KeyboardAvoidingView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import LoginForm from './LoginForm'
-import JotterText from '../components/JotterText'
-import { FONT, FONTSIZE, useAppStyles } from '../styles'
+import JotterText from '../../src/components/JotterText'
+import SignupForm from '../../src/components/inputs/SignupForm'
+import { FONT, FONTSIZE, useAppStyles } from '../../src/styles'
 
-const Login = ({ navigation }) => {
+const Signup = ({ navigation }) => {
   const { app, buttons, COLORS } = useAppStyles()
   const styles = styleSheet(app, COLORS)
   return (
@@ -14,8 +14,8 @@ const Login = ({ navigation }) => {
     >
       <SafeAreaView style={styles.container}>
         <JotterText />
-        <Text style={styles.formHeader}>Log in</Text>
-        <LoginForm />
+        <Text style={styles.formHeader}>Sign up</Text>
+        <SignupForm />
         <Text
           style={{
             fontFamily: FONT.bold,
@@ -31,11 +31,11 @@ const Login = ({ navigation }) => {
           onPress={() =>
             navigation.reset({
               index: 0,
-              routes: [{ name: 'Signup' }],
+              routes: [{ name: 'Login' }],
             })
           }
         >
-          <Text style={buttons.btnText2}>Create an account</Text>
+          <Text style={buttons.btnText2}>Log in to account</Text>
         </Pressable>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -57,4 +57,4 @@ const styleSheet = (app, COLORS) =>
     },
   })
 
-export default Login
+export default Signup

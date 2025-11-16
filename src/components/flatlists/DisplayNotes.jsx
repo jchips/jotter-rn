@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useAppStyles } from '../../styles'
-import NoteCard from './NoteCard'
-import Move from '../Modals/Move'
-import Rename from '../Modals/Rename'
-import Delete from '../Modals/Delete'
-import Details from '../Modals/Details'
+import NoteCard from '../cards/NoteCard'
+import Move from '../modals/Move'
+import Rename from '../modals/Rename'
+import Delete from '../modals/Delete'
+import Details from '../modals/Details'
 
 const DisplayNotes = ({
   notes,

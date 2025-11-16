@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, View, Text, Pressable } from 'react-native'
 import { useDispatch } from 'react-redux'
 import SelectDropdown from 'react-native-select-dropdown'
-import DropdownBtn from '../Buttons/DropdownBtn'
+import DropdownBtn from '../buttons/DropdownBtn'
 import api from '../../util/api'
 import { setConfigs } from '../../reducers/configReducer'
 import { useTheme } from '../../contexts/ThemeContext'

@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import api from '../../util/api'
-import DropdownBtn from '../Buttons/DropdownBtn'
+import DropdownBtn from '../buttons/DropdownBtn'
 import { useFolder } from '../../hooks/useFolder'
 import { useTheme } from '../../contexts/ThemeContext'
 import { FONT, FONTSIZE, useAppStyles } from '../../styles'

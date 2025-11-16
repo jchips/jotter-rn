@@ -1,13 +1,13 @@
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { useTheme } from '../contexts/ThemeContext';
+import { StyleSheet, View, ActivityIndicator } from 'react-native'
+import { useTheme } from '../../contexts/ThemeContext'
 
 /**
  * Displays loading symbol while page is loading.
  * @returns {Component} - A component with the loading symbol
  */
 const Loading = () => {
-  const { COLORS } = useTheme();
-  const styles = styleSheet(COLORS);
+  const { COLORS } = useTheme()
+  const styles = styleSheet(COLORS)
   return (
     <View style={styles.container}>
       <ActivityIndicator
@@ -16,8 +16,8 @@ const Loading = () => {
         style={{ position: 'absolute', top: 100 }}
       />
     </View>
-  );
-};
+  )
+}
 
 const styleSheet = (COLORS) =>
   StyleSheet.create({
@@ -26,6 +26,6 @@ const styleSheet = (COLORS) =>
       alignItems: 'center',
       backgroundColor: COLORS.background,
     },
-  });
+  })
 
-export default Loading;
+export default Loading
