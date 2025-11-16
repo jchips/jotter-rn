@@ -75,7 +75,7 @@ export function useFolder(folderId = null, folder = null) {
           payload: { folder: folderData }
         });
       } catch (err) {
-        // console.error(err);
+        console.error(err);
         dispatch({
           type: ACTIONS.UPDATE_FOLDER,
           payload: { folder: ROOT_FOLDER }

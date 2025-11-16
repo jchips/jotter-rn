@@ -190,7 +190,7 @@ const Move = (props) => {
       navigation.push('Drawer', {
         screen: 'Home',
         params: {
-          folderId: folderTarget.value,
+          folderId: folderTarget.value === 'null' ? null : folderTarget.value,
           folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
         },
       })
