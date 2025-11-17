@@ -6,6 +6,9 @@ import {
   Text,
   TextInput,
   Pressable,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
@@ -113,70 +116,76 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
       }}
     >
       <View style={MODAL.centeredView}>
-        <View style={MODAL.modal}>
-          <Text style={app.header}>
-            Rename{' '}
-            <Text style={{ color: COLORS.themePurpleText }}>
-              {note ? note?.title : folder?.title}
-            </Text>
-          </Text>
-          {error ? (
-            <View style={app.errorAlert}>
-              <Text style={app.errorText}>{error}</Text>
-            </View>
-          ) : null}
-          <View style={MODAL.controllerContainer}>
-            <Controller
-              name='rename'
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  value={value}
-                  defaultValue={note ? note?.title : folder?.title}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  style={app.input}
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  onSubmitEditing={handleSubmit(onSubmit)}
+        <KeyboardAvoidingView behavior='padding' style={{ width: '100%' }}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={MODAL.modal}>
+              <Text style={app.header}>
+                Rename{' '}
+                <Text style={{ color: COLORS.themePurpleText }}>
+                  {note ? note?.title : folder?.title}
+                </Text>
+              </Text>
+              {error ? (
+                <View style={app.errorAlert}>
+                  <Text style={app.errorText}>{error}</Text>
+                </View>
+              ) : null}
+              <View style={MODAL.controllerContainer}>
+                <Controller
+                  name='rename'
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      value={value}
+                      defaultValue={note ? note?.title : folder?.title}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      style={app.input}
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      onSubmitEditing={handleSubmit(onSubmit)}
+                    />
+                  )}
                 />
-              )}
-            />
-            {errors.rename && (
-              <Text style={app.formErrorText}>This field is required.</Text>
-            )}
-          </View>
+                {errors.rename && (
+                  <Text style={app.formErrorText}>This field is required.</Text>
+                )}
+              </View>
 
-          {/* Modal footer */}
-          <View style={MODAL.buttons}>
-            {/* Cancel button */}
-            <Pressable
-              style={[buttons.outlineBtn2, MODAL.button]}
-              onPress={() => {
-                setOpenRename(!openRename)
-                setError('')
-              }}
-            >
-              <Text style={buttons.btnText2}>Cancel</Text>
-            </Pressable>
+              {/* Modal footer */}
+              <View style={MODAL.buttons}>
+                {/* Cancel button */}
+                <Pressable
+                  style={[buttons.outlineBtn2, MODAL.button]}
+                  onPress={() => {
+                    setOpenRename(!openRename)
+                    setError('')
+                  }}
+                >
+                  <Text style={buttons.btnText2}>Cancel</Text>
+                </Pressable>
 
-            {/* Submit button */}
-            <Pressable
-              style={{
-                ...buttons.btn1,
-                ...MODAL.button,
-                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
-              }}
-              onPress={handleSubmit(onSubmit)}
-              disabled={saving}
-            >
-              <Text style={buttons.btnText4}>Rename</Text>
-            </Pressable>
-          </View>
-        </View>
+                {/* Submit button */}
+                <Pressable
+                  style={{
+                    ...buttons.btn1,
+                    ...MODAL.button,
+                    backgroundColor: saving
+                      ? COLORS.disabled
+                      : COLORS.themePurple,
+                  }}
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={saving}
+                >
+                  <Text style={buttons.btnText4}>Rename</Text>
+                </Pressable>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   )
