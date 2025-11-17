@@ -95,7 +95,6 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - [tanstack/react-query](https://tanstack.com/query/latest)
 - [react-native-popover-view](https://www.npmjs.com/package/react-native-popover-view)
 - [react-native-select-dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown?tab=readme-ov-file)
-- [react-native-keyboard-aware-scroll-view](https://www.npmjs.com/package/react-native-keyboard-aware-scroll-view)
 - [react-native-fadeview-wrapper](https://github.com/aliunco/react-native-fadeview)
 - [Scaling by Soluto](https://medium.com/soluto-engineering/size-matters-5aeeb462900a)
 - [icons8](https://icons8.com/)

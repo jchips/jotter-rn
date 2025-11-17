@@ -6,8 +6,9 @@ import {
   TextInput,
   Pressable,
   Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useForm, Controller } from 'react-hook-form'
 import api from '../../src/util/api'
 import { storeCurrUser } from '../../src/util/persist'
@@ -15,6 +16,14 @@ import { moderateScale } from '../../src/util/scaling'
 import { useAuth } from '../../src/contexts/AuthContext'
 import JotterText from '../../src/components/JotterText'
 import { FONT, FONTSIZE, useAppStyles } from '../../src/styles'
+
+/**
+ * @typedef {Object} UpdateFormData
+ * @property {string} email
+ * @property {string} password
+ * @property {string} newPassword
+ * @property {string} confirmPassword
+ */
 
 const UpdateLogin = ({ navigation }) => {
   const [error, setError] = useState('')
@@ -40,7 +49,7 @@ const UpdateLogin = ({ navigation }) => {
 
   /**
    * Updates the user's account information
-   * @param {Object} formData - The login data the user submits
+   * @param {UpdateFormData} formData - The login data the user submits
    */
   const onSubmit = async (formData) => {
     try {
@@ -92,135 +101,66 @@ const UpdateLogin = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.logo}>
-        <JotterText />
-        <Text style={styles.smallText}>
-          Change account email and/or password.
-        </Text>
-      </View>
-      {error ? (
-        <View style={styles.errorAlert}>
-          <Text style={app.errorText}>{error}</Text>
+    <KeyboardAvoidingView
+      behavior='padding'
+      keyboardVerticalOffset={45}
+      style={styles.container}
+    >
+      <ScrollView keyboardShouldPersistTaps='handled'>
+        <View style={styles.logo}>
+          <JotterText />
+          <Text style={styles.smallText}>
+            Change account email and/or password.
+          </Text>
         </View>
-      ) : null}
-
-      {/* Email */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.text}>Email *</Text>
-        <View style={app.controllerContainer}>
-          <Controller
-            name='email'
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder='Email'
-                placeholderTextColor={COLORS.placeHolderText}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={app.input}
-                autoCapitalize='none'
-                autoCorrect={false}
-              />
-            )}
-          />
-          {errors.email && (
-            <Text style={app.formErrorText}>{fieldRequired}</Text>
-          )}
-        </View>
-      </View>
-
-      {/* Current password */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.text}>Current password *</Text>
-        <View style={app.controllerContainer}>
-          <Controller
-            name='password'
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder='Enter current password'
-                placeholderTextColor={COLORS.placeHolderText}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={app.input}
-                textContentType='password'
-                autoCapitalize='none'
-                autoCorrect={false}
-                onSubmitEditing={handleSubmit(onSubmit)}
-                secureTextEntry
-              />
-            )}
-          />
-          {errors.password && (
-            <Text style={app.formErrorText}>{fieldRequired}</Text>
-          )}
-        </View>
-      </View>
-
-      {/* Change password button */}
-      {showChangePassword ? null : (
-        <Pressable
-          style={styles.changePassword}
-          onPress={() => setShowChangePassword(true)}
-        >
-          <Text style={buttons.btnText2}>Change password</Text>
-        </Pressable>
-      )}
-
-      {showChangePassword ? (
-        <View>
-          {/* New password */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.text}>New password</Text>
-            <View style={app.controllerContainer}>
-              <Controller
-                name='newPassword'
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    placeholder='Enter new password'
-                    placeholderTextColor={COLORS.placeHolderText}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    style={app.input}
-                    textContentType='password'
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    secureTextEntry
-                  />
-                )}
-              />
-              {errors.newPassword && (
-                <Text style={app.formErrorText}>{errors.newPassword}</Text>
-              )}
-            </View>
+        {error ? (
+          <View style={styles.errorAlert}>
+            <Text style={app.errorText}>{error}</Text>
           </View>
+        ) : null}
 
-          {/* Confirm new passwword */}
-          <Text style={styles.text}>Confirm new password</Text>
+        {/* Email */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.text}>Email *</Text>
           <View style={app.controllerContainer}>
             <Controller
-              name='confirmPassword'
+              name='email'
               control={control}
               rules={{
-                required: false,
+                required: true,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  placeholder='Repeat new password'
+                  placeholder='Email'
+                  placeholderTextColor={COLORS.placeHolderText}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  style={app.input}
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                />
+              )}
+            />
+            {errors.email && (
+              <Text style={app.formErrorText}>{fieldRequired}</Text>
+            )}
+          </View>
+        </View>
+
+        {/* Current password */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.text}>Current password *</Text>
+          <View style={app.controllerContainer}>
+            <Controller
+              name='password'
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder='Enter current password'
                   placeholderTextColor={COLORS.placeHolderText}
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -234,24 +174,101 @@ const UpdateLogin = ({ navigation }) => {
                 />
               )}
             />
-            {errors.confirmPassword && (
-              <Text style={app.formErrorText}>{errors.confirmPassword}</Text>
+            {errors.password && (
+              <Text style={app.formErrorText}>{fieldRequired}</Text>
             )}
           </View>
         </View>
-      ) : null}
 
-      <Pressable
-        onPress={handleSubmit(onSubmit)}
-        style={{
-          ...styles.button,
-          backgroundColor: loading ? `${COLORS.mutedBtn}` : `${COLORS.authBtn}`,
-        }}
-        disabled={loading}
-      >
-        <Text style={buttons.btnText4}>Update account</Text>
-      </Pressable>
-    </KeyboardAwareScrollView>
+        {/* Change password button */}
+        {showChangePassword ? null : (
+          <Pressable
+            style={styles.changePassword}
+            onPress={() => setShowChangePassword(true)}
+          >
+            <Text style={buttons.btnText2}>Change password</Text>
+          </Pressable>
+        )}
+
+        {/* New password */}
+        {showChangePassword ? (
+          <View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.text}>New password</Text>
+              <View style={app.controllerContainer}>
+                <Controller
+                  name='newPassword'
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      placeholder='Enter new password'
+                      placeholderTextColor={COLORS.placeHolderText}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      style={app.input}
+                      textContentType='password'
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      secureTextEntry
+                    />
+                  )}
+                />
+                {errors.newPassword && (
+                  <Text style={app.formErrorText}>{errors.newPassword}</Text>
+                )}
+              </View>
+            </View>
+            {/* Confirm new passwword */}
+            <Text style={styles.text}>Confirm new password</Text>
+            <View style={app.controllerContainer}>
+              <Controller
+                name='confirmPassword'
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder='Repeat new password'
+                    placeholderTextColor={COLORS.placeHolderText}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    style={app.input}
+                    textContentType='password'
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                    onSubmitEditing={handleSubmit(onSubmit)}
+                    secureTextEntry
+                  />
+                )}
+              />
+              {errors.confirmPassword && (
+                <Text style={app.formErrorText}>{errors.confirmPassword}</Text>
+              )}
+            </View>
+          </View>
+        ) : null}
+
+        {/* Update button */}
+        <Pressable
+          onPress={handleSubmit(onSubmit)}
+          style={{
+            ...styles.button,
+            backgroundColor: loading
+              ? `${COLORS.mutedBtn}`
+              : `${COLORS.authBtn}`,
+          }}
+          disabled={loading}
+        >
+          <Text style={buttons.btnText4}>Update account</Text>
+        </Pressable>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

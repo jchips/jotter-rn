@@ -27,7 +27,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
   const { app, MODAL, buttons } = useAppStyles()
   const { COLORS } = useTheme()
 
-  // Update note in database and cache
+  /* Update note in database and cache */
   const updateNoteMutation = useMutation({
     mutationFn: async ({ noteId, title }) =>
       await api.updateNote(
@@ -52,7 +52,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
     },
   })
 
-  // Update folder in database and cache
+  /* Update folder in database and cache */
   const updateFolderMutation = useMutation({
     mutationFn: async ({ folderId, title }) =>
       await api.updateFolder(
