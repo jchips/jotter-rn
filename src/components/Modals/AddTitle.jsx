@@ -6,6 +6,9 @@ import {
   Text,
   Pressable,
   TextInput,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
@@ -130,68 +133,74 @@ const AddTitle = (props) => {
       }}
     >
       <View style={MODAL.centeredView}>
-        <View style={MODAL.modal}>
-          <Text style={app.header}>Add {type}</Text>
-          {error ? (
-            <View style={app.errorAlert}>
-              <Text style={app.errorText}>{error}</Text>
-            </View>
-          ) : null}
+        <KeyboardAvoidingView behavior='padding' style={{ width: '100%' }}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={MODAL.modal}>
+              <Text style={app.header}>Add {type}</Text>
+              {error ? (
+                <View style={app.errorAlert}>
+                  <Text style={app.errorText}>{error}</Text>
+                </View>
+              ) : null}
 
-          {/* Add note title */}
-          <View style={MODAL.controllerContainer}>
-            <Controller
-              name='title'
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  placeholder={`Give ${type} a title`}
-                  placeholderTextColor={COLORS.placeHolderText}
-                  style={app.input}
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  onSubmitEditing={handleSubmit(onSubmit)}
+              {/* Add note title */}
+              <View style={MODAL.controllerContainer}>
+                <Controller
+                  name='title'
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      placeholder={`Give ${type} a title`}
+                      placeholderTextColor={COLORS.placeHolderText}
+                      style={app.input}
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      onSubmitEditing={handleSubmit(onSubmit)}
+                    />
+                  )}
                 />
-              )}
-            />
-            {errors.title && (
-              <Text style={app.formErrorText}>This field is required.</Text>
-            )}
-          </View>
+                {errors.title && (
+                  <Text style={app.formErrorText}>This field is required.</Text>
+                )}
+              </View>
 
-          {/* Modal footer */}
-          <View style={MODAL.buttons}>
-            {/* Cancel button */}
-            <Pressable
-              style={[buttons.outlineBtn2, MODAL.button]}
-              onPress={() => {
-                setOpenAddTitle(!openAddTitle)
-                setError('')
-              }}
-            >
-              <Text style={buttons.btnText2}>Cancel</Text>
-            </Pressable>
+              {/* Modal footer */}
+              <View style={MODAL.buttons}>
+                {/* Cancel button */}
+                <Pressable
+                  style={[buttons.outlineBtn2, MODAL.button]}
+                  onPress={() => {
+                    setOpenAddTitle(!openAddTitle)
+                    setError('')
+                  }}
+                >
+                  <Text style={buttons.btnText2}>Cancel</Text>
+                </Pressable>
 
-            {/* Submit button */}
-            <Pressable
-              style={{
-                ...buttons.btn1,
-                ...MODAL.button,
-                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
-              }}
-              onPress={handleSubmit(onSubmit)}
-              disabled={saving}
-            >
-              <Text style={buttons.btnText4}>Create {type}</Text>
-            </Pressable>
-          </View>
-        </View>
+                {/* Submit button */}
+                <Pressable
+                  style={{
+                    ...buttons.btn1,
+                    ...MODAL.button,
+                    backgroundColor: saving
+                      ? COLORS.disabled
+                      : COLORS.themePurple,
+                  }}
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={saving}
+                >
+                  <Text style={buttons.btnText4}>Create {type}</Text>
+                </Pressable>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   )

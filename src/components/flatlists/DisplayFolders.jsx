@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useAppStyles } from '../../styles'
-import Delete from '../Modals/Delete'
-import FolderCard from './FolderCard'
-import Move from '../Modals/Move'
-import Rename from '../Modals/Rename'
-import Details from '../Modals/Details'
+import Delete from '../modals/Delete'
+import FolderCard from '../cards/FolderCard'
+import Move from '../modals/Move'
+import Rename from '../modals/Rename'
+import Details from '../modals/Details'
 
 const DisplayFolders = ({ folders, error, gridSize }) => {
   const [openMove, setOpenMove] = useState(false)

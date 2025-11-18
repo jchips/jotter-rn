@@ -7,11 +7,11 @@ import {
 } from 'react-native-gesture-handler'
 import { runOnJS } from 'react-native-reanimated'
 import { useFocusEffect } from '@react-navigation/native'
-import { useMarkdown } from '../../contexts/MDContext'
-import { useTheme } from '../../contexts/ThemeContext'
-import { useAppStyles } from '../../styles'
-import EditButton from '../Buttons/EditButton'
-import Preview from './Preview'
+import { useMarkdown } from '../src/contexts/MDContext'
+import { useTheme } from '../src/contexts/ThemeContext'
+import { useAppStyles } from '../src/styles'
+import EditButton from '../src/components/buttons/EditButton'
+import Preview from '../src/components/PreviewMarkdown'
 
 const ViewNote = ({ navigation, route }) => {
   const { note } = route.params

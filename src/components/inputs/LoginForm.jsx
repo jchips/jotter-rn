@@ -8,9 +8,9 @@ import {
   Keyboard,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
-import { useAuth } from '../contexts/AuthContext'
-import { useTheme } from '../contexts/ThemeContext'
-import { useAppStyles } from '../styles'
+import { useAuth } from '../../contexts/AuthContext'
+import { useTheme } from '../../contexts/ThemeContext'
+import { useAppStyles } from '../../styles'
 
 const LoginForm = () => {
   const [error, setError] = useState('')
