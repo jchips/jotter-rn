@@ -51,10 +51,10 @@ export default function App() {
 
   return fontsLoaded ? (
     <ThemeProvider>
-      <ReduxProvider store={store}>
-        <AuthProvider>
-          <MarkdownProvider>
-            <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <ReduxProvider store={store}>
+          <AuthProvider>
+            <MarkdownProvider>
               {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
               <SafeAreaProvider>
                 {Platform.OS === 'android' && Platform.Version <= 33 ? (
@@ -64,10 +64,10 @@ export default function App() {
                 ) :
                   <Router />}
               </SafeAreaProvider>
-            </QueryClientProvider>
-          </MarkdownProvider>
-        </AuthProvider>
-      </ReduxProvider>
+            </MarkdownProvider>
+          </AuthProvider>
+        </ReduxProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   ) : null;
 }

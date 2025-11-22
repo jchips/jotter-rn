@@ -6,6 +6,7 @@ import {
   Platform,
   useColorScheme,
 } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -19,6 +20,7 @@ import ViewNote from '../../app/ViewNote'
 import Editor from '../../app/Editor'
 import UpdateLogin from '../../app/auth/UpdateLogin'
 import Signup from '../../app/auth/Signup'
+import { addRecent, loadRecent } from '../reducers/recentsReducer'
 import { getCurrUser, removeCurrUser } from '../util/persist'
 import { FONT } from '../styles'
 
@@ -26,9 +28,16 @@ const Stack = createStackNavigator()
 
 const Router = () => {
   const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
+  const recents = useSelector((state) => state.recents.data)
+  console.log('recents:', recents) // dl
   const { isLoggedIn, setIsLoggedIn, setToken, setUser } = useAuth()
   const { COLORS, theme } = useTheme()
   const systemTheme = useColorScheme()
+
+  useEffect(() => {
+    loadRecent()
+  }, [])
 
   useEffect(() => {
     const persistLogin = async () => {
@@ -100,7 +109,22 @@ const Router = () => {
         ) : (
           <StatusBar style={statusBarTextStyle} />
         )}
-        <NavigationContainer>
+        <NavigationContainer
+          onStateChange={(state) => {
+            const route = getActiveRoute(state)
+            console.log('route', route) // dl
+            if (route?.params) {
+              if (route.name === 'View') {
+                dispatch(
+                  addRecent({
+                    id: route.params.note.id,
+                    name: route.params.note.title,
+                  })
+                )
+              }
+            }
+          }}
+        >
           <Stack.Navigator
             screenOptions={{
               headerStyle: {
@@ -206,6 +230,14 @@ const Router = () => {
       </View>
     )
   )
+}
+
+const getActiveRoute = (state) => {
+  let current = state
+  while (current?.routes && current.index != null) {
+    current = current.routes[current.index]
+  }
+  return current
 }
 
 const styles = StyleSheet.create({})

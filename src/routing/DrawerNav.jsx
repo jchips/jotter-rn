@@ -7,6 +7,7 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native'
+import { useSelector } from 'react-redux'
 import { useRoute } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
@@ -19,6 +20,7 @@ import Dashboard from '../../app/Dashboard'
 import Settings from '../../app/Settings.jsx'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 import { getFolderTitle } from '../util/getFolder.js'
+import api from '../util/api.js'
 
 const Drawer = createDrawerNavigator()
 
@@ -31,6 +33,7 @@ function DrawerNav({ navigation }) {
   const { folder } = useFolder(route?.params?.params?.folderId)
   const { buttons } = useAppStyles()
   const { COLORS } = useTheme()
+  const recents = useSelector((state) => state.recents.data)
   const styles = styleSheet(COLORS)
 
   useEffect(() => {
@@ -64,6 +67,7 @@ function DrawerNav({ navigation }) {
     logout()
   }
 
+  // Custom drawer content (app icon, routes, recents, current, log out)
   const DrawerContent = (props) => {
     const { state, descriptors, navigation } = props
 
@@ -162,6 +166,33 @@ function DrawerNav({ navigation }) {
               </Text>
             </Pressable>
           ) : null}
+
+          {/* Recent notes label */}
+          {recents.length > 0 ? (
+            <Text style={styles.foldersTitle}>Recent notes</Text>
+          ) : null}
+
+          {/* Recent notes (4) */}
+          {recents.length > 0
+            ? recents.map((note) => {
+                return (
+                  <Pressable
+                    key={note.id}
+                    style={styles.drawerItem}
+                    onPress={async () => {
+                      let res = await api.getNote(note.id)
+                      navigation.navigate('View', {
+                        note: res.data,
+                      })
+                    }}
+                  >
+                    <Text style={styles.drawerLabel}>{note.name}</Text>
+                  </Pressable>
+                )
+              })
+            : null}
+
+          {/* Log out button */}
           <Pressable style={buttons.outlineBtn1} onPress={logUserOut}>
             <Text style={buttons.btnText3}>Log out</Text>
           </Pressable>
