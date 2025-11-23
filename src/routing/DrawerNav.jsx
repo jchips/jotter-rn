@@ -179,14 +179,13 @@ function DrawerNav({ navigation }) {
                   <Pressable
                     key={note.id}
                     style={styles.drawerItem}
-                    onPress={async () => {
-                      let res = await api.getNote(note.id)
+                    onPress={() => {
                       navigation.navigate('View', {
-                        note: res.data,
+                        note: note,
                       })
                     }}
                   >
-                    <Text style={styles.drawerLabel}>{note.name}</Text>
+                    <Text style={styles.drawerLabel}>{note.title}</Text>
                   </Pressable>
                 )
               })

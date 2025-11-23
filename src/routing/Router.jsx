@@ -29,9 +29,9 @@ const Stack = createStackNavigator()
 const Router = () => {
   const [loading, setLoading] = useState(true)
   const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth()
-  const dispatch = useDispatch()
   const { COLORS, theme } = useTheme()
   const systemTheme = useColorScheme()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const persistLogin = async () => {
@@ -116,11 +116,12 @@ const Router = () => {
             if (route?.params) {
               if (route.name === 'View') {
                 dispatch(
-                  addRecent({
-                    id: route.params.note.id,
-                    name: route.params.note.title,
-                    userId: user?.id,
-                  })
+                  addRecent(route.params.note)
+                  // addRecent({
+                  //   id: route.params.note.id,
+                  //   name: route.params.note.title,
+                  //   userId: user?.id,
+                  // })
                 )
               }
             }
@@ -233,6 +234,11 @@ const Router = () => {
   )
 }
 
+/**
+ * Gets the active (current) route.
+ * @param {Object} state - current route
+ * @returns {Object} - active route
+ */
 const getActiveRoute = (state) => {
   let current = state
   while (current?.routes && current.index != null) {
