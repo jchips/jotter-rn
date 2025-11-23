@@ -77,6 +77,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       queryClient.clear()
+      queryClient.getQueryCache().clear()
       await AsyncStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       let requestUrl = `${API_URL}/jotter/logout`
       await axios.post(requestUrl, {}, { withCredentials: true })

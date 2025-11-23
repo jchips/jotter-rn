@@ -9,9 +9,10 @@ import { runOnJS } from 'react-native-reanimated'
 import { useFocusEffect } from '@react-navigation/native'
 import { useMarkdown } from '../src/contexts/MDContext'
 import { useTheme } from '../src/contexts/ThemeContext'
-import { useAppStyles } from '../src/styles'
-import EditButton from '../src/components/buttons/EditButton'
 import Preview from '../src/components/PreviewMarkdown'
+import EditButton from '../src/components/buttons/EditButton'
+import { useHeader } from '../src/hooks/useHeader'
+import { useAppStyles } from '../src/styles'
 
 const ViewNote = ({ navigation, route }) => {
   const { note } = route.params
@@ -19,6 +20,7 @@ const ViewNote = ({ navigation, route }) => {
   const { markdown, setMarkdown } = useMarkdown()
   const { app } = useAppStyles()
   const { COLORS } = useTheme()
+  const header = useHeader()
   const { width: screenWidth } = useWindowDimensions()
   const styles = styleSheet(app)
   const doubleTap = Gesture.Tap()
@@ -41,6 +43,8 @@ const ViewNote = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: calculateHeaderLength(),
       headerTint: COLORS.themePurpleText,
+      headerRight: () =>
+        header.note({ noteId: note.id, folderId: note.folderId, navigation }),
     })
   }, [navigation])
 

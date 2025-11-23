@@ -1,10 +1,9 @@
+/* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
 import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   ScrollView,
   View,
-  Pressable,
-  Image,
   useColorScheme,
   RefreshControl,
   Dimensions,
@@ -18,9 +17,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { fetchConfigs } from '../src/reducers/configReducer'
 import { useMarkdown } from '../src/contexts/MDContext'
-import { queryClient, useAuth } from '../src/contexts/AuthContext'
+import { useAuth } from '../src/contexts/AuthContext'
 import { useTheme } from '../src/contexts/ThemeContext'
 import { useFolder } from '../src/hooks/useFolder'
+import { useHeader } from '../src/hooks/useHeader'
 import { useAppStyles } from '../src/styles'
 import Loading from '../src/components/indicators/Loading'
 import DisplayFolders from '../src/components/flatlists/DisplayFolders'
@@ -47,11 +47,12 @@ const Dashboard = ({ route }) => {
   const { token, logout, user } = useAuth()
   const { setMarkdown } = useMarkdown()
   const navigation = useNavigation()
-  const { data } = useSelector((state) => state.configs)
+  const configSettings = useSelector((state) => state.configs.data)
   const dispatch = useDispatch()
   const { folder } = useFolder(folderId)
   const { app, buttons } = useAppStyles()
   const systemTheme = useColorScheme()
+  const header = useHeader()
   const isFocused = useIsFocused()
   const styles = styleSheet(app, buttons, COLORS)
   const screenWidth = Dimensions.get('window').width
@@ -75,74 +76,17 @@ const Dashboard = ({ route }) => {
           screenWidth < 440 && folderTitle.length > 16
             ? folderTitle.substring(0, 16) + '...'
             : folderTitle,
-        headerRight: () => {
-          return (
-            <View style={{ flexDirection: 'row' }}>
-              {/* Navigate up */}
-              {folder_id && (
-                <Pressable
-                  onPress={() => {
-                    let cachedFolder = findItemInCache(folderParent, user?.id)
-                    return navigation.navigate('Drawer', {
-                      screen: 'Home',
-                      params: {
-                        folderId: folderParent,
-                        folderTitle: cachedFolder?.title || 'Home',
-                        folderParent: cachedFolder?.parentId || null,
-                      },
-                    })
-                  }}
-                  style={styles.headerButton}
-                >
-                  <Image
-                    source={{
-                      uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/up3.png`,
-                    }}
-                    alt='folder-up-button'
-                    style={app.icon}
-                  />
-                </Pressable>
-              )}
-
-              {/* Grid */}
-              <Pressable
-                onPress={() => {
-                  setOpenGrid(true)
-                }}
-                style={styles.headerButton}
-              >
-                <Image
-                  source={{
-                    uri:
-                      data?.gridSize === '2'
-                        ? `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/rows.png`
-                        : `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/grid-2.png`,
-                  }}
-                  alt='grid-button'
-                  style={app.icon}
-                />
-              </Pressable>
-
-              {/* Sort */}
-              <Pressable
-                onPress={() => {
-                  setOpenSort(true)
-                }}
-                style={styles.headerButton}
-              >
-                <Image
-                  source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/sorting-arrows.png`,
-                  }}
-                  alt='sort-button'
-                  style={app.icon}
-                />
-              </Pressable>
-            </View>
-          )
-        },
+        headerRight: () =>
+          header.dashboard({
+            setOpenGrid,
+            setOpenSort,
+            folderParent,
+            folder_id,
+            configSettings,
+            navigation,
+          }),
       })
-    }, [navigation, route, data, systemTheme, theme])
+    }, [navigation, route, configSettings, systemTheme, theme])
   )
 
   // Fetch and cache folders
@@ -158,7 +102,7 @@ const Dashboard = ({ route }) => {
       return res.data
     },
     select: (foldersRes) => {
-      const sortedFolders = sortFolders(data?.sort, foldersRes)
+      const sortedFolders = sortFolders(configSettings?.sort, foldersRes)
       return sortedFolders
     },
     staleTime: 2 * 60 * 1000, // 2 min
@@ -189,7 +133,7 @@ const Dashboard = ({ route }) => {
       return res.data
     },
     select: (notesRes) => {
-      const sortedNotes = sortNotes(data?.sort, notesRes)
+      const sortedNotes = sortNotes(configSettings?.sort, notesRes)
       return sortedNotes
     },
     staleTime: 2 * 60 * 1000, // 2 min
@@ -226,31 +170,6 @@ const Dashboard = ({ route }) => {
     setLoading(false)
   }
 
-  /**
-   * Finds and return cached note.
-   * @param {number} id - note id
-   * @param {QueryClient} queryClient - cache query
-   * @param {number} userId - current user id
-   * @returns {Object} - note in cache
-   */
-  const findItemInCache = (id, userId) => {
-    const queries = queryClient.getQueryCache(['folders', userId]).findAll()
-
-    for (const q of queries) {
-      const key = q.queryKey
-
-      // FOLDERS: ['folders', userId, parent_id]
-      if (key[0] === 'folders' && key[1] === userId) {
-        const cachedData = queryClient.getQueryData(key)
-        if (Array.isArray(cachedData)) {
-          const item = cachedData.find((f) => f.id === id)
-          if (item) return item
-        }
-      }
-    }
-    return null // folder not found
-  }
-
   // Logs the user out
   const logUserOut = () => {
     logout()
@@ -278,7 +197,7 @@ const Dashboard = ({ route }) => {
         {folders ? (
           <DisplayFolders
             folders={folders}
-            gridSize={data?.gridSize}
+            gridSize={configSettings?.gridSize}
             error={error}
           />
         ) : null}
@@ -286,7 +205,7 @@ const Dashboard = ({ route }) => {
           <DisplayNotes
             notes={notes}
             folders={folders}
-            gridSize={data?.gridSize}
+            gridSize={configSettings?.gridSize}
             error={error}
             refreshKey={refreshKey}
             isFocused={isFocused}
@@ -303,7 +222,7 @@ const Dashboard = ({ route }) => {
       <Sort
         openSort={openSort}
         setOpenSort={setOpenSort}
-        currentSort={data?.sort}
+        currentSort={configSettings?.sort}
       />
       <Grid openGrid={openGrid} setOpenGrid={setOpenGrid} />
     </View>

@@ -177,7 +177,6 @@ function DrawerNav({ navigation }) {
             <Text style={styles.foldersTitle}>Recent notes</Text>
           ) : null}
 
-          {/* Recent notes (4) */}
           {recents.length > 0
             ? recents.map((note) => {
                 return (

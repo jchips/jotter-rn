@@ -1,3 +1,4 @@
+/* Folding level 3 (VS Code, cmd/ctrl + k + 3) */
 import { useEffect, useReducer } from 'react';
 import api from '../util/api';
 

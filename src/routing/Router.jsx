@@ -1,3 +1,4 @@
+/* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
 import { useEffect, useState } from 'react'
 import {
   StyleSheet,
@@ -115,14 +116,7 @@ const Router = () => {
             // Store recent notes
             if (route?.params) {
               if (route.name === 'View') {
-                dispatch(
-                  addRecent(route.params.note)
-                  // addRecent({
-                  //   id: route.params.note.id,
-                  //   name: route.params.note.title,
-                  //   userId: user?.id,
-                  // })
-                )
+                dispatch(addRecent(route.params.note))
               }
             }
           }}
@@ -165,6 +159,14 @@ const Router = () => {
                     headerTitleStyle: {
                       fontFamily: FONT.semiBold,
                     },
+                    animation: 'scale_from_center',
+                    transitionSpec: {
+                      open: { animation: 'timing', config: { duration: 300 } },
+                      close: { animation: 'timing', config: { duration: 300 } },
+                    },
+                    cardStyleInterpolator: ({ current }) => ({
+                      cardStyle: { opacity: current.progress },
+                    }),
                   }}
                 />
                 <Stack.Screen

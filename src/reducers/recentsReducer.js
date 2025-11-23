@@ -10,7 +10,7 @@ export const addRecent = createAsyncThunk(
     const state = getState().recents;
 
     // retrieve cache data
-    const cachedNote = findItemInCache(activeNote.id, queryClient, activeNote.userId);
+    const cachedNote = findItemInCache(activeNote.id, activeNote.userId);
 
     // Remove duplicates
     let updated = state.data.filter(noteItem => noteItem.id !== activeNote.id);
@@ -18,8 +18,8 @@ export const addRecent = createAsyncThunk(
     // Add to top
     updated.unshift({ ...cachedNote });
 
-    // Limit size (4)
-    updated = updated.slice(0, 4);
+    // Limit size (3)
+    updated = updated.slice(0, 3);
 
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
@@ -75,8 +75,8 @@ const recentsSlice = createSlice({
  * @param {number} userId - current user id
  * @returns {Object} - note in cache
  */
-const findItemInCache = (id, queryClient, userId) => {
-  const queries = queryClient.getQueryCache().findAll();
+const findItemInCache = (id, userId) => {
+  const queries = queryClient.getQueryCache().findAll({ queryKey: ['notes', userId] });
 
   for (const q of queries) {
     const key = q.queryKey;
