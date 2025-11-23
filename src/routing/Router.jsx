@@ -6,7 +6,7 @@ import {
   Platform,
   useColorScheme,
 } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -28,24 +28,18 @@ const Stack = createStackNavigator()
 
 const Router = () => {
   const [loading, setLoading] = useState(true)
+  const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth()
   const dispatch = useDispatch()
-  const recents = useSelector((state) => state.recents.data)
-  console.log('recents:', recents) // dl
-  const { isLoggedIn, setIsLoggedIn, setToken, setUser } = useAuth()
   const { COLORS, theme } = useTheme()
   const systemTheme = useColorScheme()
 
   useEffect(() => {
-    loadRecent()
-  }, [])
-
-  useEffect(() => {
     const persistLogin = async () => {
       try {
-        const user = await getCurrUser()
-        if (user) {
-          setUser(user)
-          setToken(user.token)
+        const activeUser = await getCurrUser()
+        if (activeUser) {
+          setUser(activeUser)
+          setToken(activeUser.token)
           setIsLoggedIn(true)
         } else {
           setUser(null)
@@ -53,7 +47,7 @@ const Router = () => {
           setIsLoggedIn(false)
         }
       } catch (err) {
-        console.error('Failed to fetch stored user ' + err)
+        console.error('Failed to fetch active user ' + err)
         setUser(null)
         setToken(null)
         removeCurrUser()
@@ -64,6 +58,11 @@ const Router = () => {
     }
     persistLogin()
   }, [setUser])
+
+  // Resets the recent notes history when a new user logs in (security)
+  useEffect(() => {
+    dispatch(loadRecent({ userId: user?.id }))
+  }, [user?.id])
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -112,13 +111,15 @@ const Router = () => {
         <NavigationContainer
           onStateChange={(state) => {
             const route = getActiveRoute(state)
-            console.log('route', route) // dl
+
+            // Store recent notes
             if (route?.params) {
               if (route.name === 'View') {
                 dispatch(
                   addRecent({
                     id: route.params.note.id,
                     name: route.params.note.title,
+                    userId: user?.id,
                   })
                 )
               }

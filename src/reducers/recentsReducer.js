@@ -6,18 +6,18 @@ const STORAGE_KEY = 'RECENTS_SCREENS';
 
 export const addRecent = createAsyncThunk(
   'recents/addRecent',
-  async ({ id, name }, { getState }) => {
+  async ({ id, name, userId }, { getState }) => {
     const state = getState().recents;
 
     // retrieve cache data
-    const cached = findItemInCache(id, queryClient);
+    const cached = findItemInCache(id, queryClient, userId);
     const finalName = cached?.name || name;
 
     // Remove duplicates
-    let updated = state.data.filter(r => r.id !== id);
+    let updated = state.data.filter(noteItem => noteItem.id !== id);
 
     // Add to top
-    updated.unshift({ id, name: finalName });
+    updated.unshift({ id, name: finalName, userId: userId });
 
     // Limit size (4)
     updated = updated.slice(0, 4);
@@ -30,9 +30,13 @@ export const addRecent = createAsyncThunk(
 
 export const loadRecent = createAsyncThunk(
   'recents/loadRecent',
-  async () => {
-    const unparsed = await AsyncStorage.getItem(STORAGE_KEY);
-    if (unparsed) return JSON.parse(unparsed);
+  async ({ userId }, { }) => {
+    let unparsed = await AsyncStorage.getItem(STORAGE_KEY);
+    if (unparsed) {
+      unparsed = JSON.parse(unparsed);
+      unparsed = unparsed.filter(noteItem => noteItem.userId === userId)
+      return unparsed;
+    }
     return [];
   }
 );
@@ -65,14 +69,14 @@ const recentsSlice = createSlice({
   },
 });
 
-const findItemInCache = (id, queryClient) => {
+const findItemInCache = (id, queryClient, userId) => {
   const queries = queryClient.getQueryCache().findAll();
 
   for (const q of queries) {
     const key = q.queryKey;
 
     // NOTES: ['notes', userId, folder_id]
-    if (key[0] === 'notes') {
+    if (key[0] === 'notes' && key[1] === userId) {
       const data = queryClient.getQueryData(key);
       if (Array.isArray(data)) {
         const item = data.find(n => n.id === id);
@@ -80,8 +84,7 @@ const findItemInCache = (id, queryClient) => {
       }
     }
   }
-  return null; // not found
+  return null; // note not found
 }
 
-// export const {  } = recentsSlice.actions;
 export default recentsSlice.reducer;
