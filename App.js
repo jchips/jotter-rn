@@ -1,5 +1,5 @@
 import './gesture-handler';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Platform } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -29,6 +29,19 @@ export default function App() {
     'Inter-BoldItalic': require('./assets/fonts/Inter-BoldItalic2.ttf'),
     'RobotoMono-Regular': require('./assets/fonts/RobotoMono-Regular.ttf'),
   });
+  const [persistLoaded, setPersistLoaded] = useState(false);
+
+  const asyncStoragePersister = createAsyncStoragePersister({
+    storage: AsyncStorage,
+  })
+
+  useEffect(() => {
+    persistQueryClient({
+      queryClient,
+      persister: asyncStoragePersister,
+    })
+    setPersistLoaded(true);
+  }, [])
 
   useEffect(() => {
     if (fontsLoaded || error) {
@@ -36,24 +49,16 @@ export default function App() {
     }
   }, [fontsLoaded, error]);
 
+  // if (!persistLoaded || (!fontsLoaded && !error)) {
   if (!fontsLoaded && !error) {
     return null;
   }
 
-  const asyncStoragePersister = createAsyncStoragePersister({
-    storage: AsyncStorage,
-  })
-
-  persistQueryClient({
-    queryClient,
-    persister: asyncStoragePersister,
-  })
-
-  return fontsLoaded ? (
+  return (fontsLoaded && persistLoaded) && (
     <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <ReduxProvider store={store}>
-          <AuthProvider>
+      <ReduxProvider store={store}>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
             <MarkdownProvider>
               {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
               <SafeAreaProvider>
@@ -65,11 +70,11 @@ export default function App() {
                   <Router />}
               </SafeAreaProvider>
             </MarkdownProvider>
-          </AuthProvider>
-        </ReduxProvider>
-      </QueryClientProvider>
+          </QueryClientProvider>
+        </AuthProvider>
+      </ReduxProvider>
     </ThemeProvider>
-  ) : null;
+  );
 }
 
 const styles = StyleSheet.create({});

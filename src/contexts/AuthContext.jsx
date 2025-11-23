@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { QueryClient } from '@tanstack/react-query'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
 import { Buffer } from 'buffer'
 import { setConfigs } from '../reducers/configReducer'
@@ -51,8 +50,7 @@ export function AuthProvider({ children }) {
     )
     let res
     try {
-      await queryClient.clear()
-      await AsyncStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
+      queryClient.clear()
       axios.defaults.headers.common['Authorization'] = `Basic ${encodedLogin}`
       axios.defaults.headers.common['Content-Type'] = 'application/json'
       let requestUrl = `${API_URL}/jotter/login`
@@ -77,8 +75,6 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       queryClient.clear()
-      queryClient.getQueryCache().clear()
-      await AsyncStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       let requestUrl = `${API_URL}/jotter/logout`
       await axios.post(requestUrl, {}, { withCredentials: true })
       setUser(null)
