@@ -149,7 +149,7 @@ const Settings = ({ navigation }) => {
         {/* History settings */}
         <Text style={app.header2}>History</Text>
         <Pressable
-          style={buttons.outlineBtn1}
+          style={{ ...buttons.outlineBtn1, height: moderateScale(50) }}
           onPress={() => {
             dispatch(clearRecent())
             showToast()

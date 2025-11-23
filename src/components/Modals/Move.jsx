@@ -59,9 +59,8 @@ const Move = (props) => {
           // loop folders
           for (let j = 0; j < formatFolders[i].path.length; j++) {
             // loop path ids
-            formatFolders[i].path[j]['title'] = await getFolderTitle(
-              formatFolders[i].path[j].id
-            )
+            const folderInfo = await getFolderTitle(formatFolders[i].path[j].id)
+            formatFolders[i].path[j]['title'] = folderInfo.title
           }
         }
         setFormattedFolders(formatFolders)
@@ -124,6 +123,7 @@ const Move = (props) => {
         params: {
           folderId: folderTarget.value === 'null' ? null : folderTarget.value,
           folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
+          folderParent: moveToFolder?.parentId ? moveToFolder?.parentId : null,
         },
       })
     },
@@ -192,6 +192,7 @@ const Move = (props) => {
         params: {
           folderId: folderTarget.value === 'null' ? null : folderTarget.value,
           folderTitle: moveToFolder?.title ? moveToFolder?.title : 'Home',
+          folderParent: moveToFolder?.parentId ? moveToFolder?.parentId : null,
         },
       })
     },

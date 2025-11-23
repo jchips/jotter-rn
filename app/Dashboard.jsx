@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { fetchConfigs } from '../src/reducers/configReducer'
 import { useMarkdown } from '../src/contexts/MDContext'
-import { useAuth } from '../src/contexts/AuthContext'
+import { queryClient, useAuth } from '../src/contexts/AuthContext'
 import { useTheme } from '../src/contexts/ThemeContext'
 import { useFolder } from '../src/hooks/useFolder'
 import { useAppStyles } from '../src/styles'
@@ -29,11 +29,11 @@ import AddButton from '../src/components/buttons/AddButton'
 import Sort from '../src/components/modals/Sort'
 import Grid from '../src/components/modals/Grid'
 import AddTitle from '../src/components/modals/AddTitle'
-import api from '../src/util/api'
 import { sortFolders, sortNotes } from '../src/util/sortBy'
+import api from '../src/util/api'
 
 const Dashboard = ({ route }) => {
-  const { folderId, folderTitle } = route.params
+  const { folderId, folderTitle, folderParent } = route.params
   const [notes, setNotes] = useState()
   const [folders, setFolders] = useState()
   const [error, setError] = useState('')
@@ -72,12 +72,39 @@ const Dashboard = ({ route }) => {
       // Header settings
       navigation.setOptions({
         headerTitle:
-          screenWidth < 440 && folderTitle.length > 20
-            ? folderTitle.substring(0, 20) + '...'
+          screenWidth < 440 && folderTitle.length > 16
+            ? folderTitle.substring(0, 16) + '...'
             : folderTitle,
         headerRight: () => {
           return (
             <View style={{ flexDirection: 'row' }}>
+              {/* Navigate up */}
+              {folder_id && (
+                <Pressable
+                  onPress={() => {
+                    let cachedFolder = findItemInCache(folderParent, user?.id)
+                    return navigation.navigate('Drawer', {
+                      screen: 'Home',
+                      params: {
+                        folderId: folderParent,
+                        folderTitle: cachedFolder?.title || 'Home',
+                        folderParent: cachedFolder?.parentId || null,
+                      },
+                    })
+                  }}
+                  style={styles.headerButton}
+                >
+                  <Image
+                    source={{
+                      uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/up3.png`,
+                    }}
+                    alt='folder-up-button'
+                    style={app.icon}
+                  />
+                </Pressable>
+              )}
+
+              {/* Grid */}
               <Pressable
                 onPress={() => {
                   setOpenGrid(true)
@@ -95,6 +122,8 @@ const Dashboard = ({ route }) => {
                   style={app.icon}
                 />
               </Pressable>
+
+              {/* Sort */}
               <Pressable
                 onPress={() => {
                   setOpenSort(true)
@@ -195,6 +224,31 @@ const Dashboard = ({ route }) => {
     await Promise.all([refetchFolders(), refetchNotes()])
     setRefreshKey((prev) => prev + 1)
     setLoading(false)
+  }
+
+  /**
+   * Finds and return cached note.
+   * @param {number} id - note id
+   * @param {QueryClient} queryClient - cache query
+   * @param {number} userId - current user id
+   * @returns {Object} - note in cache
+   */
+  const findItemInCache = (id, userId) => {
+    const queries = queryClient.getQueryCache(['folders', userId]).findAll()
+
+    for (const q of queries) {
+      const key = q.queryKey
+
+      // FOLDERS: ['folders', userId, parent_id]
+      if (key[0] === 'folders' && key[1] === userId) {
+        const cachedData = queryClient.getQueryData(key)
+        if (Array.isArray(cachedData)) {
+          const item = cachedData.find((f) => f.id === id)
+          if (item) return item
+        }
+      }
+    }
+    return null // folder not found
   }
 
   // Logs the user out

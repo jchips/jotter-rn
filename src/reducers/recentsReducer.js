@@ -6,26 +6,17 @@ const STORAGE_KEY = 'RECENTS_SCREENS';
 
 export const addRecent = createAsyncThunk(
   'recents/addRecent',
-  // async ({ id, title, userId}, { getState }) => {
   async (activeNote, { getState }) => {
     const state = getState().recents;
 
     // retrieve cache data
     const cachedNote = findItemInCache(activeNote.id, queryClient, activeNote.userId);
-    const finalName = cachedNote?.title || activeNote.title;
 
     // Remove duplicates
     let updated = state.data.filter(noteItem => noteItem.id !== activeNote.id);
 
     // Add to top
     updated.unshift({ ...cachedNote });
-    // updated.unshift({ ...activeNote, title: finalName });
-    // updated.unshift({
-    //   id: activeNote.id,
-    //   name: finalName,
-    //   userId: activeNote.userId,
-    //   folderId: activeNote.folderId
-    // });
 
     // Limit size (4)
     updated = updated.slice(0, 4);
@@ -77,6 +68,13 @@ const recentsSlice = createSlice({
   },
 });
 
+/**
+ * Finds and return cached note.
+ * @param {number} id - note id
+ * @param {QueryClient} queryClient - cache query
+ * @param {number} userId - current user id
+ * @returns {Object} - note in cache
+ */
 const findItemInCache = (id, queryClient, userId) => {
   const queries = queryClient.getQueryCache().findAll();
 
@@ -89,7 +87,6 @@ const findItemInCache = (id, queryClient, userId) => {
       if (Array.isArray(data)) {
         const item = data.find(n => n.id === id);
         if (item) return item;
-        // if (item) return { name: item.title };
       }
     }
   }

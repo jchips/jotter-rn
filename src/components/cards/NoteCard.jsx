@@ -38,7 +38,11 @@ const NoteCard = (props) => {
   return (
     <View style={[styles.container, { width: itemWidth }]}>
       <View style={styles.h1Container}>
-        <Text style={styles.h1}>{note.title}</Text>
+        <View>
+          <Text style={styles.h1}>{note.title}</Text>
+        </View>
+
+        {/* Popover */}
         <Popover
           ref={popoverRef}
           from={

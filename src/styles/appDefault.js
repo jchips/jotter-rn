@@ -21,7 +21,8 @@ const app = (COLORS) => StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: BORDER.radius,
     backgroundColor: COLORS.cardBg,
-    marginVertical: 5,
+    marginVertical: moderateScale(5),
+    // marginVertical: 5,
   },
   input: {
     width: '100%',
@@ -39,7 +40,9 @@ const app = (COLORS) => StyleSheet.create({
   },
   smallText: {
     fontSize: moderateScale(FONTSIZE.xsmall),
+    // marginVertical: moderateScale(1),
     marginVertical: 1,
+    // fontFamily: moderateScale(FONT.regular),
     fontFamily: FONT.regular,
     lineHeight: moderateScale(20),
   },

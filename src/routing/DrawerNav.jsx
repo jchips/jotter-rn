@@ -20,7 +20,6 @@ import Dashboard from '../../app/Dashboard'
 import Settings from '../../app/Settings.jsx'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 import { getFolderTitle } from '../util/getFolder.js'
-import api from '../util/api.js'
 
 const Drawer = createDrawerNavigator()
 
@@ -50,8 +49,12 @@ function DrawerNav({ navigation }) {
         const pathWithTitles = await currentFolderPath.reduce(
           async (accPromise, item) => {
             const acc = await accPromise
-            const title = await getFolderTitle(item.id)
-            acc.push({ ...item, title })
+            const { title, parentId } = await getFolderTitle(item.id)
+            acc.push({
+              ...item,
+              title,
+              parentId,
+            })
             return acc
           },
           Promise.resolve([])
@@ -129,6 +132,7 @@ function DrawerNav({ navigation }) {
                         params: {
                           folderId: pathItem.id,
                           folderTitle: pathItem.title,
+                          folderParent: pathItem.parentId,
                         },
                       })
                     }
@@ -157,6 +161,7 @@ function DrawerNav({ navigation }) {
                   params: {
                     folderId: currentFolder.id,
                     folderTitle: currentFolder.title,
+                    folderParent: currentFolder.parentId,
                   },
                 })
               }
@@ -227,7 +232,11 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         name='Home'
         component={Dashboard}
-        initialParams={{ folderId: null, folderTitle: 'Home' }}
+        initialParams={{
+          folderId: null,
+          folderTitle: 'Home',
+          folderParent: null,
+        }}
       />
       <Drawer.Screen name='Account' component={Account} />
       <Drawer.Screen name='Settings' component={Settings} />
