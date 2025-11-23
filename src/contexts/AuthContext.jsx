@@ -16,7 +16,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 2 * 60 * 1000, // 2 min
-      cacheTime: 24 * 60 * 60 * 1000,
+      cacheTime: 4 * 60 * 60 * 1000, // 4 hrs
     },
   },
 })
@@ -77,6 +77,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       queryClient.clear()
+      queryClient.getQueryCache().clear()
       await AsyncStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
       let requestUrl = `${API_URL}/jotter/logout`
       await axios.post(requestUrl, {}, { withCredentials: true })

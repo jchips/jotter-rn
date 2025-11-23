@@ -7,6 +7,7 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native'
+import { useSelector } from 'react-redux'
 import { useRoute } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
@@ -31,6 +32,7 @@ function DrawerNav({ navigation }) {
   const { folder } = useFolder(route?.params?.params?.folderId)
   const { buttons } = useAppStyles()
   const { COLORS } = useTheme()
+  const recents = useSelector((state) => state.recents.data)
   const styles = styleSheet(COLORS)
 
   useEffect(() => {
@@ -47,8 +49,12 @@ function DrawerNav({ navigation }) {
         const pathWithTitles = await currentFolderPath.reduce(
           async (accPromise, item) => {
             const acc = await accPromise
-            const title = await getFolderTitle(item.id)
-            acc.push({ ...item, title })
+            const { title, parentId } = await getFolderTitle(item.id)
+            acc.push({
+              ...item,
+              title,
+              parentId,
+            })
             return acc
           },
           Promise.resolve([])
@@ -64,6 +70,7 @@ function DrawerNav({ navigation }) {
     logout()
   }
 
+  // Custom drawer content (app icon, routes, recents, current, log out)
   const DrawerContent = (props) => {
     const { state, descriptors, navigation } = props
 
@@ -125,6 +132,7 @@ function DrawerNav({ navigation }) {
                         params: {
                           folderId: pathItem.id,
                           folderTitle: pathItem.title,
+                          folderParent: pathItem.parentId,
                         },
                       })
                     }
@@ -153,6 +161,7 @@ function DrawerNav({ navigation }) {
                   params: {
                     folderId: currentFolder.id,
                     folderTitle: currentFolder.title,
+                    folderParent: currentFolder.parentId,
                   },
                 })
               }
@@ -162,6 +171,31 @@ function DrawerNav({ navigation }) {
               </Text>
             </Pressable>
           ) : null}
+
+          {/* Recent notes label */}
+          {recents.length > 0 ? (
+            <Text style={styles.foldersTitle}>Recent notes</Text>
+          ) : null}
+
+          {recents.length > 0
+            ? recents.map((note) => {
+                return (
+                  <Pressable
+                    key={note.id}
+                    style={styles.drawerItem}
+                    onPress={() => {
+                      navigation.navigate('View', {
+                        note: note,
+                      })
+                    }}
+                  >
+                    <Text style={styles.drawerLabel}>{note.title}</Text>
+                  </Pressable>
+                )
+              })
+            : null}
+
+          {/* Log out button */}
           <Pressable style={buttons.outlineBtn1} onPress={logUserOut}>
             <Text style={buttons.btnText3}>Log out</Text>
           </Pressable>
@@ -197,7 +231,11 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         name='Home'
         component={Dashboard}
-        initialParams={{ folderId: null, folderTitle: 'Home' }}
+        initialParams={{
+          folderId: null,
+          folderTitle: 'Home',
+          folderParent: null,
+        }}
       />
       <Drawer.Screen name='Account' component={Account} />
       <Drawer.Screen name='Settings' component={Settings} />

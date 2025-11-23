@@ -45,6 +45,8 @@ const FolderCard = (props) => {
         />
         <Text style={styles.h1}>{folder.title}</Text>
       </View>
+
+      {/* Popover */}
       <Popover
         ref={popoverRef}
         from={

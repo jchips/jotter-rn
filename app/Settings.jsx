@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Switch, Linking } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  Linking,
+  Pressable,
+  ToastAndroid,
+} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import SelectDropdown from 'react-native-select-dropdown'
 import { fetchConfigs, setConfigs } from '../src/reducers/configReducer'
+import { clearRecent } from '../src/reducers/recentsReducer'
 import { useAuth } from '../src/contexts/AuthContext'
 import { useTheme } from '../src/contexts/ThemeContext'
 import api from '../src/util/api'
@@ -15,7 +24,7 @@ const Settings = ({ navigation }) => {
   const [hideWordCount, setHideWordCount] = useState(configs?.hideWordCount)
   const [hidePreview, setHidePreview] = useState(configs?.hidePreview)
   const { COLORS, changeTheme, theme } = useTheme()
-  const { app, MODAL } = useAppStyles()
+  const { app, MODAL, buttons } = useAppStyles()
   const { token } = useAuth()
   const dispatch = useDispatch()
   const styles = styleSheet(app, COLORS)
@@ -82,6 +91,11 @@ const Settings = ({ navigation }) => {
     return <Text>Select theme</Text>
   }
 
+  // Clear recents notes (from drawer)
+  const showToast = () => {
+    ToastAndroid.show('Recent notes cleared.', ToastAndroid.SHORT)
+  }
+
   return (
     <View style={app.container}>
       <View style={{ flex: 1 }}>
@@ -106,6 +120,8 @@ const Settings = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           dropdownStyle={MODAL.dropdownMenuStyle}
         />
+
+        {/* Editor settings */}
         <Text style={app.header2}>Editor</Text>
         <View style={styles.settingsCard}>
           <Text style={{ color: COLORS.text }}>Hide word count</Text>
@@ -129,6 +145,20 @@ const Settings = ({ navigation }) => {
             value={hidePreview}
           />
         </View>
+
+        {/* History settings */}
+        <Text style={app.header2}>History</Text>
+        <Pressable
+          style={{ ...buttons.outlineBtn1, height: moderateScale(50) }}
+          onPress={() => {
+            dispatch(clearRecent())
+            showToast()
+          }}
+        >
+          <Text style={buttons.btnText2}>Clear recent notes</Text>
+        </Pressable>
+
+        {/* Web version exclusives */}
         <Text
           style={{
             ...app.smallText,

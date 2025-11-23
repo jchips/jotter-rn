@@ -1,17 +1,17 @@
-import { useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext } from 'react'
 
-const MarkdownContext = createContext();
+const MarkdownContext = createContext()
 
 export function useMarkdown() {
-  return useContext(MarkdownContext);
+  return useContext(MarkdownContext)
 }
 
 export function MarkdownProvider({ children }) {
-  const [markdown, setMarkdown] = useState('');
-  const value = { markdown, setMarkdown };
+  const [markdown, setMarkdown] = useState('')
+  const value = { markdown, setMarkdown }
   return (
     <MarkdownContext.Provider value={value}>
       {children}
     </MarkdownContext.Provider>
-  );
+  )
 }

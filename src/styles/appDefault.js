@@ -21,7 +21,7 @@ const app = (COLORS) => StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: BORDER.radius,
     backgroundColor: COLORS.cardBg,
-    marginVertical: 5,
+    marginVertical: moderateScale(5),
   },
   input: {
     width: '100%',

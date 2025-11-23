@@ -1,3 +1,4 @@
+/* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
 import { useEffect, useState } from 'react'
 import {
   StyleSheet,
@@ -6,6 +7,7 @@ import {
   Platform,
   useColorScheme,
 } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -19,6 +21,7 @@ import ViewNote from '../../app/ViewNote'
 import Editor from '../../app/Editor'
 import UpdateLogin from '../../app/auth/UpdateLogin'
 import Signup from '../../app/auth/Signup'
+import { addRecent, loadRecent } from '../reducers/recentsReducer'
 import { getCurrUser, removeCurrUser } from '../util/persist'
 import { FONT } from '../styles'
 
@@ -26,17 +29,18 @@ const Stack = createStackNavigator()
 
 const Router = () => {
   const [loading, setLoading] = useState(true)
-  const { isLoggedIn, setIsLoggedIn, setToken, setUser } = useAuth()
+  const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth()
   const { COLORS, theme } = useTheme()
   const systemTheme = useColorScheme()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const persistLogin = async () => {
       try {
-        const user = await getCurrUser()
-        if (user) {
-          setUser(user)
-          setToken(user.token)
+        const activeUser = await getCurrUser()
+        if (activeUser) {
+          setUser(activeUser)
+          setToken(activeUser.token)
           setIsLoggedIn(true)
         } else {
           setUser(null)
@@ -44,7 +48,7 @@ const Router = () => {
           setIsLoggedIn(false)
         }
       } catch (err) {
-        console.error('Failed to fetch stored user ' + err)
+        console.error('Failed to fetch active user ' + err)
         setUser(null)
         setToken(null)
         removeCurrUser()
@@ -55,6 +59,11 @@ const Router = () => {
     }
     persistLogin()
   }, [setUser])
+
+  // Resets the recent notes history when a new user logs in (security)
+  useEffect(() => {
+    dispatch(loadRecent({ userId: user?.id }))
+  }, [user?.id])
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -100,7 +109,18 @@ const Router = () => {
         ) : (
           <StatusBar style={statusBarTextStyle} />
         )}
-        <NavigationContainer>
+        <NavigationContainer
+          onStateChange={(state) => {
+            const route = getActiveRoute(state)
+
+            // Store recent notes
+            if (route?.params) {
+              if (route.name === 'View') {
+                dispatch(addRecent(route.params.note))
+              }
+            }
+          }}
+        >
           <Stack.Navigator
             screenOptions={{
               headerStyle: {
@@ -139,6 +159,14 @@ const Router = () => {
                     headerTitleStyle: {
                       fontFamily: FONT.semiBold,
                     },
+                    animation: 'scale_from_center',
+                    transitionSpec: {
+                      open: { animation: 'timing', config: { duration: 300 } },
+                      close: { animation: 'timing', config: { duration: 300 } },
+                    },
+                    cardStyleInterpolator: ({ current }) => ({
+                      cardStyle: { opacity: current.progress },
+                    }),
                   }}
                 />
                 <Stack.Screen
@@ -206,6 +234,19 @@ const Router = () => {
       </View>
     )
   )
+}
+
+/**
+ * Gets the active (current) route.
+ * @param {Object} state - current route
+ * @returns {Object} - active route
+ */
+const getActiveRoute = (state) => {
+  let current = state
+  while (current?.routes && current.index != null) {
+    current = current.routes[current.index]
+  }
+  return current
 }
 
 const styles = StyleSheet.create({})

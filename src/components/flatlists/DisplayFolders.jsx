@@ -30,7 +30,11 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
         onPress={() => {
           navigation.push('Drawer', {
             screen: 'Home',
-            params: { folderId: folder.id, folderTitle: folder.title },
+            params: {
+              folderId: folder.id,
+              folderTitle: folder.title,
+              folderParent: folder.parentId,
+            },
           })
         }}
       >
