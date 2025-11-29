@@ -8,16 +8,12 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native'
-import {
-  useFocusEffect,
-  useNavigation,
-  useIsFocused,
-} from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { fetchConfigs } from '../src/reducers/configReducer'
 import { useMarkdown } from '../src/contexts/MDContext'
-import { useAuth } from '../src/contexts/AuthContext'
+import { queryClient, useAuth } from '../src/contexts/AuthContext'
 import { useTheme } from '../src/contexts/ThemeContext'
 import { useFolder } from '../src/hooks/useFolder'
 import { useHeader } from '../src/hooks/useHeader'
@@ -53,7 +49,6 @@ const Dashboard = ({ route }) => {
   const { app, buttons } = useAppStyles()
   const systemTheme = useColorScheme()
   const header = useHeader()
-  const isFocused = useIsFocused()
   const styles = styleSheet(app, buttons, COLORS)
   const screenWidth = Dimensions.get('window').width
   const userId = !user?.id ? null : user.id
@@ -84,6 +79,8 @@ const Dashboard = ({ route }) => {
             folder_id,
             configSettings,
             navigation,
+            userId,
+            path: folder?.path,
           }),
       })
     }, [navigation, route, configSettings, systemTheme, theme])
@@ -165,6 +162,7 @@ const Dashboard = ({ route }) => {
   // Reset cache
   const onRefresh = async () => {
     setLoading(true)
+    queryClient.invalidateQueries()
     await Promise.all([refetchFolders(), refetchNotes()])
     setRefreshKey((prev) => prev + 1)
     setLoading(false)
@@ -208,7 +206,6 @@ const Dashboard = ({ route }) => {
             gridSize={configSettings?.gridSize}
             error={error}
             refreshKey={refreshKey}
-            isFocused={isFocused}
           />
         ) : null}
       </ScrollView>

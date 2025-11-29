@@ -1,22 +1,22 @@
 /* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
 import { Pressable, View, Image } from 'react-native';
 import { useAppStyles } from '../styles';
-import { queryClient, useAuth } from '../contexts/AuthContext';
+import { queryClient } from '../contexts/AuthContext';
 
 export function useHeader() {
   const { app, buttons, COLORS } = useAppStyles();
-  const { user } = useAuth();
 
   const headers = {
     dashboard: (props) => {
       const {
         setOpenGrid,
         setOpenSort,
-        // findItemInCache,
         folderParent,
         folder_id,
         configSettings,
-        navigation
+        navigation,
+        userId,
+        path
       } = props;
       return (
         <View style={{ flexDirection: 'row' }}>
@@ -24,7 +24,7 @@ export function useHeader() {
           {folder_id && (
             <Pressable
               onPress={() => {
-                let cachedFolder = findItemInCache(folderParent, user?.id)
+                let cachedFolder = findItemInCache(folderParent, userId, path)
                 return navigation.navigate('Drawer', {
                   screen: 'Home',
                   params: {
@@ -87,7 +87,8 @@ export function useHeader() {
       const {
         noteId,
         folderId,
-        navigation
+        navigation,
+        userId
       } = props;
       return (
         <View style={{ flexDirection: 'row' }}>
@@ -95,7 +96,7 @@ export function useHeader() {
           {noteId && (
             <Pressable
               onPress={() => {
-                let cachedFolder = findItemInCache(folderId, user?.id)
+                let cachedFolder = findItemInCache(folderId, userId)
                 return navigation.navigate('Drawer', {
                   screen: 'Home',
                   params: {
@@ -109,11 +110,10 @@ export function useHeader() {
             >
               <Image
                 source={{
-                  // uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/up.png`
                   uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
                 }}
                 alt='folder-up-button'
-                style={app.icon2}
+                style={app.icon}
               />
             </Pressable>
           )}
@@ -139,20 +139,18 @@ export function useHeader() {
  * @param {number} userId - current user id
  * @returns {Object} - note in cache
  */
-const findItemInCache = (id, userId) => {
-  const queries = queryClient.getQueryCache().findAll({ queryKey: ['folders', userId] })
+const findItemInCache = (id, userId, path) => {
+  let folderId;
+  if (path && Array.isArray(path)) {
+    const index = path.findIndex(item => item.id === id)
+    const pathItem = path[index - 1]
+    folderId = pathItem?.id || null
+  }
 
-  for (const q of queries) {
-    const key = q.queryKey
-
-    // FOLDERS: ['folders', userId, parent_id]
-    if (key[0] === 'folders' && key[1] === userId) {
-      const cachedData = queryClient.getQueryData(key)
-      if (Array.isArray(cachedData)) {
-        const item = cachedData.find((f) => f.id === id)
-        if (item) return item
-      }
-    }
+  const cachedData = queryClient.getQueryData(['folders', userId, folderId])
+  if (Array.isArray(cachedData)) {
+    const item = cachedData.find((f) => f.id === folderId || id)
+    if (item) return item
   }
   return null // folder not found
 }

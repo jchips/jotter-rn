@@ -63,7 +63,7 @@ const Router = () => {
   // Resets the recent notes history when a new user logs in (security)
   useEffect(() => {
     dispatch(loadRecent({ userId: user?.id }))
-  }, [user?.id])
+  }, [user])
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -98,6 +98,8 @@ const Router = () => {
       ? 'light'
       : 'dark'
 
+  let lastNoteId = null
+
   return (
     !loading && (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -114,11 +116,16 @@ const Router = () => {
             const route = getActiveRoute(state)
 
             // Store recent notes
-            if (route?.params) {
-              if (route.name === 'View') {
-                dispatch(addRecent(route.params.note))
+            if (route?.params?.note && route.name === 'View') {
+              const note = route.params.note
+
+              // Prevent repeated duplicate dispatches
+              if (note.id !== lastNoteId) {
+                lastNoteId = note.id
+                dispatch(addRecent(note))
               }
             }
+            // }
           }}
         >
           <Stack.Navigator
@@ -159,14 +166,6 @@ const Router = () => {
                     headerTitleStyle: {
                       fontFamily: FONT.semiBold,
                     },
-                    animation: 'scale_from_center',
-                    transitionSpec: {
-                      open: { animation: 'timing', config: { duration: 300 } },
-                      close: { animation: 'timing', config: { duration: 300 } },
-                    },
-                    cardStyleInterpolator: ({ current }) => ({
-                      cardStyle: { opacity: current.progress },
-                    }),
                   }}
                 />
                 <Stack.Screen

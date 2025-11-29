@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useAppStyles } from '../../styles'
@@ -8,15 +8,7 @@ import Rename from '../modals/Rename'
 import Delete from '../modals/Delete'
 import Details from '../modals/Details'
 
-const DisplayNotes = ({
-  notes,
-  folders,
-  error,
-  gridSize,
-  refreshKey,
-  isFocused,
-}) => {
-  const [focusKey, setFocusKey] = useState(0)
+const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
   const [openMove, setOpenMove] = useState(false)
   const [openRename, setOpenRename] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -25,13 +17,6 @@ const DisplayNotes = ({
   const navigation = useNavigation()
   const { app, COLORS } = useAppStyles()
   const numColumns = Number(gridSize) || 1
-
-  // re-measure layout
-  useEffect(() => {
-    if (isFocused) {
-      setFocusKey((prev) => prev + 1)
-    }
-  }, [isFocused])
 
   /**
    * Renders a list of notes
@@ -75,7 +60,7 @@ const DisplayNotes = ({
           <View>
             <FlatList
               data={notes}
-              key={`${numColumns}-${refreshKey}-${focusKey}`}
+              key={`${numColumns}-${refreshKey}`}
               renderItem={renderItem}
               numColumns={numColumns}
               scrollEnabled={false}
