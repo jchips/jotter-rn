@@ -11,41 +11,10 @@ export function useHeader() {
       const {
         setOpenGrid,
         setOpenSort,
-        folderParent,
-        folder_id,
-        configSettings,
-        navigation,
-        userId,
-        path
+        configSettings
       } = props;
       return (
         <View style={{ flexDirection: 'row' }}>
-          {/* Navigate folder up */}
-          {folder_id && (
-            <Pressable
-              onPress={() => {
-                let cachedFolder = findItemInCache(folderParent, userId, path)
-                return navigation.navigate('Drawer', {
-                  screen: 'Home',
-                  params: {
-                    folderId: folderParent,
-                    folderTitle: cachedFolder?.title || 'Home',
-                    folderParent: cachedFolder?.parentId || null,
-                  },
-                })
-              }}
-              style={styles.headerButton}
-            >
-              <Image
-                source={{
-                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/up.png`,
-                }}
-                alt='folder-up-button'
-                style={app.icon}
-              />
-            </Pressable>
-          )}
-
           {/* Grid */}
           <Pressable
             onPress={() => {

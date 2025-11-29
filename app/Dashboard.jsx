@@ -75,12 +75,6 @@ const Dashboard = ({ route }) => {
           header.dashboard({
             setOpenGrid,
             setOpenSort,
-            folderParent,
-            folder_id,
-            configSettings,
-            navigation,
-            userId,
-            path: folder?.path,
           }),
       })
     }, [navigation, route, configSettings, systemTheme, theme])
