@@ -1,4 +1,4 @@
-/* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
+/* Folding level 5 (VS Code, cmd/ctrl + k + 5) */
 import { useEffect, useState } from 'react'
 import {
   StyleSheet,
@@ -7,7 +7,6 @@ import {
   Platform,
   useColorScheme,
 } from 'react-native'
-import { useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
@@ -21,18 +20,19 @@ import ViewNote from '../../app/ViewNote'
 import Editor from '../../app/Editor'
 import UpdateLogin from '../../app/auth/UpdateLogin'
 import Signup from '../../app/auth/Signup'
-import { addRecent, loadRecent } from '../reducers/recentsReducer'
 import { getCurrUser, removeCurrUser } from '../util/persist'
+import { useRecentStore } from '../recentStore'
 import { FONT } from '../styles'
 
 const Stack = createStackNavigator()
 
 const Router = () => {
   const [loading, setLoading] = useState(true)
+  const [lastNoteId, setLastNoteId] = useState(null)
   const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth()
   const { COLORS, theme } = useTheme()
   const systemTheme = useColorScheme()
-  const dispatch = useDispatch()
+  const addRecent = useRecentStore((state) => state.addRecent)
 
   useEffect(() => {
     const persistLogin = async () => {
@@ -60,10 +60,9 @@ const Router = () => {
     persistLogin()
   }, [setUser])
 
-  // Resets the recent notes history when a new user logs in (security)
   useEffect(() => {
-    dispatch(loadRecent({ userId: user?.id }))
-  }, [user])
+    useRecentStore.getState().loadRecent(user?.id)
+  }, [user?.id])
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -98,8 +97,6 @@ const Router = () => {
       ? 'light'
       : 'dark'
 
-  let lastNoteId = null
-
   return (
     !loading && (
       <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -116,16 +113,19 @@ const Router = () => {
             const route = getActiveRoute(state)
 
             // Store recent notes
-            if (route?.params?.note && route.name === 'View') {
-              const note = route.params.note
+            if (route?.params && route.name === 'View') {
+              const note = route.params
 
-              // Prevent repeated duplicate dispatches
-              if (note.id !== lastNoteId) {
-                lastNoteId = note.id
-                dispatch(addRecent(note))
+              // prevent repeated updates
+              if (note.noteId !== lastNoteId) {
+                setLastNoteId(note.noteId)
+                addRecent({
+                  id: note.noteId,
+                  userId: user?.id,
+                  folderId: note.noteFolder,
+                })
               }
             }
-            // }
           }}
         >
           <Stack.Navigator

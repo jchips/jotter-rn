@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,11 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native'
-import { useSelector } from 'react-redux'
 import { useRoute } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useFolder } from '../hooks/useFolder.js'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth, queryClient } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { moderateScale } from '../util/scaling.js'
 import Account from '../../app/Account'
@@ -20,6 +19,9 @@ import Dashboard from '../../app/Dashboard'
 import Settings from '../../app/Settings.jsx'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 import { getFolderTitle } from '../util/getFolder.js'
+import { useRecentStore } from '../recentStore.js'
+import ViewNote from '../../app/ViewNote.jsx'
+import api from '../util/api'
 
 const Drawer = createDrawerNavigator()
 
@@ -32,7 +34,8 @@ function DrawerNav({ navigation }) {
   const { folder } = useFolder(route?.params?.params?.folderId)
   const { buttons } = useAppStyles()
   const { COLORS } = useTheme()
-  const recents = useSelector((state) => state.recents.data)
+  const recent = useRecentStore((state) => state.recent)
+  // const recent = useMemo(() => recent, [recent])
   const styles = styleSheet(COLORS)
 
   useEffect(() => {
@@ -71,7 +74,7 @@ function DrawerNav({ navigation }) {
   }
 
   // Custom drawer content (app icon, routes, recents, current, log out)
-  const DrawerContent = (props) => {
+  let DrawerContent = (props) => {
     const { state, descriptors, navigation } = props
 
     return (
@@ -93,7 +96,7 @@ function DrawerNav({ navigation }) {
           contentContainerStyle={styles.drawerWrapper}
         >
           {/* Home, Account, and Settings items */}
-          {state.routes.map((route, index) => {
+          {state.routes.slice(0, 3).map((route, index) => {
             const isActive = state.index === index
             return (
               <Pressable
@@ -173,20 +176,29 @@ function DrawerNav({ navigation }) {
           ) : null}
 
           {/* Recent notes label */}
-          {recents.length > 0 ? (
+          {recent.length > 0 ? (
             <Text style={styles.foldersTitle}>Recent notes</Text>
           ) : null}
 
           {/* Recent notes */}
-          {recents.length > 0
-            ? recents.map((note) => {
+          {recent.length > 0
+            ? recent.map((note) => {
                 return (
                   <Pressable
                     key={note.id}
                     style={styles.drawerItem}
                     onPress={() => {
-                      navigation.navigate('View', {
-                        note: note,
+                      queryClient.prefetchQuery({
+                        queryKey: ['note', note.userId, note.id],
+                        queryFn: () => api.getNote(note.id).then((r) => r.data),
+                      })
+                      navigation.navigate('Drawer', {
+                        screen: 'View',
+                        params: {
+                          noteId: note.id,
+                          title: note?.title,
+                          noteFolder: note.folderId,
+                        },
                       })
                     }}
                   >
@@ -240,6 +252,21 @@ function DrawerNav({ navigation }) {
       />
       <Drawer.Screen name='Account' component={Account} />
       <Drawer.Screen name='Settings' component={Settings} />
+      <Drawer.Screen
+        name='View'
+        component={ViewNote}
+        options={{
+          headerTintColor: COLORS.themePurpleText,
+          headerShadowVisible: false,
+          headerStyle: {
+            height: 90,
+            backgroundColor: COLORS.background,
+          },
+          headerTitleStyle: {
+            fontFamily: FONT.semiBold,
+          },
+        }}
+      />
     </Drawer.Navigator>
   )
 }

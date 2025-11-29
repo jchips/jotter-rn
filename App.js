@@ -1,5 +1,6 @@
 import './gesture-handler';
 import React, { useState, useEffect } from 'react';
+// import { QueryClient } from '@tanstack/react-query'
 import { StyleSheet, Text, Platform } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ import { MarkdownProvider } from './src/contexts/MDContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Router from './src/routing/Router';
 import store from './src/store';
+// import { useRecentStore } from './src/recentStore';
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
@@ -29,18 +31,24 @@ export default function App() {
     'Inter-BoldItalic': require('./assets/fonts/Inter-BoldItalic2.ttf'),
     'RobotoMono-Regular': require('./assets/fonts/RobotoMono-Regular.ttf'),
   });
-  const [persistLoaded, setPersistLoaded] = useState(false);
+  // const [persistLoaded, setPersistLoaded] = useState(false);
+  // const loadRecent = useRecentStore(state => state.loadRecent);
 
   const asyncStoragePersister = createAsyncStoragePersister({
     storage: AsyncStorage,
   })
 
+  // useEffect(() => {
+  //   loadRecent();
+  // }, []);
+
   useEffect(() => {
+    // setPersistLoaded(false)
     persistQueryClient({
       queryClient,
       persister: asyncStoragePersister,
     })
-    setPersistLoaded(true);
+    // setPersistLoaded(true);
   }, [])
 
   useEffect(() => {
@@ -54,12 +62,13 @@ export default function App() {
     return null;
   }
 
-  return (fontsLoaded && persistLoaded) && (
+  // return (fontsLoaded && persistLoaded) && (
+  return (fontsLoaded) && (
     <ThemeProvider>
       <ReduxProvider store={store}>
         <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <MarkdownProvider>
+          <MarkdownProvider>
+            <QueryClientProvider client={queryClient}>
               {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
               <SafeAreaProvider>
                 {Platform.OS === 'android' && Platform.Version <= 33 ? (
@@ -69,8 +78,8 @@ export default function App() {
                 ) :
                   <Router />}
               </SafeAreaProvider>
-            </MarkdownProvider>
-          </QueryClientProvider>
+            </QueryClientProvider>
+          </MarkdownProvider>
         </AuthProvider>
       </ReduxProvider>
     </ThemeProvider>

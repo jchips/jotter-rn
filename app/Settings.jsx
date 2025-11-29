@@ -11,13 +11,13 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 import SelectDropdown from 'react-native-select-dropdown'
 import { fetchConfigs, setConfigs } from '../src/reducers/configReducer'
-import { clearRecent } from '../src/reducers/recentsReducer'
 import { useAuth } from '../src/contexts/AuthContext'
 import { useTheme } from '../src/contexts/ThemeContext'
 import api from '../src/util/api'
 import { moderateScale } from '../src/util/scaling'
 import DropdownBtn from '../src/components/buttons/DropdownBtn'
 import { FONTSIZE, FONT, useAppStyles } from '../src/styles'
+import { useRecentStore } from '../src/recentStore'
 
 const Settings = ({ navigation }) => {
   const { data: configs } = useSelector((state) => state.configs)
@@ -27,6 +27,7 @@ const Settings = ({ navigation }) => {
   const { app, MODAL, buttons } = useAppStyles()
   const { token } = useAuth()
   const dispatch = useDispatch()
+  const clearRecent = useRecentStore((state) => state.clearRecent)
   const styles = styleSheet(app, COLORS)
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const Settings = ({ navigation }) => {
     return <Text>Select theme</Text>
   }
 
-  // Clear recents notes (from drawer)
+  // Show cleared recents notes message
   const showToast = () => {
     ToastAndroid.show('Recent notes cleared.', ToastAndroid.SHORT)
   }
@@ -151,7 +152,7 @@ const Settings = ({ navigation }) => {
         <Pressable
           style={{ ...buttons.outlineBtn1, height: moderateScale(50) }}
           onPress={() => {
-            dispatch(clearRecent())
+            clearRecent()
             showToast()
           }}
         >

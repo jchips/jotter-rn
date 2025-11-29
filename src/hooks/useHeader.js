@@ -1,9 +1,12 @@
 /* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
 import { Pressable, View, Image } from 'react-native';
 import { useAppStyles } from '../styles';
-import { queryClient } from '../contexts/AuthContext';
+import { getFolderTitle } from '../util/getFolder';
+import { queryClient, useAuth } from '../contexts/AuthContext';
+import api from '../util/api';
 
 export function useHeader() {
+  const { user } = useAuth();
   const { app, buttons, COLORS } = useAppStyles();
 
   const headers = {
@@ -15,22 +18,27 @@ export function useHeader() {
         folder_id,
         configSettings,
         navigation,
-        userId,
-        path
       } = props;
       return (
         <View style={{ flexDirection: 'row' }}>
           {/* Navigate folder up */}
           {folder_id && (
             <Pressable
-              onPress={() => {
-                let cachedFolder = findItemInCache(folderParent, userId, path)
+              onPress={async () => {
+                let folder = folderParent;
+                if (folderParent !== null) {
+                  folder = await getFolderTitle(folderParent);
+                }
+                queryClient.prefetchQuery({
+                  queryKey: ['folders', user?.id, folderParent],
+                  queryFn: () => api.getFolders(folderParent).then((r) => r.data),
+                })
                 return navigation.navigate('Drawer', {
                   screen: 'Home',
                   params: {
                     folderId: folderParent,
-                    folderTitle: cachedFolder?.title || 'Home',
-                    folderParent: cachedFolder?.parentId || null,
+                    folderTitle: folder?.title || 'Home',
+                    folderParent: folder?.parentId || null,
                   },
                 })
               }}
@@ -88,21 +96,27 @@ export function useHeader() {
         noteId,
         folderId,
         navigation,
-        userId
       } = props;
       return (
         <View style={{ flexDirection: 'row' }}>
           {/* Navigate folder up */}
           {noteId && (
             <Pressable
-              onPress={() => {
-                let cachedFolder = findItemInCache(folderId, userId)
+              onPress={async () => {
+                let folder;
+                if (folderId !== null) {
+                  folder = await getFolderTitle(folderId);
+                }
+                queryClient.prefetchQuery({
+                  queryKey: ['folders', user?.id, folderId],
+                  queryFn: () => api.getFolders(folderId).then((r) => r.data),
+                })
                 return navigation.navigate('Drawer', {
                   screen: 'Home',
                   params: {
                     folderId: folderId,
-                    folderTitle: cachedFolder?.title || 'Home',
-                    folderParent: cachedFolder?.parentId || null,
+                    folderTitle: folder?.title || 'Home',
+                    folderParent: folder?.parentId || null,
                   },
                 })
               }}
@@ -133,24 +147,24 @@ export function useHeader() {
 }
 
 /**
- * Finds and return cached note.
- * @param {number} id - note id
+ * Finds and return cached folder.
+ * @param {number} id - folder id
  * @param {QueryClient} queryClient - cache query
  * @param {number} userId - current user id
- * @returns {Object} - note in cache
+ * @returns {Object} - folder in cache
  */
-const findItemInCache = (id, userId, path) => {
-  let folderId;
-  if (path && Array.isArray(path)) {
-    const index = path.findIndex(item => item.id === id)
-    const pathItem = path[index - 1]
-    folderId = pathItem?.id || null
-  }
+// const findItemInCache = (id, userId, path) => {
+//   let folderId;
+//   if (path && Array.isArray(path)) {
+//     const index = path.findIndex(item => item.id === id)
+//     const pathItem = path[index - 1]
+//     folderId = pathItem?.id || null
+//   }
 
-  const cachedData = queryClient.getQueryData(['folders', userId, folderId])
-  if (Array.isArray(cachedData)) {
-    const item = cachedData.find((f) => f.id === folderId || id)
-    if (item) return item
-  }
-  return null // folder not found
-}
+//   const cachedData = queryClient.getQueryData(['folders', userId, folderId])
+//   if (Array.isArray(cachedData)) {
+//     const item = cachedData.find((f) => f.id === folderId || id)
+//     if (item) return item
+//   }
+//   return null // folder not found
+// }

@@ -79,8 +79,6 @@ const Dashboard = ({ route }) => {
             folder_id,
             configSettings,
             navigation,
-            userId,
-            path: folder?.path,
           }),
       })
     }, [navigation, route, configSettings, systemTheme, theme])

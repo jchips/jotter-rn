@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import api from '../../util/api'
 import { useTheme } from '../../contexts/ThemeContext'
 import { queryClient, useAuth } from '../../contexts/AuthContext'
+// import { queryClient } from '../../../App'
 import { useAppStyles } from '../../styles'
 
 const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
@@ -29,6 +30,7 @@ const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
       return res.data
     },
     onSuccess: (updatedNote) => {
+      queryClient.setQueryData(['note', userId, updatedNote.id], updatedNote)
       queryClient.setQueryData(
         ['notes', userId, updatedNote.folderId],
         (oldNotes) =>

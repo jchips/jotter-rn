@@ -100,6 +100,7 @@ const Move = (props) => {
     onSuccess: (res, { folderTarget, moveToFolder }) => {
       const sourceFolderId = note.folderId || null // null is Home folder
       // Remove note from the old folder’s cache
+      queryClient.setQueryData(['note', user?.id, res.data.id], res.data)
       queryClient.setQueryData(
         ['notes', user?.id, sourceFolderId],
         (oldNotes = []) => oldNotes.filter((n) => n.id !== res.data.id)

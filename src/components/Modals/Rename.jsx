@@ -41,6 +41,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         noteId
       ),
     onSuccess: (res) => {
+      queryClient.setQueryData(['note', user?.id, res.data.id], res.data)
       queryClient.setQueryData(
         ['notes', user?.id, res.data.folderId],
         (oldNotes) =>

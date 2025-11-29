@@ -40,6 +40,7 @@ const AddTitle = (props) => {
   const createNoteMutation = useMutation({
     mutationFn: async (newNote) => await api.addNote(newNote),
     onSuccess: (res, newNote) => {
+      queryClient.setQueryData(['note', user?.id, newNote.id], newNote)
       queryClient.setQueryData(['notes', user?.id, newNote.folderId], (old) =>
         old ? [...old, res.data] : [res.data]
       )

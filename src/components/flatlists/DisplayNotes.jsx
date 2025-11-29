@@ -7,6 +7,8 @@ import Move from '../modals/Move'
 import Rename from '../modals/Rename'
 import Delete from '../modals/Delete'
 import Details from '../modals/Details'
+import { queryClient } from '../../contexts/AuthContext'
+import api from '../../util/api'
 
 const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
   const [openMove, setOpenMove] = useState(false)
@@ -28,7 +30,15 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
     return (
       <Pressable
         onPress={() => {
-          navigation.navigate('View', { note: note })
+          queryClient.prefetchQuery({
+            queryKey: ['note', note.userId, note.id],
+            queryFn: () => api.getNote(note.id).then((r) => r.data),
+          })
+          navigation.navigate('View', {
+            noteId: note?.id,
+            title: note?.title,
+            noteFolder: note?.folderId,
+          })
         }}
       >
         <NoteCard
