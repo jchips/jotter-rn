@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import {
   Gesture,
@@ -41,20 +41,13 @@ const ViewNote = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    setLoading(true)
+  useLayoutEffect(() => {
+    if (!note) return
+
     navigation.setOptions({
       headerTitle: calculateHeaderLength(),
       headerTint: COLORS.themePurpleText,
-      headerRight: () =>
-        header.note({
-          noteId: note.id,
-          folderId: note.folderId,
-          navigation,
-          userId: note.userId,
-        }),
     })
-    setLoading(false)
   }, [navigation])
 
   useEffect(() => {

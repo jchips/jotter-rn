@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { queryClient } from '../contexts/AuthContext';
 
-const STORAGE_KEY = 'RECENTS_SCREENS';
+const STORAGE_KEY = 'RECENT_SCREENS';
 
 export const addRecent = createAsyncThunk(
   'recents/addRecent',
