@@ -60,13 +60,7 @@ const ViewNote = ({ navigation, route }) => {
 
   useEffect(() => {
     if (!note) return
-    // setLoading(true)
-    // if (note) {
     setMarkdown(note.content)
-    // } else {
-    //   setMarkdown('')
-    // }
-    // setLoading(false)
   }, [note])
 
   useFocusEffect(
@@ -78,31 +72,23 @@ const ViewNote = ({ navigation, route }) => {
     }, [doubleTap])
   )
 
-  // // Loading circle
-  // if (loading) {
-  //   return <Loading />
-  // }
-
   return (
-    // !loading && (
     <GestureHandlerRootView style={styles.container}>
-      {
-        note ? (
-          <GestureDetector gesture={doubleTap}>
-            <View style={{ flex: 1 }}>
-              <Preview note={note} markdown={markdown} />
-              <EditButton
-                navigation={navigation}
-                note={note}
-                editBtnVisible={editBtnVisible}
-              />
-            </View>
-          </GestureDetector>
-        ) : null
-        // <Loading />
-      }
+      {note ? (
+        <GestureDetector gesture={doubleTap}>
+          <View style={{ flex: 1 }}>
+            <Preview note={note} markdown={markdown} />
+            <EditButton
+              navigation={navigation}
+              note={note}
+              editBtnVisible={editBtnVisible}
+            />
+          </View>
+        </GestureDetector>
+      ) : (
+        <Loading />
+      )}
     </GestureHandlerRootView>
-    // )
   )
 }
 
