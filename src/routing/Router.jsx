@@ -116,8 +116,13 @@ const Router = () => {
             const route = getActiveRoute(state)
 
             // Store recent notes
-            if (route?.params?.note && route.name === 'View') {
-              const note = route.params.note
+            if (route?.params?.noteId && route.name === 'View') {
+              const note = {
+                id: route.params.noteId,
+                title: route.params.title,
+                userId: user?.id,
+                folderId: route.params.folderId,
+              }
 
               // Prevent repeated duplicate dispatches
               if (note.id !== lastNoteId) {
@@ -125,7 +130,6 @@ const Router = () => {
                 dispatch(addRecent(note))
               }
             }
-            // }
           }}
         >
           <Stack.Navigator

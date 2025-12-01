@@ -111,6 +111,8 @@ const Move = (props) => {
         (oldNotes = []) => [...(oldNotes || []), res.data]
       )
 
+      queryClient.setQueryData(['note', user?.id, res.data.id], res.data)
+
       // Prefetch target folder to guarantee refresh
       queryClient.prefetchQuery({
         queryKey: ['notes', user?.id, res.data.folderId],

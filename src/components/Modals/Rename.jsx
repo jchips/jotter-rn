@@ -46,6 +46,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         (oldNotes) =>
           oldNotes.map((note) => (note.id === res.data.id ? res.data : note))
       )
+      queryClient.setQueryData(['note', user?.id, res.data.id], res.data)
       setOpenRename(false)
     },
     onError: (err) => {

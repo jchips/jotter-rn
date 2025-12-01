@@ -43,6 +43,7 @@ const AddTitle = (props) => {
       queryClient.setQueryData(['notes', user?.id, newNote.folderId], (old) =>
         old ? [...old, res.data] : [res.data]
       )
+      queryClient.setQueryData(['note', user?.id, newNote?.id])
       setOpenAddTitle(false)
     },
     onError: (err) => {

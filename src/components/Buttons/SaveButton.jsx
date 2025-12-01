@@ -36,6 +36,7 @@ const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
             note.id === updatedNote.id ? updatedNote : note
           )
       )
+      queryClient.setQueryData(['note', userId, updatedNote.id], updatedNote)
       setSaving(false)
       setSaved(true)
     },

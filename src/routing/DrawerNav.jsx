@@ -14,12 +14,12 @@ import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useFolder } from '../hooks/useFolder.js'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { moderateScale } from '../util/scaling.js'
 import Account from '../../app/Account'
 import Dashboard from '../../app/Dashboard'
 import Settings from '../../app/Settings.jsx'
-import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
+import { moderateScale } from '../util/scaling.js'
 import { getFolderTitle } from '../util/getFolder.js'
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
 
 const Drawer = createDrawerNavigator()
 
@@ -110,9 +110,9 @@ function DrawerNav({ navigation }) {
             )
           })}
 
-          {/* Recent folders label */}
+          {/* Current folder(s) label */}
           {currentFolder ? (
-            <Text style={styles.foldersTitle}>Recent folders</Text>
+            <Text style={styles.foldersTitle}>Current folder</Text>
           ) : null}
 
           {/* Breadcrumbs */}
@@ -186,7 +186,9 @@ function DrawerNav({ navigation }) {
                     style={styles.drawerItem}
                     onPress={() => {
                       navigation.navigate('View', {
-                        note: note,
+                        noteId: note.id,
+                        title: note.title,
+                        folderId: note.folderId,
                       })
                     }}
                   >
@@ -284,6 +286,7 @@ const styleSheet = (COLORS) =>
       paddingVertical: moderateScale(10),
       paddingHorizontal: 15,
       borderRadius: 5,
+      marginVertical: 1,
     },
     drawerLabel: {
       fontSize: moderateScale(15),
