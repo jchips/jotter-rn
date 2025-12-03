@@ -49,7 +49,6 @@ export default function App() {
     }
   }, [fontsLoaded, error]);
 
-  // if (!persistLoaded || (!fontsLoaded && !error)) {
   if (!fontsLoaded && !error) {
     return null;
   }

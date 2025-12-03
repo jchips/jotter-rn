@@ -28,7 +28,11 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
     return (
       <Pressable
         onPress={() => {
-          navigation.navigate('View', { note: note })
+          navigation.navigate('View', {
+            noteId: note.id,
+            title: note.title,
+            folderId: note.folderId,
+          })
         }}
       >
         <NoteCard

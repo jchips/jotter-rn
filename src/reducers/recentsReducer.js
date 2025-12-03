@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { queryClient } from '../contexts/AuthContext';
 
-const STORAGE_KEY = 'RECENTS_SCREENS';
+const STORAGE_KEY = 'RECENT_SCREENS';
 
 export const addRecent = createAsyncThunk(
   'recents/addRecent',
@@ -21,7 +21,6 @@ export const addRecent = createAsyncThunk(
       title: cachedNote.title,
       user: activeNote.userId,
       folderId: cachedNote.folderId,
-      content: cachedNote.content
     });
 
     // Limit size (3)
@@ -46,6 +45,16 @@ export const loadRecent = createAsyncThunk(
   }
 );
 
+export const removeRecent = createAsyncThunk(
+  'recents/removeRecent',
+  async ({ noteId }, { getState }) => {
+    const state = getState().recents;
+    let updated = state.data.filter(noteItem => noteItem.id !== noteId);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return updated;
+  }
+)
+
 export const clearRecent = createAsyncThunk(
   'recents/clearRecent',
   async (_, { }) => {
@@ -66,6 +75,9 @@ const recentsSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(loadRecent.fulfilled, (state, action) => {
+        state.data = action.payload;
+      })
+      .addCase(removeRecent.fulfilled, (state, action) => {
         state.data = action.payload;
       })
       .addCase(clearRecent.fulfilled, (state, action) => {

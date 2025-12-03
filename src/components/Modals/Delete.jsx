@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native'
 import { useMutation } from '@tanstack/react-query'
+import { useDispatch } from 'react-redux'
+import { removeRecent } from '../../reducers/recentsReducer'
 import { queryClient, useAuth } from '../../contexts/AuthContext'
 import api from '../../util/api'
 import { moderateScale } from '../../util/scaling'
@@ -14,6 +16,7 @@ const Delete = (props) => {
   const { app, MODAL, buttons } = useAppStyles()
   const { COLORS } = useTheme()
   const { user } = useAuth()
+  const dispatch = useDispatch()
   const styles = styleSheet(app, COLORS)
   const { openDelete, setOpenDelete, note, folder } = props
 
@@ -35,6 +38,10 @@ const Delete = (props) => {
         ['notes', user?.id, note.folderId],
         (oldNotes = []) => oldNotes.filter((n) => n.id !== note.id)
       )
+
+      queryClient.cancelQueries(['note', user?.id, note.id])
+
+      dispatch(removeRecent({ noteId: note.id }))
 
       return { previousNotes }
     },

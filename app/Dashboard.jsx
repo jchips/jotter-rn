@@ -75,6 +75,7 @@ const Dashboard = ({ route }) => {
           header.dashboard({
             setOpenGrid,
             setOpenSort,
+            configSettings,
           }),
       })
     }, [navigation, route, configSettings, systemTheme, theme])
