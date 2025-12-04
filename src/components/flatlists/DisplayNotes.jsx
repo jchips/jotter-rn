@@ -16,7 +16,8 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
   const [selectedNote, setSelectedNote] = useState(null)
   const navigation = useNavigation()
   const { app, COLORS } = useAppStyles()
-  const numColumns = Number(gridSize) || 1
+  const numColumns = Number(gridSize) || 0
+  // const numColumns = Number(gridSize) || 1
 
   /**
    * Renders a list of notes
@@ -61,7 +62,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
               <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
-          <View>
+          {numColumns > 0 && (
             <FlatList
               data={notes}
               key={`${numColumns}-${refreshKey}`}
@@ -74,7 +75,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
               }
               removeClippedSubviews={false}
             />
-          </View>
+          )}
         </View>
       )}
       <Rename

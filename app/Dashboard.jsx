@@ -7,6 +7,7 @@ import {
   useColorScheme,
   RefreshControl,
   Dimensions,
+  useWindowDimensions,
 } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useSelector, useDispatch } from 'react-redux'
@@ -50,7 +51,8 @@ const Dashboard = ({ route }) => {
   const systemTheme = useColorScheme()
   const header = useHeader()
   const styles = styleSheet(app, buttons, COLORS)
-  const screenWidth = Dimensions.get('window').width
+  const { width: screenWidth } = useWindowDimensions()
+  // const screenWidth = Dimensions.get('window').width
   const userId = !user?.id ? null : user.id
   let folder_id = !folderId ? null : folderId
 
