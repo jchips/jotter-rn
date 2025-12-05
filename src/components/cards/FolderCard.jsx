@@ -6,13 +6,14 @@ import {
   Image,
   Pressable,
   Dimensions,
+  useWindowDimensions,
 } from 'react-native'
 import Popover from 'react-native-popover-view'
 import { useTheme } from '../../contexts/ThemeContext'
 import { moderateScale } from '../../util/scaling'
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles'
 
-const screenWidth = Dimensions.get('window').width
+// const screenWidth = Dimensions.get('window').width
 
 const FolderCard = (props) => {
   const {
@@ -28,6 +29,7 @@ const FolderCard = (props) => {
   const { COLORS } = useTheme()
   const { app, buttons, POPOVER } = useAppStyles()
   const styles = styleSheet(app, COLORS)
+  const { width: screenWidth } = useWindowDimensions()
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /

@@ -6,6 +6,7 @@ import {
   Pressable,
   Image,
   Dimensions,
+  useWindowDimensions,
 } from 'react-native'
 import Popover from 'react-native-popover-view'
 import { useTheme } from '../../contexts/ThemeContext'
@@ -14,7 +15,7 @@ import { moderateScale } from '../../util/scaling'
 import { useAppStyles } from '../../styles'
 import { FONT, FONTSIZE, BORDER } from '../../styles'
 
-const screenWidth = Dimensions.get('window').width
+// const screenWidth = Dimensions.get('window').width
 
 const NoteCard = (props) => {
   const {
@@ -30,6 +31,7 @@ const NoteCard = (props) => {
   const { app, POPOVER, buttons } = useAppStyles()
   const { COLORS } = useTheme()
   const styles = styleSheet(app, COLORS)
+  const { width: screenWidth } = useWindowDimensions()
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /

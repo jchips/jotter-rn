@@ -16,7 +16,8 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
   const [selectedFolder, setSelectedFolder] = useState(null)
   const { app } = useAppStyles()
   const navigation = useNavigation()
-  const numColumns = Number(gridSize) || 1
+  const numColumns = Number(gridSize) || 0
+  // const numColumns = Number(gridSize) || 1
 
   /**
    * Renders list of folders
@@ -58,18 +59,20 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
           <Text style={app.errorText}>{error}</Text>
         </View>
       ) : null}
-      <FlatList
-        data={folders}
-        key={numColumns}
-        renderItem={renderItem}
-        numColumns={numColumns}
-        scrollEnabled={false}
-        keyExtractor={(item) => item.id}
-        columnWrapperStyle={
-          numColumns > 1 ? { justifyContent: 'space-between' } : undefined
-        }
-        removeClippedSubviews={false}
-      />
+      {numColumns > 0 && (
+        <FlatList
+          data={folders}
+          key={numColumns}
+          renderItem={renderItem}
+          numColumns={numColumns}
+          scrollEnabled={false}
+          keyExtractor={(item) => item.id}
+          columnWrapperStyle={
+            numColumns > 1 ? { justifyContent: 'space-between' } : undefined
+          }
+          removeClippedSubviews={false}
+        />
+      )}
       <Rename
         openRename={openRename}
         setOpenRename={setOpenRename}
