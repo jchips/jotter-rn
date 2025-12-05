@@ -5,7 +5,6 @@ import {
   View,
   Pressable,
   Image,
-  Dimensions,
   useWindowDimensions,
 } from 'react-native'
 import Popover from 'react-native-popover-view'
@@ -14,8 +13,6 @@ import formatDate from '../../util/formatDate'
 import { moderateScale } from '../../util/scaling'
 import { useAppStyles } from '../../styles'
 import { FONT, FONTSIZE, BORDER } from '../../styles'
-
-// const screenWidth = Dimensions.get('window').width
 
 const NoteCard = (props) => {
   const {

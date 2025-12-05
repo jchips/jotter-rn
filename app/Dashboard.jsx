@@ -6,7 +6,6 @@ import {
   View,
   useColorScheme,
   RefreshControl,
-  Dimensions,
   useWindowDimensions,
 } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
@@ -52,7 +51,6 @@ const Dashboard = ({ route }) => {
   const header = useHeader()
   const styles = styleSheet(app, buttons, COLORS)
   const { width: screenWidth } = useWindowDimensions()
-  // const screenWidth = Dimensions.get('window').width
   const userId = !user?.id ? null : user.id
   let folder_id = !folderId ? null : folderId
 

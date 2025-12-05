@@ -17,7 +17,6 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
   const { app } = useAppStyles()
   const navigation = useNavigation()
   const numColumns = Number(gridSize) || 0
-  // const numColumns = Number(gridSize) || 1
 
   /**
    * Renders list of folders
