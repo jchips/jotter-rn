@@ -17,7 +17,6 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
   const navigation = useNavigation()
   const { app, COLORS } = useAppStyles()
   const numColumns = Number(gridSize) || 0
-  // const numColumns = Number(gridSize) || 1
 
   /**
    * Renders a list of notes
