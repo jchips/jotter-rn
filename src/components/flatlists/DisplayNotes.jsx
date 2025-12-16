@@ -1,22 +1,23 @@
-import { useState } from 'react'
-import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useAppStyles } from '../../styles'
-import NoteCard from '../cards/NoteCard'
-import Move from '../modals/Move'
-import Rename from '../modals/Rename'
-import Delete from '../modals/Delete'
-import Details from '../modals/Details'
+import { useState } from 'react';
+import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useAppStyles } from '../../styles';
+import NoteCard from '../cards/NoteCard';
+import Move from '../modals/Move';
+import Rename from '../modals/Rename';
+import Delete from '../modals/Delete';
+import Details from '../modals/Details';
+import Loading from '../indicators/Loading';
 
 const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
-  const [openMove, setOpenMove] = useState(false)
-  const [openRename, setOpenRename] = useState(false)
-  const [openDelete, setOpenDelete] = useState(false)
-  const [openDetails, setOpenDetails] = useState(false)
-  const [selectedNote, setSelectedNote] = useState(null)
-  const navigation = useNavigation()
-  const { app, COLORS } = useAppStyles()
-  const numColumns = Number(gridSize) || 0
+  const [openMove, setOpenMove] = useState(false);
+  const [openRename, setOpenRename] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(null);
+  const navigation = useNavigation();
+  const { app, COLORS } = useAppStyles();
+  const numColumns = Number(gridSize) || 0;
 
   /**
    * Renders a list of notes
@@ -24,7 +25,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
    * @returns - a note card that navigates to the note
    */
   const renderItem = ({ item }) => {
-    const note = item
+    const note = item;
     return (
       <Pressable
         onPress={() => {
@@ -32,7 +33,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
             noteId: note.id,
             title: note.title,
             folderId: note.folderId,
-          })
+          });
         }}
       >
         <NoteCard
@@ -45,8 +46,8 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
           numColumns={numColumns}
         />
       </Pressable>
-    )
-  }
+    );
+  };
 
   return (
     <View>
@@ -61,7 +62,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
               <Text style={app.errorText}>{error}</Text>
             </View>
           ) : null}
-          {numColumns > 0 && (
+          {numColumns > 0 ? (
             <FlatList
               data={notes}
               key={`${numColumns}-${refreshKey}`}
@@ -74,6 +75,8 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
               }
               removeClippedSubviews={false}
             />
+          ) : (
+            <Loading />
           )}
         </View>
       )}
@@ -100,9 +103,9 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
         note={selectedNote}
       />
     </View>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-export default DisplayNotes
+export default DisplayNotes;
