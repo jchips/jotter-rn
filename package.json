@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "baseline-browser-mapping": "^2.9.7",
     "dotenv-cli": "^8.0.0"
   },
   "private": true
