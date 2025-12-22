@@ -7,13 +7,12 @@ const JotterText = () => {
   const styles = styleSheet(COLORS);
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.header}>J</Text>
       <Image
         style={styles.img}
         source={require('../../assets/imgs/jotter-circle.png')}
         alt='Jotter logo'
       />
-      <Text style={styles.header}>tter</Text>
+      <Text style={styles.header}>Jotter</Text>
     </View>
   );
 };
@@ -21,20 +20,19 @@ const JotterText = () => {
 const styleSheet = (COLORS) =>
   StyleSheet.create({
     headerContainer: {
-      flexDirection: 'row',
       alignItems: 'center',
       padding: 10,
     },
     header: {
       justifyContent: 'center',
       alignItems: 'center',
-      fontSize: moderateScale(40),
+      fontSize: moderateScale(35), // 40
       fontFamily: FONT.bold,
-      color: COLORS.text,
+      color: COLORS.text2,
     },
     img: {
-      width: moderateScale(27),
-      height: moderateScale(27),
+      width: moderateScale(30), // 27
+      height: moderateScale(30), // 27
       marginLeft: 3,
       marginRight: 4,
       marginTop: 4,
