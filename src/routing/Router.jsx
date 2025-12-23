@@ -1,69 +1,69 @@
 /* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   StyleSheet,
   StatusBar as RNStatusBar,
   View,
   Platform,
   useColorScheme,
-} from 'react-native'
-import { useDispatch } from 'react-redux'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import * as NavigationBar from 'expo-navigation-bar'
-import { StatusBar } from 'expo-status-bar'
-import * as SystemUI from 'expo-system-ui'
-import { useAuth } from '../contexts/AuthContext'
-import { useTheme } from '../contexts/ThemeContext'
-import DrawerNav from './DrawerNav'
-import Login from '../../app/auth/Login'
-import ViewNote from '../../app/ViewNote'
-import Editor from '../../app/Editor'
-import UpdateLogin from '../../app/auth/UpdateLogin'
-import Signup from '../../app/auth/Signup'
-import { addRecent, loadRecent } from '../reducers/recentsReducer'
-import { getCurrUser, removeCurrUser } from '../util/persist'
-import { FONT } from '../styles'
+} from 'react-native';
+import { useDispatch } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as NavigationBar from 'expo-navigation-bar';
+import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
+import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import DrawerNav from './DrawerNav';
+import Login from '../../app/auth/Login';
+import ViewNote from '../../app/ViewNote';
+import Editor from '../../app/Editor';
+import UpdateLogin from '../../app/auth/UpdateLogin';
+import Signup from '../../app/auth/Signup';
+import { addRecent, loadRecent } from '../reducers/recentsReducer';
+import { getCurrUser, removeCurrUser } from '../util/persist';
+import { FONT } from '../styles';
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator();
 
 const Router = () => {
-  const [loading, setLoading] = useState(true)
-  const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth()
-  const { COLORS, theme } = useTheme()
-  const systemTheme = useColorScheme()
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true);
+  const { isLoggedIn, setIsLoggedIn, setToken, setUser, user } = useAuth();
+  const { COLORS, theme } = useTheme();
+  const systemTheme = useColorScheme();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const persistLogin = async () => {
       try {
-        const activeUser = await getCurrUser()
+        const activeUser = await getCurrUser();
         if (activeUser) {
-          setUser(activeUser)
-          setToken(activeUser.token)
-          setIsLoggedIn(true)
+          setUser(activeUser);
+          setToken(activeUser.token);
+          setIsLoggedIn(true);
         } else {
-          setUser(null)
-          setToken(null)
-          setIsLoggedIn(false)
+          setUser(null);
+          setToken(null);
+          setIsLoggedIn(false);
         }
       } catch (err) {
-        console.error('Failed to fetch active user ' + err)
-        setUser(null)
-        setToken(null)
-        removeCurrUser()
-        setIsLoggedIn(false)
+        console.error('Failed to fetch active user ' + err);
+        setUser(null);
+        setToken(null);
+        removeCurrUser();
+        setIsLoggedIn(false);
         // logout()?
       }
-      setLoading(false)
-    }
-    persistLogin()
-  }, [setUser])
+      setLoading(false);
+    };
+    persistLogin();
+  }, [setUser]);
 
   // Resets the recent notes history when a new user logs in (security)
   useEffect(() => {
-    dispatch(loadRecent({ userId: user?.id }))
-  }, [user])
+    dispatch(loadRecent({ userId: user?.id }));
+  }, [user]);
 
   // Makes the Android navigation background color follow the device theme (dark or light)
   useEffect(() => {
@@ -71,22 +71,22 @@ const Router = () => {
       const navigationBg = async () => {
         if (theme === 'system') {
           if (systemTheme === 'light') {
-            await NavigationBar.setButtonStyleAsync('dark')
+            await NavigationBar.setButtonStyleAsync('dark');
           } else {
-            await NavigationBar.setButtonStyleAsync('light')
+            await NavigationBar.setButtonStyleAsync('light');
           }
         } else {
           await NavigationBar.setButtonStyleAsync(
             theme === 'dark' ? 'light' : 'dark'
-          )
+          );
         }
-        await SystemUI.setBackgroundColorAsync(COLORS.background)
-      }
-      Platform.OS === 'android' ? navigationBg() : null
+        await SystemUI.setBackgroundColorAsync(COLORS.background);
+      };
+      Platform.OS === 'android' ? navigationBg() : null;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }, [NavigationBar, theme, systemTheme])
+  }, [NavigationBar, theme, systemTheme]);
 
   // Sets the status bar text theme
   const statusBarTextStyle =
@@ -96,9 +96,9 @@ const Router = () => {
         : 'light'
       : theme === 'dark'
       ? 'light'
-      : 'dark'
+      : 'dark';
 
-  let lastNoteId = null
+  let lastNoteId = null;
 
   return (
     !loading && (
@@ -113,7 +113,7 @@ const Router = () => {
         )}
         <NavigationContainer
           onStateChange={(state) => {
-            const route = getActiveRoute(state)
+            const route = getActiveRoute(state);
 
             // Store recent notes
             if (route?.params?.noteId && route.name === 'View') {
@@ -122,12 +122,12 @@ const Router = () => {
                 title: route.params.title,
                 userId: user?.id,
                 folderId: route.params.folderId,
-              }
+              };
 
               // Prevent repeated duplicate dispatches
               if (note.id !== lastNoteId) {
-                lastNoteId = note.id
-                dispatch(addRecent(note))
+                lastNoteId = note.id;
+                dispatch(addRecent(note));
               }
             }
           }}
@@ -236,8 +236,8 @@ const Router = () => {
         </NavigationContainer>
       </View>
     )
-  )
-}
+  );
+};
 
 /**
  * Gets the active (current) route.
@@ -245,13 +245,13 @@ const Router = () => {
  * @returns {Object} - active route
  */
 const getActiveRoute = (state) => {
-  let current = state
+  let current = state;
   while (current?.routes && current.index != null) {
-    current = current.routes[current.index]
+    current = current.routes[current.index];
   }
-  return current
-}
+  return current;
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-export default Router
+export default Router;

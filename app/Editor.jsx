@@ -5,9 +5,9 @@ import {
   useMemo,
   useLayoutEffect,
   useRef,
-} from 'react'
-import debounce from 'lodash/debounce'
-import { useSelector } from 'react-redux'
+} from 'react';
+import debounce from 'lodash/debounce';
+import { useSelector } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -16,107 +16,107 @@ import {
   Image,
   KeyboardAvoidingView,
   Keyboard,
-} from 'react-native'
+} from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
-} from 'react-native-gesture-handler'
-import { runOnJS } from 'react-native-reanimated'
-import { useFocusEffect } from '@react-navigation/native'
-import { useMarkdown } from '../src/contexts/MDContext'
-import { useTheme } from '../src/contexts/ThemeContext'
-import Preview from '../src/components/PreviewMarkdown'
-import EditNote from '../src/components/inputs/EditNote'
-import NotSavedDot from '../src/components/indicators/NotSavedDot'
-import SaveButton from '../src/components/buttons/SaveButton'
-import TogglePreview from '../src/components/buttons/TogglePreview'
-import getWordCount from '../src/util/getWordCount'
-import api from '../src/util/api'
-import { moderateScale } from '../src/util/scaling'
-import calculateHeaderLength from '../src/util/calEditorHeaderLength'
-import { FONT, FONTSIZE, useAppStyles } from '../src/styles'
+} from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
+import { useFocusEffect } from '@react-navigation/native';
+import { useMarkdown } from '../src/contexts/MDContext';
+import { useTheme } from '../src/contexts/ThemeContext';
+import Preview from '../src/components/PreviewMarkdown';
+import EditNote from '../src/components/inputs/EditNote';
+import NotSavedDot from '../src/components/indicators/NotSavedDot';
+import SaveButton from '../src/components/buttons/SaveButton';
+import TogglePreview from '../src/components/buttons/TogglePreview';
+import getWordCount from '../src/util/getWordCount';
+import api from '../src/util/api';
+import { moderateScale } from '../src/util/scaling';
+import calculateHeaderLength from '../src/util/calEditorHeaderLength';
+import { FONT, FONTSIZE, useAppStyles } from '../src/styles';
 
 const Editor = ({ navigation, route }) => {
-  const { note } = route.params
-  const configs = useSelector((state) => state.configs.data)
-  const [error, setError] = useState('')
-  const [isEditable, setIsEditable] = useState(false)
-  const [showPreview, setShowPreview] = useState(!configs?.hidePreview)
-  const [undoStack, setUndoStack] = useState([])
-  const [redoStack, setRedoStack] = useState([])
-  const [keyboardOffset, setKeyboardOffset] = useState(0)
-  const { markdown, setMarkdown } = useMarkdown()
-  const [noteContent, setNoteContent] = useState(markdown)
-  const [saved, setSaved] = useState(true)
-  const [words, setWords] = useState(getWordCount(markdown))
+  const { note } = route.params;
+  const configs = useSelector((state) => state.configs.data);
+  const [error, setError] = useState('');
+  const [isEditable, setIsEditable] = useState(false);
+  const [showPreview, setShowPreview] = useState(!configs?.hidePreview);
+  const [undoStack, setUndoStack] = useState([]);
+  const [redoStack, setRedoStack] = useState([]);
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+  const { markdown, setMarkdown } = useMarkdown();
+  const [noteContent, setNoteContent] = useState(markdown);
+  const [saved, setSaved] = useState(true);
+  const [words, setWords] = useState(getWordCount(markdown));
   const [selection, setSelection] = useState({
     start: 0,
     end: 0,
-  })
-  const pendingSelection = useRef(null)
-  const { app, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
-  const styles = styleSheet(app, buttons, COLORS)
+  });
+  const pendingSelection = useRef(null);
+  const { app, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(app, buttons, COLORS);
 
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
     .onEnd(() => {
-      runOnJS(setIsEditable)(true)
-    })
+      runOnJS(setIsEditable)(true);
+    });
 
   const checkSaved = useMemo(
     () =>
       debounce((currentMarkdown, savedNote) => {
-        const isSaved = currentMarkdown === savedNote
-        setSaved(isSaved)
+        const isSaved = currentMarkdown === savedNote;
+        setSaved(isSaved);
       }, 100),
     []
-  )
+  );
 
   useLayoutEffect(() => {
     if (pendingSelection.current) {
-      setSelection(pendingSelection.current)
-      pendingSelection.current = null
+      setSelection(pendingSelection.current);
+      pendingSelection.current = null;
     }
-  }, [markdown])
+  }, [markdown]);
 
   useEffect(() => {
-    checkSaved(markdown, noteContent)
-  }, [markdown, noteContent])
+    checkSaved(markdown, noteContent);
+  }, [markdown, noteContent]);
 
   useEffect(() => {
     const showOffset = Keyboard.addListener('keyboardDidShow', () =>
       setKeyboardOffset(105)
-    )
+    );
     const hideOffset = Keyboard.addListener('keyboardDidHide', () =>
       setKeyboardOffset(0)
-    )
+    );
 
     return () => {
-      showOffset.remove()
-      hideOffset.remove()
-    }
-  }, [])
+      showOffset.remove();
+      hideOffset.remove();
+    };
+  }, []);
 
   // 'not saved' indicator
   useFocusEffect(
     useCallback(() => {
       const fetchNote = async () => {
         try {
-          setError('')
-          const res = await api.getNote(note.id)
-          setNoteContent(res.data.content)
-          setSaved(markdown === res.data.content)
+          setError('');
+          const res = await api.getNote(note.id);
+          setNoteContent(res.data.content);
+          setSaved(markdown === res.data.content);
         } catch (err) {
-          setError('Failed to fetch note')
-          console.error('Failed to fetch note -', err)
+          setError('Failed to fetch note');
+          console.error('Failed to fetch note -', err);
         }
-      }
+      };
 
-      fetchNote()
+      fetchNote();
     }, [note.id, markdown])
-  )
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -167,19 +167,19 @@ const Editor = ({ navigation, route }) => {
               </Pressable>
             </View>
           </>
-        )
+        );
       },
-    })
-  }, [navigation, undoStack, redoStack, saved])
+    });
+  }, [navigation, undoStack, redoStack, saved]);
 
   // Clean up function to reset undo and redo stacks and 'not saved' indicator
   useEffect(() => {
     return () => {
-      setUndoStack([])
-      setRedoStack([])
-      checkSaved.cancel()
-    }
-  }, [])
+      setUndoStack([]);
+      setRedoStack([]);
+      checkSaved.cancel();
+    };
+  }, []);
 
   /**
    * Updates the markdown content with every change the user makes
@@ -189,10 +189,10 @@ const Editor = ({ navigation, route }) => {
    * @returns - exits the function
    */
   const update = (value) => {
-    const lines = value.split('\n')
-    const lastLine = lines[lines.length - 1] || ''
-    const secondLastLine = lines[lines.length - 2] || ''
-    let digit = /^(\d+)\.$/
+    const lines = value.split('\n');
+    const lastLine = lines[lines.length - 1] || '';
+    const secondLastLine = lines[lines.length - 2] || '';
+    let digit = /^(\d+)\.$/;
 
     if (lines.length > 1) {
       if (
@@ -203,57 +203,57 @@ const Editor = ({ navigation, route }) => {
         secondLastLine !== ''
       ) {
         if (secondLastLine.startsWith('* ')) {
-          const newValue = value + '* '
-          setMarkdown(newValue)
+          const newValue = value + '* ';
+          setMarkdown(newValue);
           pendingSelection.current = {
             start: newValue.length,
             end: newValue.length,
-          }
-          return
+          };
+          return;
         }
         if (secondLastLine.startsWith('- ')) {
-          const newValue = value + '- '
-          setMarkdown(newValue)
+          const newValue = value + '- ';
+          setMarkdown(newValue);
           pendingSelection.current = {
             start: newValue.length,
             end: newValue.length,
-          }
-          return
+          };
+          return;
         }
-        const match = secondLastLine.match(/^(\d+)\. /)
+        const match = secondLastLine.match(/^(\d+)\. /);
         if (match) {
-          const count = parseInt(match[1], 10)
-          const newValue = value + `${count + 1}. `
-          setMarkdown(newValue)
+          const count = parseInt(match[1], 10);
+          const newValue = value + `${count + 1}. `;
+          setMarkdown(newValue);
           pendingSelection.current = {
             start: newValue.length,
             end: newValue.length,
-          }
-          return
+          };
+          return;
         }
       } else if (secondLastLine === '-' && lastLine === '') {
-        lines.splice(lines.length - 2, 1)
-        const newValue = lines.join('\n')
-        setMarkdown(newValue)
-        return
+        lines.splice(lines.length - 2, 1);
+        const newValue = lines.join('\n');
+        setMarkdown(newValue);
+        return;
       } else if (secondLastLine === '*' && lastLine === '') {
-        lines.splice(lines.length - 2, 1)
-        const newValue = lines.join('\n')
-        setMarkdown(newValue)
-        return
+        lines.splice(lines.length - 2, 1);
+        const newValue = lines.join('\n');
+        setMarkdown(newValue);
+        return;
       } else if (secondLastLine.match(digit) && lastLine === '') {
-        lines.splice(lines.length - 2, 1)
-        const newValue = lines.join('\n')
-        setMarkdown(newValue)
-        return
+        lines.splice(lines.length - 2, 1);
+        const newValue = lines.join('\n');
+        setMarkdown(newValue);
+        return;
       }
     }
 
-    setUndoStack([...undoStack, markdown])
-    setMarkdown(value)
-    setRedoStack([])
-    setWords(getWordCount(value))
-  }
+    setUndoStack([...undoStack, markdown]);
+    setMarkdown(value);
+    setRedoStack([]);
+    setWords(getWordCount(value));
+  };
 
   /**
    * (LIFO)
@@ -263,12 +263,12 @@ const Editor = ({ navigation, route }) => {
    */
   const undo = () => {
     if (undoStack.length > 0) {
-      const prev = undoStack.pop()
-      setRedoStack([markdown, ...redoStack])
-      setMarkdown(prev)
-      setUndoStack([...undoStack])
+      const prev = undoStack.pop();
+      setRedoStack([markdown, ...redoStack]);
+      setMarkdown(prev);
+      setUndoStack([...undoStack]);
     }
-  }
+  };
 
   /**
    * (LIFO)
@@ -278,19 +278,19 @@ const Editor = ({ navigation, route }) => {
    */
   const redo = () => {
     if (redoStack.length > 0) {
-      const next = redoStack[0]
-      setUndoStack([...undoStack, markdown])
-      setMarkdown(next)
-      setRedoStack(redoStack.slice(1))
+      const next = redoStack[0];
+      setUndoStack([...undoStack, markdown]);
+      setMarkdown(next);
+      setRedoStack(redoStack.slice(1));
     }
-  }
+  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <KeyboardAvoidingView
         behavior='height'
         style={{ flex: 1 }}
-        keyboardVerticalOffset={moderateScale(keyboardOffset)}
+        keyboardVerticalOffset={moderateScale(keyboardOffset, 0.05)}
       >
         {error ? (
           <View style={app.errorAlert}>
@@ -328,8 +328,8 @@ const Editor = ({ navigation, route }) => {
         </View>
       </KeyboardAvoidingView>
     </GestureHandlerRootView>
-  )
-}
+  );
+};
 
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
@@ -376,6 +376,6 @@ const styleSheet = (app, buttons, COLORS) =>
       flexDirection: 'row',
       alignItems: 'center',
     },
-  })
+  });
 
-export default Editor
+export default Editor;

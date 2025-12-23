@@ -54,25 +54,21 @@ export default function App() {
   }
 
   return (fontsLoaded && persistLoaded) && (
-    <ThemeProvider>
-      <ReduxProvider store={store}>
-        <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <MarkdownProvider>
-              {/* TODO: Move <SafeAreaProvider> outside of android 15+ router */}
-              <SafeAreaProvider>
-                {Platform.OS === 'android' && Platform.Version <= 33 ? (
-                  <SafeAreaView style={{ flex: 1 }}>
-                    <Router />
-                  </SafeAreaView>
-                ) :
-                  <Router />}
-              </SafeAreaProvider>
-            </MarkdownProvider>
-          </QueryClientProvider>
-        </AuthProvider>
-      </ReduxProvider>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+        <ThemeProvider>
+          <ReduxProvider store={store}>
+            <AuthProvider>
+              <QueryClientProvider client={queryClient}>
+                <MarkdownProvider>
+                  <Router />
+                </MarkdownProvider>
+              </QueryClientProvider>
+            </AuthProvider>
+          </ReduxProvider>
+        </ThemeProvider>
+      </SafeAreaView>
+    </ SafeAreaProvider>
   );
 }
 
