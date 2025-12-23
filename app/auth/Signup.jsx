@@ -23,7 +23,7 @@ const Signup = ({ navigation }) => {
       }}
     >
       <View style={{ flex: 1 }} />
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <SafeAreaView style={styles.container}>
           <JotterText />
           <Text style={styles.formHeader}>Sign up</Text>

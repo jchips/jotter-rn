@@ -1,5 +1,5 @@
 /* Folding level 4 (VS Code, cmd/ctrl + k + 4) */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -7,60 +7,60 @@ import {
   useColorScheme,
   RefreshControl,
   useWindowDimensions,
-} from 'react-native'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { useSelector, useDispatch } from 'react-redux'
-import { useQuery } from '@tanstack/react-query'
-import { fetchConfigs } from '../src/reducers/configReducer'
-import { useMarkdown } from '../src/contexts/MDContext'
-import { queryClient, useAuth } from '../src/contexts/AuthContext'
-import { useTheme } from '../src/contexts/ThemeContext'
-import { useFolder } from '../src/hooks/useFolder'
-import { useHeader } from '../src/hooks/useHeader'
-import { useAppStyles } from '../src/styles'
-import Loading from '../src/components/indicators/Loading'
-import DisplayFolders from '../src/components/flatlists/DisplayFolders'
-import DisplayNotes from '../src/components/flatlists/DisplayNotes'
-import AddButton from '../src/components/buttons/AddButton'
-import Sort from '../src/components/modals/Sort'
-import Grid from '../src/components/modals/Grid'
-import AddTitle from '../src/components/modals/AddTitle'
-import { sortFolders, sortNotes } from '../src/util/sortBy'
-import api from '../src/util/api'
+} from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import { fetchConfigs } from '../src/reducers/configReducer';
+import { useMarkdown } from '../src/contexts/MDContext';
+import { queryClient, useAuth } from '../src/contexts/AuthContext';
+import { useTheme } from '../src/contexts/ThemeContext';
+import { useFolder } from '../src/hooks/useFolder';
+import { useHeader } from '../src/hooks/useHeader';
+import { useAppStyles } from '../src/styles';
+import Loading from '../src/components/indicators/Loading';
+import DisplayFolders from '../src/components/flatlists/DisplayFolders';
+import DisplayNotes from '../src/components/flatlists/DisplayNotes';
+import AddButton from '../src/components/buttons/AddButton';
+import Sort from '../src/components/modals/Sort';
+import Grid from '../src/components/modals/Grid';
+import AddTitle from '../src/components/modals/AddTitle';
+import { sortFolders, sortNotes } from '../src/util/sortBy';
+import api from '../src/util/api';
 
 const Dashboard = ({ route }) => {
-  const { folderId, folderTitle, folderParent } = route.params
-  const [notes, setNotes] = useState()
-  const [folders, setFolders] = useState()
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [type, setType] = useState(null)
-  const [openSort, setOpenSort] = useState(false)
-  const [openGrid, setOpenGrid] = useState(false)
-  const [openAddTitle, setOpenAddTitle] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
-  const { COLORS, theme } = useTheme()
-  const { token, logout, user } = useAuth()
-  const { setMarkdown } = useMarkdown()
-  const navigation = useNavigation()
-  const configSettings = useSelector((state) => state.configs.data)
-  const dispatch = useDispatch()
-  const { folder } = useFolder(folderId)
-  const { app, buttons } = useAppStyles()
-  const systemTheme = useColorScheme()
-  const header = useHeader()
-  const styles = styleSheet(app, buttons, COLORS)
-  const { width: screenWidth } = useWindowDimensions()
-  const userId = !user?.id ? null : user.id
-  let folder_id = !folderId ? null : folderId
+  const { folderId, folderTitle, folderParent } = route.params;
+  const [notes, setNotes] = useState();
+  const [folders, setFolders] = useState();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [type, setType] = useState(null);
+  const [openSort, setOpenSort] = useState(false);
+  const [openGrid, setOpenGrid] = useState(false);
+  const [openAddTitle, setOpenAddTitle] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { COLORS, theme } = useTheme();
+  const { token, logout, user } = useAuth();
+  const { setMarkdown } = useMarkdown();
+  const navigation = useNavigation();
+  const configSettings = useSelector((state) => state.configs.data);
+  const dispatch = useDispatch();
+  const { folder } = useFolder(folderId);
+  const { app, buttons } = useAppStyles();
+  const systemTheme = useColorScheme();
+  const header = useHeader();
+  const styles = styleSheet(app, buttons, COLORS);
+  const { width: screenWidth } = useWindowDimensions();
+  const userId = !user?.id ? null : user.id;
+  let folder_id = !folderId ? null : folderId;
 
   useEffect(() => {
-    dispatch(fetchConfigs(token))
-  }, [dispatch])
+    dispatch(fetchConfigs(token));
+  }, [dispatch]);
 
   useEffect(() => {
-    setMarkdown('')
-  }, [])
+    setMarkdown('');
+  }, []);
 
   // Header
   useFocusEffect(
@@ -77,9 +77,9 @@ const Dashboard = ({ route }) => {
             setOpenSort,
             configSettings,
           }),
-      })
+      });
     }, [navigation, route, configSettings, systemTheme, theme])
-  )
+  );
 
   // Fetch and cache folders
   const {
@@ -90,22 +90,22 @@ const Dashboard = ({ route }) => {
   } = useQuery({
     queryKey: ['folders', userId, folder_id],
     queryFn: async () => {
-      const res = await api.getFolders(folder_id)
-      return res.data
+      const res = await api.getFolders(folder_id);
+      return res.data;
     },
     select: (foldersRes) => {
-      const sortedFolders = sortFolders(configSettings?.sort, foldersRes)
-      return sortedFolders
+      const sortedFolders = sortFolders(configSettings?.sort, foldersRes);
+      return sortedFolders;
     },
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
-        logUserOut()
+        logUserOut();
       } else {
-        setError('Could not fetch folders', err)
+        setError('Could not fetch folders', err);
       }
     },
-  })
+  });
 
   // Fetch and cache notes
   const {
@@ -116,61 +116,61 @@ const Dashboard = ({ route }) => {
   } = useQuery({
     queryKey: ['notes', userId, folder_id],
     queryFn: async () => {
-      let res
+      let res;
       if (folder_id) {
-        res = await api.getNotes(folder_id)
+        res = await api.getNotes(folder_id);
       } else {
-        res = await api.getRootNotes()
+        res = await api.getRootNotes();
       }
-      return res.data
+      return res.data;
     },
     select: (notesRes) => {
-      const sortedNotes = sortNotes(configSettings?.sort, notesRes)
-      return sortedNotes
+      const sortedNotes = sortNotes(configSettings?.sort, notesRes);
+      return sortedNotes;
     },
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
-        logUserOut()
+        logUserOut();
       } else {
-        setError('Could not fetch notes', err)
+        setError('Could not fetch notes', err);
       }
     },
-  })
+  });
 
   // Sync folder cache data
   useEffect(() => {
-    setLoading(true)
-    if (cachedFolders) setFolders(cachedFolders)
-    setLoading(false)
-  }, [cachedFolders])
+    setLoading(true);
+    if (cachedFolders) setFolders(cachedFolders);
+    setLoading(false);
+  }, [cachedFolders]);
 
   // Sync note cache data
   useEffect(() => {
-    setLoading(true)
-    if (cachedNotes) setNotes(cachedNotes)
-    setLoading(false)
-  }, [cachedNotes])
+    setLoading(true);
+    if (cachedNotes) setNotes(cachedNotes);
+    setLoading(false);
+  }, [cachedNotes]);
 
-  const isLoading = foldersLoading || notesLoading
+  const isLoading = foldersLoading || notesLoading;
 
   // Reset cache
   const onRefresh = async () => {
-    setLoading(true)
-    queryClient.invalidateQueries()
-    await Promise.all([refetchFolders(), refetchNotes()])
-    setRefreshKey((prev) => prev + 1)
-    setLoading(false)
-  }
+    setLoading(true);
+    queryClient.invalidateQueries();
+    await Promise.all([refetchFolders(), refetchNotes()]);
+    setRefreshKey((prev) => prev + 1);
+    setLoading(false);
+  };
 
   // Logs the user out
   const logUserOut = () => {
-    logout()
-  }
+    logout();
+  };
 
   // Loading circle
   if (isLoading || loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return !isLoading && !loading ? (
@@ -218,8 +218,8 @@ const Dashboard = ({ route }) => {
       />
       <Grid openGrid={openGrid} setOpenGrid={setOpenGrid} />
     </View>
-  ) : null
-}
+  ) : null;
+};
 
 const styleSheet = (app, buttons, COLORS) =>
   StyleSheet.create({
@@ -233,6 +233,6 @@ const styleSheet = (app, buttons, COLORS) =>
       margin: 0,
       paddingLeft: 0,
     },
-  })
+  });
 
-export default Dashboard
+export default Dashboard;

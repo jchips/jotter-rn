@@ -4,7 +4,7 @@
   <img src='./assets/imgs/jotter-circle.png#jotter' alt='Jotter logo' height='50px' width='50px'/>
 </center>
 
-Tired of searching for the perfect tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking app that combines the simplicity of Markdown with the power of organization. **All your notes are encrypted.**
+Tired of searching for the perfect tool to easily organize your thoughts and ideas? Say hello to **Jotter**, the intuitive note-taking app that combines the simplicity of Markdown with the power of organization. **All notes are encrypted** with server-side encryption.
 
 Try **Jotter** today!
 
@@ -56,13 +56,13 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 - **1.3.8** (2025-12-15, 4:25pm) - Minor improvements.
 - **1.3.7** (2025-11-23, 1:30am) - Added recent notes feature in the drawer, improved navigation through folders.
 - **1.3.6** (2025-11-16, 11:55am) - Improved error handling, fixed moving to home folder bug.
-- **1.3.5** (2025-11-09, 9:20pm) - Fixed bug where new sort does not happen immediately.
+- **1.3.5** (2025-11-09, 9:20pm) - Fixed bug where sort does not execute immediately.
 - **1.3.4** (2025-11-08, 12:55am) - Caches data to improve app performance.
 - **1.3.3** (2025-11-07, 12:55am) - Fixed breadcrumbs bug, fix keyboard covering up inputs on auth page bug.
 - **1.3.2** (2025-10-19, 10:25pm) - Fixed bullet point bug where cursor displays before bullet.
 - **1.3.1** (2025-10-15, 10:40pm) - Fixed text flickering bug with creating newlines.
 - **1.3.0** (2025-10-12, 12:20pm) - Bug fixes and improved security. Server-side encryption for all notes and folders.
-- **1.2.8** (2025-08-31, 10:35pm) - Updated packages.
+- **1.2.8** (2025-08-31, 10:35pm) - Updated dependencies.
 - **1.2.7** (2025-05-25, 4:10pm) - Bug fix.
 - **1.2.6** (2025-05-02, 11:00pm) - Added 'not saved' indicator in note editor.
 - **1.2.5** (2025-04-27, 6:00pm) - Users can update their email and/or password, minor ui improvements.

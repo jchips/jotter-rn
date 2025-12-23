@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,73 +6,73 @@ import {
   Pressable,
   Image,
   useWindowDimensions,
-} from 'react-native'
-import { useSelector } from 'react-redux'
-import { useRoute } from '@react-navigation/native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import { DrawerContentScrollView } from '@react-navigation/drawer'
-import { useFolder } from '../hooks/useFolder.js'
-import { useAuth } from '../contexts/AuthContext'
-import { useTheme } from '../contexts/ThemeContext'
-import Account from '../../app/Account'
-import Dashboard from '../../app/Dashboard'
-import Settings from '../../app/Settings.jsx'
-import { moderateScale } from '../util/scaling.js'
-import { getFolderTitle } from '../util/getFolder.js'
-import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles'
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { useFolder } from '../hooks/useFolder.js';
+import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import Account from '../../app/Account';
+import Dashboard from '../../app/Dashboard';
+import Settings from '../../app/Settings.jsx';
+import { moderateScale } from '../util/scaling.js';
+import { getFolderTitle } from '../util/getFolder.js';
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles';
 
-const Drawer = createDrawerNavigator()
+const Drawer = createDrawerNavigator();
 
 function DrawerNav({ navigation }) {
-  const { width: screenWidth } = useWindowDimensions()
-  const [currentFolder, setCurrentFolder] = useState(null)
-  const [breadcrumbPath, setBreadcrumbPath] = useState([])
-  const { user, logout } = useAuth()
-  const route = useRoute()
-  const { folder } = useFolder(route?.params?.params?.folderId)
-  const { buttons } = useAppStyles()
-  const { COLORS } = useTheme()
-  const recents = useSelector((state) => state.recents.data)
-  const styles = styleSheet(COLORS)
+  const { width: screenWidth } = useWindowDimensions();
+  const [currentFolder, setCurrentFolder] = useState(null);
+  const [breadcrumbPath, setBreadcrumbPath] = useState([]);
+  const { user, logout } = useAuth();
+  const route = useRoute();
+  const { folder } = useFolder(route?.params?.params?.folderId);
+  const { buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const recents = useSelector((state) => state.recents.data);
+  const styles = styleSheet(COLORS);
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: folder ? folder?.title : 'Home',
-    })
+    });
     if (folder?.id) {
-      setCurrentFolder(folder)
+      setCurrentFolder(folder);
       const formatPath = async () => {
         let currentFolderPath =
           typeof folder.path === 'string'
             ? JSON.parse(folder.path)
-            : folder.path
+            : folder.path;
         const pathWithTitles = await currentFolderPath.reduce(
           async (accPromise, item) => {
-            const acc = await accPromise
-            const { title, parentId } = await getFolderTitle(item.id)
+            const acc = await accPromise;
+            const { title, parentId } = await getFolderTitle(item.id);
             acc.push({
               ...item,
               title,
               parentId,
-            })
-            return acc
+            });
+            return acc;
           },
           Promise.resolve([])
-        )
-        setBreadcrumbPath(pathWithTitles)
-      }
-      formatPath()
+        );
+        setBreadcrumbPath(pathWithTitles);
+      };
+      formatPath();
     }
-  }, [folder?.id])
+  }, [folder?.id]);
 
   // log user out
   const logUserOut = () => {
-    logout()
-  }
+    logout();
+  };
 
   // Custom drawer content (app icon, routes, recents, current, log out)
   const DrawerContent = (props) => {
-    const { state, descriptors, navigation } = props
+    const { state, descriptors, navigation } = props;
 
     return (
       <View style={styles.drawerContainer}>
@@ -94,7 +94,7 @@ function DrawerNav({ navigation }) {
         >
           {/* Home, Account, and Settings items */}
           {state.routes.map((route, index) => {
-            const isActive = state.index === index
+            const isActive = state.index === index;
             return (
               <Pressable
                 key={index}
@@ -107,18 +107,18 @@ function DrawerNav({ navigation }) {
                   {descriptors[route.key].options.drawerLabel || route.name}
                 </Text>
               </Pressable>
-            )
+            );
           })}
 
-          {/* Current folder(s) label */}
+          {/* Recent folder(s) label */}
           {currentFolder ? (
-            <Text style={styles.foldersTitle}>Current folder</Text>
+            <Text style={styles.foldersTitle}>Recent folders</Text>
           ) : null}
 
           {/* Breadcrumbs */}
           {currentFolder && breadcrumbPath.length > 0
             ? breadcrumbPath.map((pathItem, index) => {
-                const isActive = state.index === index + 2
+                const isActive = state.index === index + 2;
                 return (
                   <Pressable
                     key={pathItem.id}
@@ -146,7 +146,7 @@ function DrawerNav({ navigation }) {
                       {pathItem.title}
                     </Text>
                   </Pressable>
-                )
+                );
               })
             : null}
 
@@ -189,12 +189,12 @@ function DrawerNav({ navigation }) {
                         noteId: note.id,
                         title: note.title,
                         folderId: note.folderId,
-                      })
+                      });
                     }}
                   >
                     <Text style={styles.drawerLabel}>{note.title}</Text>
                   </Pressable>
-                )
+                );
               })
             : null}
 
@@ -204,8 +204,8 @@ function DrawerNav({ navigation }) {
           </Pressable>
         </DrawerContentScrollView>
       </View>
-    )
-  }
+    );
+  };
 
   const headerOptions = {
     headerShadowVisible: false,
@@ -216,7 +216,7 @@ function DrawerNav({ navigation }) {
       backgroundColor: COLORS.background,
     },
     headerTintColor: COLORS.text2,
-  }
+  };
 
   return (
     <Drawer.Navigator
@@ -243,7 +243,7 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen name='Account' component={Account} />
       <Drawer.Screen name='Settings' component={Settings} />
     </Drawer.Navigator>
-  )
+  );
 }
 
 const styleSheet = (COLORS) =>
@@ -314,6 +314,6 @@ const styleSheet = (COLORS) =>
     activeLabel: {
       color: COLORS.text, // Active label (text) color
     },
-  })
+  });
 
-export default DrawerNav
+export default DrawerNav;

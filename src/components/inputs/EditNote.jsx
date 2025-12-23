@@ -1,16 +1,16 @@
-import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native'
-import { moderateScale } from '../../util/scaling'
-import { useTheme } from '../../contexts/ThemeContext'
-import { FONT, FONTSIZE } from '../../styles'
+import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native';
+import { moderateScale } from '../../util/scaling';
+import { useTheme } from '../../contexts/ThemeContext';
+import { FONT, FONTSIZE } from '../../styles';
 
 const EditNote = (props) => {
-  const { isEditable, markdown, update, selection, setSelection } = props
-  const { COLORS } = useTheme()
-  const styles = styleSheet(COLORS)
+  const { isEditable, markdown, update, selection, setSelection } = props;
+  const { COLORS } = useTheme();
+  const styles = styleSheet(COLORS);
 
   const handleSelectionChange = ({ nativeEvent: { selection } }) => {
-    setSelection(selection)
-  }
+    setSelection(selection);
+  };
 
   return !isEditable ? (
     <ScrollView style={{ marginBottom: 15 }}>
@@ -50,8 +50,8 @@ const EditNote = (props) => {
         }
       />
     </ScrollView>
-  )
-}
+  );
+};
 
 const styleSheet = (COLORS) =>
   StyleSheet.create({
@@ -76,6 +76,6 @@ const styleSheet = (COLORS) =>
       paddingBottom: 10,
       whiteSpace: 'pre-wrap',
     },
-  })
+  });
 
-export default EditNote
+export default EditNote;

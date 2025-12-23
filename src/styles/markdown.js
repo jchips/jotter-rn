@@ -131,11 +131,13 @@ const MARKDOWN = (COLORS) => {
     code_block: {
       backgroundColor: COLORS.block,
       borderColor: COLORS.themePurpleText,
+      borderWidth: 0,
       ...textColor,
     },
     fence: {
       backgroundColor: COLORS.block,
       borderColor: COLORS.themePurpleText,
+      borderWidth: 0,
       ...textColor,
     },
     hr: {
