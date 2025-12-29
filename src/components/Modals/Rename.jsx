@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,26 +9,26 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
-import { queryClient, useAuth } from '../../contexts/AuthContext'
-import { useTheme } from '../../contexts/ThemeContext'
-import { useAppStyles } from '../../styles'
-import api from '../../util/api'
+} from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient, useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import api from '../../util/api';
 
 const Rename = ({ openRename, setOpenRename, note, folder }) => {
-  const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
-  const { user } = useAuth()
-  const { app, MODAL, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
+  } = useForm();
+  const { user } = useAuth();
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
 
   /* Update note in database and cache */
   const updateNoteMutation = useMutation({
@@ -43,18 +43,23 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
     onSuccess: (res) => {
       queryClient.setQueryData(
         ['notes', user?.id, res.data.folderId],
-        (oldNotes) =>
-          oldNotes.map((note) => (note.id === res.data.id ? res.data : note))
-      )
-      queryClient.setQueryData(['note', user?.id, res.data.id], res.data)
-      setOpenRename(false)
+        (oldNotes) => {
+          if (oldNotes) {
+            return oldNotes.map((note) =>
+              note.id === res.data.id ? res.data : note
+            );
+          }
+        }
+      );
+      queryClient.setQueryData(['note', user?.id, res.data.id], res.data);
+      setOpenRename(false);
     },
     onError: (err) => {
-      console.error('Failed to rename note', err)
-      setError('Failed to rename note')
-      setSaving(false)
+      console.error('Failed to rename note', err);
+      setError('Failed to rename note');
+      setSaving(false);
     },
-  })
+  });
 
   /* Update folder in database and cache */
   const updateFolderMutation = useMutation({
@@ -69,19 +74,22 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
     onSuccess: (res) => {
       queryClient.setQueryData(
         ['folders', user?.id, res.data.parentId],
-        (oldFolders) =>
-          oldFolders.map((folder) =>
-            folder.id === res.data.id ? res.data : folder
-          )
-      )
-      setOpenRename(false)
+        (oldFolders) => {
+          if (oldFolders) {
+            return oldFolders.map((folder) =>
+              folder.id === res.data.id ? res.data : folder
+            );
+          }
+        }
+      );
+      setOpenRename(false);
     },
     onError: (err) => {
-      console.error('Failed to rename folder', err)
-      setError('Failed to rename folder')
-      setSaving(false)
+      console.error('Failed to rename folder', err);
+      setError('Failed to rename folder');
+      setSaving(false);
     },
-  })
+  });
 
   /**
    * Changes the title of a note or folder
@@ -89,23 +97,23 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
    */
   const onSubmit = async (title) => {
     try {
-      setError('')
-      setSaving(true)
+      setError('');
+      setSaving(true);
       if (note) {
-        const noteId = note.id
-        updateNoteMutation.mutate({ noteId, title })
+        const noteId = note.id;
+        updateNoteMutation.mutate({ noteId, title });
       } else if (folder) {
-        const folderId = folder.id
-        updateFolderMutation.mutate({ folderId, title })
+        const folderId = folder.id;
+        updateFolderMutation.mutate({ folderId, title });
       }
     } catch (err) {
       // Handled in onError
     }
     reset({
       title: '',
-    })
-    setSaving(false)
-  }
+    });
+    setSaving(false);
+  };
 
   return (
     <Modal
@@ -113,7 +121,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
       transparent={true}
       visible={openRename}
       onRequestClose={() => {
-        setOpenRename(!openRename)
+        setOpenRename(!openRename);
       }}
     >
       <View style={MODAL.centeredView}>
@@ -162,8 +170,8 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
                 <Pressable
                   style={[buttons.outlineBtn2, MODAL.button]}
                   onPress={() => {
-                    setOpenRename(!openRename)
-                    setError('')
+                    setOpenRename(!openRename);
+                    setError('');
                   }}
                 >
                   <Text style={buttons.btnText2}>Cancel</Text>
@@ -189,9 +197,9 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         </KeyboardAvoidingView>
       </View>
     </Modal>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-export default Rename
+export default Rename;
