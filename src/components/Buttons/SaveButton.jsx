@@ -1,71 +1,74 @@
-import { useState } from 'react'
-import { Image, Pressable, StyleSheet } from 'react-native'
-import { useMutation } from '@tanstack/react-query'
-import api from '../../util/api'
-import { useTheme } from '../../contexts/ThemeContext'
-import { queryClient, useAuth } from '../../contexts/AuthContext'
-import { useAppStyles } from '../../styles'
+import { useState } from 'react';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { useMutation } from '@tanstack/react-query';
+import api from '../../util/api';
+import { useTheme } from '../../contexts/ThemeContext';
+import { queryClient, useAuth } from '../../contexts/AuthContext';
+import { useAppStyles } from '../../styles';
 
 const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
-  const [saving, setSaving] = useState(false)
-  const { user } = useAuth()
-  const { app, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
-  const styles = styleSheet(buttons)
-  const userId = !user?.id ? null : user.id
+  const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
+  const { app, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(buttons);
+  const userId = !user?.id ? null : user.id;
 
   // Update Notes cache (refresh screen instantly)
   const updateNoteMutation = useMutation({
     mutationFn: async ({ noteId, markdown }) => {
-      setSaving(true)
+      setSaving(true);
       const res = await api.updateNote(
         {
           content: markdown,
           updatedAt: Date.now(),
         },
         noteId
-      )
-      setNoteContent(res.data.content)
-      return res.data
+      );
+      setNoteContent(res.data.content);
+      return res.data;
     },
     onSuccess: (updatedNote) => {
       queryClient.setQueryData(
         ['notes', userId, updatedNote.folderId],
-        (oldNotes) =>
-          oldNotes.map((note) =>
-            note.id === updatedNote.id ? updatedNote : note
-          )
-      )
-      queryClient.setQueryData(['note', userId, updatedNote.id], updatedNote)
-      setSaving(false)
-      setSaved(true)
+        (oldNotes) => {
+          if (oldNotes) {
+            return oldNotes.map((note) =>
+              note.id === updatedNote.id ? updatedNote : note
+            );
+          }
+        }
+      );
+      queryClient.setQueryData(['note', userId, updatedNote.id], updatedNote);
+      setSaving(false);
+      setSaved(true);
     },
     onError: (err) => {
-      console.error('Failed to save changes', err)
-      setError('Failed to save changes')
+      console.error('Failed to save changes', err);
+      setError('Failed to save changes');
       if (err?.response?.data?.message === 'jwt expired') {
-        logUserOut()
+        logUserOut();
       }
-      setSaving(false)
-      setSaved(false)
+      setSaving(false);
+      setSaved(false);
     },
-  })
+  });
 
   // Saves note to db
   const saveNote = async () => {
     try {
-      setError('')
-      const noteId = note?.id
+      setError('');
+      const noteId = note?.id;
       if (noteId) {
-        updateNoteMutation.mutate({ noteId, markdown })
+        updateNoteMutation.mutate({ noteId, markdown });
       }
     } catch (err) {
-      setError('Failed to save changes')
-      console.error('Failed to save changes', err)
-      setSaved(false)
+      setError('Failed to save changes');
+      console.error('Failed to save changes', err);
+      setSaved(false);
     }
-    setSaving(false)
-  }
+    setSaving(false);
+  };
 
   return (
     <Pressable
@@ -84,8 +87,8 @@ const SaveButton = ({ note, markdown, setError, setSaved, setNoteContent }) => {
         style={app.icon}
       />
     </Pressable>
-  )
-}
+  );
+};
 
 const styleSheet = (buttons) =>
   StyleSheet.create({
@@ -96,6 +99,6 @@ const styleSheet = (buttons) =>
       marginVertical: 0,
       marginHorizontal: 10,
     },
-  })
+  });
 
-export default SaveButton
+export default SaveButton;
