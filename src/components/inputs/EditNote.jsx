@@ -16,7 +16,9 @@ const EditNote = (props) => {
     <ScrollView style={{ marginBottom: 15 }}>
       <View style={{ flex: 1 }}>
         {markdown ? (
-          <Text style={styles.editor}>{markdown}</Text>
+          <Text style={styles.editor} selectable={true}>
+            {markdown}
+          </Text>
         ) : (
           <Text style={styles.placeholderText}>
             Double tap to add markdown...
