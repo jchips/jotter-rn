@@ -5,17 +5,17 @@ import {
   Text,
   Platform,
   TouchableOpacity,
-} from 'react-native'
-import FitImage from 'react-native-fit-image'
-import Markdown from 'react-native-markdown-display'
-import { extractText } from '../util/extract'
-import { useTheme } from '../contexts/ThemeContext'
-import { noteView, useAppStyles } from '../styles'
+} from 'react-native';
+import FitImage from 'react-native-fit-image';
+import Markdown from 'react-native-markdown-display';
+import { extractText } from '../util/extract';
+import { useTheme } from '../contexts/ThemeContext';
+import { noteView, useAppStyles } from '../styles';
 
 const Preview = ({ markdown }) => {
-  const { COLORS } = useTheme()
-  const { MARKDOWN } = useAppStyles()
-  const styles = styleSheet(COLORS)
+  const { COLORS } = useTheme();
+  const { MARKDOWN } = useAppStyles();
+  const styles = styleSheet(COLORS);
   /**
    * Flattens all the styles into one array
    * Filters out all undefined or null values
@@ -23,35 +23,35 @@ const Preview = ({ markdown }) => {
    * @returns {Object[]} - All the styling with null/undefined values removed
    */
   const combineStyles = (allStyles) => {
-    return allStyles.flat().filter(Boolean)
-  }
+    return allStyles.flat().filter(Boolean);
+  };
 
   // Rules for list items (bullets, numbers, checkboxes)
   const rules = {
     list_item: (node, children, parent, style) => {
-      const content = extractText(node).trim()
-      const allStyles = []
+      const content = extractText(node).trim();
+      const allStyles = [];
 
       // Match checkboxes: - [ ] or - [x]
-      const checkboxMatch = content.match(/^\[( |x)\]\s*/i)
+      const checkboxMatch = content.match(/^\[( |x)\]\s*/i);
       if (checkboxMatch) {
-        const isChecked = checkboxMatch[1].toLowerCase() === 'x'
+        const isChecked = checkboxMatch[1].toLowerCase() === 'x';
 
         // Get styling for checkbox label
         children.forEach((child) => {
           if (child?.props?.children && Array.isArray(child?.props?.children)) {
             child.props.children.forEach((nestedChild) => {
               if (nestedChild?.props?.style) {
-                allStyles.push(nestedChild.props.style)
+                allStyles.push(nestedChild.props.style);
               }
-            })
+            });
           }
           if (child?.props?.style) {
-            allStyles.push(child.props.style)
+            allStyles.push(child.props.style);
           }
-        })
-        const finalStyles = combineStyles(allStyles)
-        const filteredChildren = content.replace(/^\[( |x)\]\s*/, '') // Removes checbox
+        });
+        const finalStyles = combineStyles(allStyles);
+        const filteredChildren = content.replace(/^\[( |x)\]\s*/, ''); // Removes checbox
         return (
           <TouchableOpacity
             key={node.key}
@@ -60,9 +60,11 @@ const Preview = ({ markdown }) => {
             <View
               style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
-            <Text style={finalStyles}>{filteredChildren}</Text>
+            <Text style={finalStyles} selectable={true}>
+              {filteredChildren}
+            </Text>
           </TouchableOpacity>
-        )
+        );
       }
 
       // Nested bullets
@@ -72,32 +74,34 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.innerBullet}>{'\u25E6'}</Text>
+            <Text style={styles.innerBullet} selectable={true}>
+              {'\u25E6'}
+            </Text>
             <View>{children}</View>
           </View>
-        )
+        );
       }
 
       // Numbered lists
       if (parent[0] && parent[0]?.sourceType === 'ordered_list') {
-        let listItemNumber
+        let listItemNumber;
         if (parent[0]?.attributes && parent[0]?.attributes.start) {
-          listItemNumber = parent[0].attributes.start + node.index
+          listItemNumber = parent[0].attributes.start + node.index;
         } else {
-          listItemNumber = node.index + 1
+          listItemNumber = node.index + 1;
         }
         return (
           <View
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.bullet}>
+            <Text style={styles.bullet} selectable={true}>
               {listItemNumber}
               {node.markup}
             </Text>
             <View>{children}</View>
           </View>
-        )
+        );
       }
 
       // Fallback for regular bullet list items (without checkboxes and not nested)
@@ -106,7 +110,7 @@ const Preview = ({ markdown }) => {
           key={node.key}
           style={[noteView.listItemContainer, style.list_item]}
         >
-          <Text style={styles.bullet}>
+          <Text style={styles.bullet} selectable={true}>
             {Platform.select({
               android: '\u2022',
               ios: '\u00B7',
@@ -115,7 +119,7 @@ const Preview = ({ markdown }) => {
           </Text>
           <View>{children}</View>
         </View>
-      )
+      );
     },
     // Image rules (to turn indicator off)
     image: (
@@ -124,18 +128,18 @@ const Preview = ({ markdown }) => {
       parent,
       styles,
       allowedImageHandlers,
-      defaultImageHandler
+      defaultImageHandler,
     ) => {
-      const { src, alt } = node.attributes
+      const { src, alt } = node.attributes;
 
       // check that the source starts with at least one of the elements in allowedImageHandlers
       const show =
         allowedImageHandlers.filter((value) => {
-          return src.toLowerCase().startsWith(value.toLowerCase())
-        }).length > 0
+          return src.toLowerCase().startsWith(value.toLowerCase());
+        }).length > 0;
 
       if (show === false && defaultImageHandler === null) {
-        return null
+        return null;
       }
 
       const imageProps = {
@@ -144,16 +148,16 @@ const Preview = ({ markdown }) => {
         source: {
           uri: show === true ? src : `${defaultImageHandler}${src}`,
         },
-      }
+      };
 
       if (alt) {
-        imageProps.accessible = true
-        imageProps.accessibilityLabel = alt
+        imageProps.accessible = true;
+        imageProps.accessibilityLabel = alt;
       }
 
-      return <FitImage key={node.key} {...imageProps} />
+      return <FitImage key={node.key} {...imageProps} />;
     },
-  }
+  };
 
   return (
     <ScrollView
@@ -165,8 +169,8 @@ const Preview = ({ markdown }) => {
         {markdown}
       </Markdown>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styleSheet = (COLORS) =>
   StyleSheet.create({
@@ -192,6 +196,6 @@ const styleSheet = (COLORS) =>
       ...noteView.checkedCheckbox,
       backgroundColor: COLORS.text,
     },
-  })
+  });
 
-export default Preview
+export default Preview;
