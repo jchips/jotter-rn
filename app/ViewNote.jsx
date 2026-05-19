@@ -23,7 +23,7 @@ const ViewNote = ({ navigation, route }) => {
   const { markdown, setMarkdown } = useMarkdown();
   const { app } = useAppStyles();
   const { COLORS } = useTheme();
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const { width: screenWidth } = useWindowDimensions();
   const styles = styleSheet(app);
   const doubleTap = Gesture.Tap()
@@ -46,7 +46,14 @@ const ViewNote = ({ navigation, route }) => {
 
   const { data: note, isLoading } = useQuery({
     queryKey: ['note', user?.id, noteId],
-    queryFn: () => api.getNote(noteId).then((res) => res.data),
+    enabled: isLoggedIn && !!user?.id,
+    queryFn: () =>
+      api
+        .getNote(noteId)
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err;
+        }),
     initialData: () => {
       return queryClient.getQueryData(['note', user?.id, noteId]);
     },

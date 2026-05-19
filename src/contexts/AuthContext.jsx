@@ -1,15 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { QueryClient } from '@tanstack/react-query'
-import Constants from 'expo-constants'
-import { Buffer } from 'buffer'
-import { setConfigs } from '../reducers/configReducer'
-import { storeCurrUser, removeCurrUser } from '../util/persist'
-import axios from 'axios'
-import api from '../util/api'
+import React, { useState, useContext, useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { QueryClient } from '@tanstack/react-query';
+import Constants from 'expo-constants';
+import { Buffer } from 'buffer';
+import { setConfigs } from '../reducers/configReducer';
+import { storeCurrUser, removeCurrUser } from '../util/persist';
+import axios from 'axios';
+import api from '../util/api';
+import { jwtDecode } from 'jwt-decode';
 
-const API_URL = Constants.expoConfig?.extra?.API_URL
-const AuthContext = React.createContext()
+const API_URL = Constants.expoConfig?.extra?.API_URL;
+const AuthContext = React.createContext();
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,22 +19,38 @@ export const queryClient = new QueryClient({
       cacheTime: 4 * 60 * 60 * 1000, // 4 hrs
     },
   },
-})
+});
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [token, setToken] = useState(null)
-  const dispatch = useDispatch()
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
+  const dispatch = useDispatch();
 
   // Set up bearer auth for user
   useEffect(() => {
-    api.setTokenGetter(() => token)
-  }, [token, user])
+    api.setTokenGetter(() => token);
+    if (token && isTokenExpired(token)) {
+      logout(true);
+    }
+  }, [token, user]);
+
+  // check if token is expired
+  const isTokenExpired = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+
+      if (!decoded.exp) return true;
+
+      return decoded.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  };
 
   /**
    * Logs user in
@@ -46,46 +63,48 @@ export function AuthProvider({ children }) {
    */
   const login = async (email, password) => {
     const encodedLogin = Buffer.from(`${email}:${password}`, 'utf-8').toString(
-      'base64'
-    )
-    let res
+      'base64',
+    );
+    let res;
     try {
-      queryClient.clear()
-      axios.defaults.headers.common['Authorization'] = `Basic ${encodedLogin}`
-      axios.defaults.headers.common['Content-Type'] = 'application/json'
-      let requestUrl = `${API_URL}/jotter/login`
-      res = await axios.post(requestUrl, { withCredentials: true })
-      setUser(res.data.user)
-      setToken(res.data.token)
-      storeCurrUser(res.data.user)
-      setIsLoggedIn(true)
-      api.setTokenGetter(() => res.data.token)
-      let uConfigs = await api.getConfigs()
-      dispatch(setConfigs(uConfigs.data))
+      queryClient.clear();
+      axios.defaults.headers.common['Authorization'] = `Basic ${encodedLogin}`;
+      axios.defaults.headers.common['Content-Type'] = 'application/json';
+      let requestUrl = `${API_URL}/jotter/login`;
+      res = await axios.post(requestUrl, { withCredentials: true });
+      setUser(res.data.user);
+      setToken(res.data.token);
+      storeCurrUser(res.data.user);
+      setIsLoggedIn(true);
+      api.setTokenGetter(() => res.data.token);
+      let uConfigs = await api.getConfigs();
+      dispatch(setConfigs(uConfigs.data));
     } catch (err) {
-      console.error(err)
-      res = err
+      console.error(err);
+      res = err;
     }
-    return res
-  }
+    return res;
+  };
 
   // Logs user out
   // Clears cookie
   // Clears token from local storage
-  const logout = async () => {
+  const logout = useCallback(async (skipServer = false) => {
     try {
-      queryClient.clear()
-      let requestUrl = `${API_URL}/jotter/logout`
-      await axios.post(requestUrl, {}, { withCredentials: true })
-      setUser(null)
-      setIsLoggedIn(false)
-      setToken(null)
-      removeCurrUser()
-      delete axios.defaults.headers.common['Authorization']
+      queryClient.clear();
+      setIsLoggedIn(false);
+      if (!skipServer) {
+        let requestUrl = `${API_URL}/jotter/logout`;
+        await axios.post(requestUrl, {}, { withCredentials: true });
+      }
+      setUser(null);
+      setToken(null);
+      removeCurrUser();
+      delete axios.defaults.headers.common['Authorization'];
     } catch (err) {
-      console.error('Failed to log user out:', err)
+      console.error('Failed to log user out:', err);
     }
-  }
+  }, []);
 
   const value = {
     user,
@@ -96,7 +115,7 @@ export function AuthProvider({ children }) {
     setIsLoggedIn,
     login,
     logout,
-  }
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

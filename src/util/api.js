@@ -21,7 +21,7 @@ const setTokenGetter = (tokenGetter) => {
   getToken = tokenGetter;
 };
 
-// Axios interceptor
+// Axios interceptor for gathering jwt
 api.interceptors.request.use(
   (apiConfig) => {
     const token = getToken();

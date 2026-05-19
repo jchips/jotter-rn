@@ -40,7 +40,7 @@ const Dashboard = ({ route }) => {
   const [openAddTitle, setOpenAddTitle] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const { COLORS, theme } = useTheme();
-  const { token, logout, user } = useAuth();
+  const { token, logout, user, isLoggedIn } = useAuth();
   const { setMarkdown } = useMarkdown();
   const navigation = useNavigation();
   const configSettings = useSelector((state) => state.configs.data);
@@ -78,7 +78,7 @@ const Dashboard = ({ route }) => {
             configSettings,
           }),
       });
-    }, [navigation, route, configSettings, systemTheme, theme])
+    }, [navigation, route, configSettings, systemTheme, theme]),
   );
 
   // Fetch and cache folders
@@ -89,9 +89,15 @@ const Dashboard = ({ route }) => {
     refetch: refetchFolders,
   } = useQuery({
     queryKey: ['folders', userId, folder_id],
+    enabled: isLoggedIn && !!userId,
     queryFn: async () => {
-      const res = await api.getFolders(folder_id);
-      return res.data;
+      try {
+        const res = await api.getFolders(folder_id);
+        return res.data;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     },
     select: (foldersRes) => {
       const sortedFolders = sortFolders(configSettings?.sort, foldersRes);
@@ -100,10 +106,11 @@ const Dashboard = ({ route }) => {
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
-        logUserOut();
+        logout();
       } else {
         setError('Could not fetch folders', err);
       }
+      throw err;
     },
   });
 
@@ -115,14 +122,20 @@ const Dashboard = ({ route }) => {
     refetch: refetchNotes,
   } = useQuery({
     queryKey: ['notes', userId, folder_id],
+    enabled: isLoggedIn && !!userId,
     queryFn: async () => {
-      let res;
-      if (folder_id) {
-        res = await api.getNotes(folder_id);
-      } else {
-        res = await api.getRootNotes();
+      try {
+        let res;
+        if (folder_id) {
+          res = await api.getNotes(folder_id);
+        } else {
+          res = await api.getRootNotes();
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+        throw err;
       }
-      return res.data;
     },
     select: (notesRes) => {
       const sortedNotes = sortNotes(configSettings?.sort, notesRes);
@@ -131,7 +144,7 @@ const Dashboard = ({ route }) => {
     staleTime: 2 * 60 * 1000, // 2 min
     onError: (err) => {
       if (err?.response?.data?.message === 'jwt expired') {
-        logUserOut();
+        logout();
       } else {
         setError('Could not fetch notes', err);
       }
@@ -164,9 +177,9 @@ const Dashboard = ({ route }) => {
   };
 
   // Logs the user out
-  const logUserOut = () => {
-    logout();
-  };
+  // const logUserOut = () => {
+  //   logout();
+  // };
 
   // Loading circle
   if (isLoading || loading) {
