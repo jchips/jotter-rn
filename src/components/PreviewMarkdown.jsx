@@ -26,7 +26,7 @@ const Preview = ({ markdown }) => {
     return allStyles.flat().filter(Boolean);
   };
 
-  // Rules for list items (bullets, numbers, checkboxes)
+  // Rules for list items (checkboxes, bullets, numbers)
   const rules = {
     list_item: (node, children, parent, style) => {
       const content = extractText(node).trim();
@@ -53,17 +53,17 @@ const Preview = ({ markdown }) => {
         const finalStyles = combineStyles(allStyles);
         const filteredChildren = content.replace(/^\[( |x)\]\s*/, ''); // Removes checbox
         return (
-          <TouchableOpacity
+          <View
             key={node.key}
             style={[noteView.checkboxContainer, style.list_item]}
           >
             <View
               style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
-            <Text style={finalStyles} selectable={true}>
+            <Text style={finalStyles} selectable>
               {filteredChildren}
             </Text>
-          </TouchableOpacity>
+          </View>
         );
       }
 
@@ -74,7 +74,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.innerBullet} selectable={true}>
+            <Text style={styles.innerBullet} selectable>
               {'\u25E6'}
             </Text>
             <View>{children}</View>
@@ -95,7 +95,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.bullet} selectable={true}>
+            <Text style={styles.bullet} selectable>
               {listItemNumber}
               {node.markup}
             </Text>
@@ -110,7 +110,7 @@ const Preview = ({ markdown }) => {
           key={node.key}
           style={[noteView.listItemContainer, style.list_item]}
         >
-          <Text style={styles.bullet} selectable={true}>
+          <Text style={styles.bullet} selectable>
             {Platform.select({
               android: '\u2022',
               ios: '\u00B7',
@@ -157,13 +157,61 @@ const Preview = ({ markdown }) => {
 
       return <FitImage key={node.key} {...imageProps} />;
     },
+
+    textgroup: (node, children, parent, styles) => {
+      return (
+        <Text key={node.key} style={styles.textgroup} selectable>
+          {children}
+        </Text>
+      );
+    },
+
+    code_block: (node, children, parent, styles, inheritedStyles = {}) => {
+      // we trim new lines off the end of code blocks because the parser sends an extra one.
+      let { content } = node;
+
+      if (
+        typeof node.content === 'string' &&
+        node.content.charAt(node.content.length - 1) === '\n'
+      ) {
+        content = node.content.substring(0, node.content.length - 1);
+      }
+
+      return (
+        <Text
+          key={node.key}
+          style={[inheritedStyles, styles.code_block]}
+          selectable
+        >
+          {content}
+        </Text>
+      );
+    },
+
+    fence: (node, children, parent, styles, inheritedStyles = {}) => {
+      // we trim new lines off the end of code blocks because the parser sends an extra one.
+      let { content } = node;
+
+      if (
+        typeof node.content === 'string' &&
+        node.content.charAt(node.content.length - 1) === '\n'
+      ) {
+        content = node.content.substring(0, node.content.length - 1);
+      }
+
+      return (
+        <Text key={node.key} style={[inheritedStyles, styles.fence]} selectable>
+          {content}
+        </Text>
+      );
+    },
   };
 
   return (
     <ScrollView
       style={noteView.previewContainer}
       contentContainerStyle={{ paddingBottom: 20 }}
-      keyboardShouldPersistTaps='handled'
+      keyboardShouldPersistTaps='always' // handled
     >
       <Markdown style={{ ...MARKDOWN, ...styles.markdown }} rules={rules}>
         {markdown}
