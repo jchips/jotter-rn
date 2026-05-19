@@ -56,13 +56,12 @@ const Preview = ({ markdown }) => {
           <View
             key={node.key}
             style={[noteView.checkboxContainer, style.list_item]}
+            collapsable={false}
           >
             <View
               style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
-            <Text style={finalStyles} selectable>
-              {filteredChildren}
-            </Text>
+            <Text style={finalStyles}>{filteredChildren}</Text>
           </View>
         );
       }
@@ -74,10 +73,8 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.innerBullet} selectable>
-              {'\u25E6'}
-            </Text>
-            <View>{children}</View>
+            <Text style={styles.innerBullet}>{'\u25E6'}</Text>
+            <View collapsable={false}>{children}</View>
           </View>
         );
       }
@@ -95,11 +92,11 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.bullet} selectable>
+            <Text style={styles.bullet}>
               {listItemNumber}
               {node.markup}
             </Text>
-            <View>{children}</View>
+            <View collapsable={false}>{children}</View>
           </View>
         );
       }
@@ -110,14 +107,14 @@ const Preview = ({ markdown }) => {
           key={node.key}
           style={[noteView.listItemContainer, style.list_item]}
         >
-          <Text style={styles.bullet} selectable>
+          <Text style={styles.bullet}>
             {Platform.select({
               android: '\u2022',
               ios: '\u00B7',
               default: '\u2022',
             })}
           </Text>
-          <View>{children}</View>
+          <View collapsable={false}>{children}</View>
         </View>
       );
     },
@@ -167,7 +164,6 @@ const Preview = ({ markdown }) => {
     },
 
     code_block: (node, children, parent, styles, inheritedStyles = {}) => {
-      // we trim new lines off the end of code blocks because the parser sends an extra one.
       let { content } = node;
 
       if (
@@ -189,7 +185,6 @@ const Preview = ({ markdown }) => {
     },
 
     fence: (node, children, parent, styles, inheritedStyles = {}) => {
-      // we trim new lines off the end of code blocks because the parser sends an extra one.
       let { content } = node;
 
       if (
