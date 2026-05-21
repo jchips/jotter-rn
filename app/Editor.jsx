@@ -17,11 +17,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMarkdown } from '../src/contexts/MDContext';
@@ -71,7 +67,7 @@ const Editor = ({ navigation, route }) => {
         const isSaved = currentMarkdown === savedNote;
         setSaved(isSaved);
       }, 100),
-    []
+    [],
   );
 
   useLayoutEffect(() => {
@@ -87,10 +83,10 @@ const Editor = ({ navigation, route }) => {
 
   useEffect(() => {
     const showOffset = Keyboard.addListener('keyboardDidShow', () =>
-      setKeyboardOffset(105)
+      setKeyboardOffset(105),
     );
     const hideOffset = Keyboard.addListener('keyboardDidHide', () =>
-      setKeyboardOffset(0)
+      setKeyboardOffset(0),
     );
 
     return () => {
@@ -115,7 +111,7 @@ const Editor = ({ navigation, route }) => {
       };
 
       fetchNote();
-    }, [note.id, markdown])
+    }, [note.id, markdown]),
   );
 
   useEffect(() => {
@@ -286,7 +282,7 @@ const Editor = ({ navigation, route }) => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior='height'
         style={{ flex: 1 }}
@@ -327,7 +323,7 @@ const Editor = ({ navigation, route }) => {
           />
         </View>
       </KeyboardAvoidingView>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

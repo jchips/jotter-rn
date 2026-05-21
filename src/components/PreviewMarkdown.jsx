@@ -26,7 +26,7 @@ const Preview = ({ markdown }) => {
     return allStyles.flat().filter(Boolean);
   };
 
-  // Rules for list items (bullets, numbers, checkboxes)
+  // Rules for list items (checkboxes, bullets, numbers)
   const rules = {
     list_item: (node, children, parent, style) => {
       const content = extractText(node).trim();
@@ -53,17 +53,15 @@ const Preview = ({ markdown }) => {
         const finalStyles = combineStyles(allStyles);
         const filteredChildren = content.replace(/^\[( |x)\]\s*/, ''); // Removes checbox
         return (
-          <TouchableOpacity
+          <View
             key={node.key}
             style={[noteView.checkboxContainer, style.list_item]}
           >
             <View
               style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
             />
-            <Text style={finalStyles} selectable={true}>
-              {filteredChildren}
-            </Text>
-          </TouchableOpacity>
+            <Text style={finalStyles}>{filteredChildren}</Text>
+          </View>
         );
       }
 
@@ -74,9 +72,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.innerBullet} selectable={true}>
-              {'\u25E6'}
-            </Text>
+            <Text style={styles.innerBullet}>{'\u25E6'}</Text>
             <View>{children}</View>
           </View>
         );
@@ -95,7 +91,7 @@ const Preview = ({ markdown }) => {
             key={node.key}
             style={[noteView.listItemContainer, style.list_item]}
           >
-            <Text style={styles.bullet} selectable={true}>
+            <Text style={styles.bullet}>
               {listItemNumber}
               {node.markup}
             </Text>
@@ -110,7 +106,7 @@ const Preview = ({ markdown }) => {
           key={node.key}
           style={[noteView.listItemContainer, style.list_item]}
         >
-          <Text style={styles.bullet} selectable={true}>
+          <Text style={styles.bullet}>
             {Platform.select({
               android: '\u2022',
               ios: '\u00B7',

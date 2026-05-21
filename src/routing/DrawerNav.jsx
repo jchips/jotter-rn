@@ -57,7 +57,7 @@ function DrawerNav({ navigation }) {
             });
             return acc;
           },
-          Promise.resolve([])
+          Promise.resolve([]),
         );
         setBreadcrumbPath(pathWithTitles);
       };
@@ -66,9 +66,9 @@ function DrawerNav({ navigation }) {
   }, [folder?.id]);
 
   // log user out
-  const logUserOut = () => {
-    logout();
-  };
+  // const logUserOut = () => {
+  //   logout();
+  // };
 
   // Custom drawer content (app icon, routes, recents, current, log out)
   const DrawerContent = (props) => {
@@ -199,7 +199,7 @@ function DrawerNav({ navigation }) {
             : null}
 
           {/* Log out button */}
-          <Pressable style={buttons.outlineBtn1} onPress={logUserOut}>
+          <Pressable style={buttons.outlineBtn1} onPress={logout}>
             <Text style={buttons.btnText3}>Log out</Text>
           </Pressable>
         </DrawerContentScrollView>

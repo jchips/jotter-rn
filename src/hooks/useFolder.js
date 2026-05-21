@@ -1,6 +1,7 @@
 /* Folding level 3 (VS Code, cmd/ctrl + k + 3) */
 import { useEffect, useReducer } from 'react';
 import api from '../util/api';
+import { useAuth } from "../contexts/AuthContext";
 
 const ACTIONS = {
   SELECT_FOLDER: 'select-folder',
@@ -48,9 +49,11 @@ export function useFolder(folderId = null, folder = null) {
     childFolders: [],
     childNotes: []
   });
+  const { isLoggedIn, logout } = useAuth();
 
   // resets folder for breadcrumb
   useEffect(() => {
+    if (!isLoggedIn) return;
     dispatch({
       type: ACTIONS.SELECT_FOLDER,
       payload: { folderId, folder }
@@ -59,6 +62,7 @@ export function useFolder(folderId = null, folder = null) {
 
   // updates folder with it's data from database
   useEffect(() => {
+    if (!isLoggedIn) return;
     if (folderId === 'null' || folderId === null) { // in the root folder
       return dispatch({
         type: ACTIONS.UPDATE_FOLDER,
@@ -88,6 +92,7 @@ export function useFolder(folderId = null, folder = null) {
 
   // set child folders
   useEffect(() => {
+    if (!isLoggedIn) return;
     const getChildFolders = async () => {
       try {
         let childFolders = await api.getFolders(folderId);
@@ -98,6 +103,12 @@ export function useFolder(folderId = null, folder = null) {
         });
       } catch (err) {
         console.error(err);
+        if (
+          err?.response?.status === 401 ||
+          err?.response?.data?.message === 'jwt expired'
+        ) {
+          logout(true);
+        }
       }
     }
     getChildFolders();
@@ -105,6 +116,7 @@ export function useFolder(folderId = null, folder = null) {
 
   // set child notes
   useEffect(() => {
+    if (!isLoggedIn) return;
     const getChildNotes = async () => {
       try {
         let childNotes = await api.getNotes(folderId);
@@ -115,6 +127,12 @@ export function useFolder(folderId = null, folder = null) {
         });
       } catch (err) {
         console.error(err);
+        if (
+          err?.response?.status === 401 ||
+          err?.response?.data?.message === 'jwt expired'
+        ) {
+          logout(true);
+        }
       }
     }
     getChildNotes();

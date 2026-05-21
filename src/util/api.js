@@ -12,6 +12,7 @@ const api = axios.create({
 });
 
 let getToken;
+let logoutHandler = null;
 
 /**
  * Sets the Bearer auth token to the current user's token.
@@ -21,7 +22,15 @@ const setTokenGetter = (tokenGetter) => {
   getToken = tokenGetter;
 };
 
-// Axios interceptor
+/**
+ * Fetches logout() from useAuth hook
+ * @param {Function} handler - Returns the logout function.
+ */
+const setLogoutHandler = (handler) => {
+  logoutHandler = handler;
+}
+
+// api (axios) interceptor for fetching jwt
 api.interceptors.request.use(
   (apiConfig) => {
     const token = getToken();
@@ -33,8 +42,23 @@ api.interceptors.request.use(
   }
 );
 
+// api (axios) interceptor for auto logout on errors
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const status = error?.response?.status;
+
+    if (status === 401 && logoutHandler) {
+      await logoutHandler();
+    }
+
+    return Promise.reject(error)
+  }
+)
+
 const apiService = {
   setTokenGetter,
+  setLogoutHandler,
   authenticate: () => api.get('/', { withCredentials: true }),
   getNote: (noteId) => api.get(`/note/${noteId}`),
   getRootNotes: () => api.get('/note'),
