@@ -7,6 +7,7 @@ const COMMON_COLORS = {
   mutedPurple: '#1c27ff',
   mutedBlack: '#2e2e33',
   danger: '#dc3545',
+  savedIndicatorRed: '#FF0000', // '#ef4444',
   disabled: '#000abc',
   white: '#ffffff',
   offWhite: '#e4e4e7',
