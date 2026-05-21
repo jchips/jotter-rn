@@ -56,7 +56,6 @@ const Preview = ({ markdown }) => {
           <View
             key={node.key}
             style={[noteView.checkboxContainer, style.list_item]}
-            collapsable={false}
           >
             <View
               style={[styles.checkbox, isChecked && styles.checkedCheckbox]}
@@ -74,7 +73,7 @@ const Preview = ({ markdown }) => {
             style={[noteView.listItemContainer, style.list_item]}
           >
             <Text style={styles.innerBullet}>{'\u25E6'}</Text>
-            <View collapsable={false}>{children}</View>
+            <View>{children}</View>
           </View>
         );
       }
@@ -96,7 +95,7 @@ const Preview = ({ markdown }) => {
               {listItemNumber}
               {node.markup}
             </Text>
-            <View collapsable={false}>{children}</View>
+            <View>{children}</View>
           </View>
         );
       }
@@ -114,7 +113,7 @@ const Preview = ({ markdown }) => {
               default: '\u2022',
             })}
           </Text>
-          <View collapsable={false}>{children}</View>
+          <View>{children}</View>
         </View>
       );
     },
@@ -154,59 +153,13 @@ const Preview = ({ markdown }) => {
 
       return <FitImage key={node.key} {...imageProps} />;
     },
-
-    textgroup: (node, children, parent, styles) => {
-      return (
-        <Text key={node.key} style={styles.textgroup} selectable>
-          {children}
-        </Text>
-      );
-    },
-
-    code_block: (node, children, parent, styles, inheritedStyles = {}) => {
-      let { content } = node;
-
-      if (
-        typeof node.content === 'string' &&
-        node.content.charAt(node.content.length - 1) === '\n'
-      ) {
-        content = node.content.substring(0, node.content.length - 1);
-      }
-
-      return (
-        <Text
-          key={node.key}
-          style={[inheritedStyles, styles.code_block]}
-          selectable
-        >
-          {content}
-        </Text>
-      );
-    },
-
-    fence: (node, children, parent, styles, inheritedStyles = {}) => {
-      let { content } = node;
-
-      if (
-        typeof node.content === 'string' &&
-        node.content.charAt(node.content.length - 1) === '\n'
-      ) {
-        content = node.content.substring(0, node.content.length - 1);
-      }
-
-      return (
-        <Text key={node.key} style={[inheritedStyles, styles.fence]} selectable>
-          {content}
-        </Text>
-      );
-    },
   };
 
   return (
     <ScrollView
       style={noteView.previewContainer}
       contentContainerStyle={{ paddingBottom: 20 }}
-      keyboardShouldPersistTaps='always' // handled
+      keyboardShouldPersistTaps='handled'
     >
       <Markdown style={{ ...MARKDOWN, ...styles.markdown }} rules={rules}>
         {markdown}

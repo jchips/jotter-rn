@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
 import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useQuery } from '@tanstack/react-query';
 import { runOnJS } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
@@ -82,22 +84,22 @@ const ViewNote = ({ navigation, route }) => {
   );
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       {note ? (
-        <GestureDetector gesture={doubleTap}>
-          <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <GestureDetector gesture={doubleTap}>
             <Preview note={note} markdown={markdown} />
-            <EditButton
-              navigation={navigation}
-              note={note}
-              editBtnVisible={editBtnVisible}
-            />
-          </View>
-        </GestureDetector>
+          </GestureDetector>
+          <EditButton
+            navigation={navigation}
+            note={note}
+            editBtnVisible={editBtnVisible}
+          />
+        </View>
       ) : (
         <Loading />
       )}
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

@@ -39,6 +39,11 @@ export function AuthProvider({ children }) {
     }
   }, [token, user]);
 
+  // Set up logout handler for api interceptor
+  useEffect(() => {
+    api.setLogoutHandler(logout);
+  }, [logout]);
+
   // check if token is expired
   const isTokenExpired = (token) => {
     try {

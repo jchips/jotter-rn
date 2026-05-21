@@ -6,7 +6,6 @@
     "orientation": "default",
     "icon": "./assets/imgs/jotter-circle2.png",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },

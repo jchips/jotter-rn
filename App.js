@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Platform } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // used for recent notes
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider, queryClient } from './src/contexts/AuthContext';
@@ -54,21 +55,23 @@ export default function App() {
   }
 
   return (fontsLoaded && persistLoaded) && (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-        <ThemeProvider>
-          <ReduxProvider store={store}>
-            <AuthProvider>
-              <QueryClientProvider client={queryClient}>
-                <MarkdownProvider>
-                  <Router />
-                </MarkdownProvider>
-              </QueryClientProvider>
-            </AuthProvider>
-          </ReduxProvider>
-        </ThemeProvider>
-      </SafeAreaView>
-    </ SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+          <ThemeProvider>
+            <ReduxProvider store={store}>
+              <AuthProvider>
+                <QueryClientProvider client={queryClient}>
+                  <MarkdownProvider>
+                    <Router />
+                  </MarkdownProvider>
+                </QueryClientProvider>
+              </AuthProvider>
+            </ReduxProvider>
+          </ThemeProvider>
+        </SafeAreaView>
+      </ SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
