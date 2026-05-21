@@ -6,14 +6,9 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-// import { useSelector } from 'react-redux'
 
-const NotSavedDot = ({ showDot, COLORS, configs }) => {
+const NotSavedIndicator = ({ showDot, COLORS, configs }) => {
   const scale = useSharedValue(1);
-  // const configs = useSelector((state) => state.configs.data)
-  // const [savedIndicatorColor, setSavedIndicatorColor] = useState(
-  //   configs?.savedIndicatorColor,
-  // );
 
   useEffect(() => {
     if (showDot) {
@@ -54,4 +49,4 @@ const NotSavedDot = ({ showDot, COLORS, configs }) => {
   );
 };
 
-export default NotSavedDot;
+export default NotSavedIndicator;

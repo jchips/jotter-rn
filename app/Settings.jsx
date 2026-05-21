@@ -46,7 +46,7 @@ const Settings = ({ navigation }) => {
 
   // Saved indicator color dropdown button default text
   const dropdownSavedIndicatorColor = () => {
-    return <Text>Select indicator color</Text>;
+    return <Text>Set indicator color (default: theme purple)</Text>;
   };
 
   // Clear recents notes (from drawer)
@@ -164,7 +164,6 @@ const Settings = ({ navigation }) => {
           <Text style={styles.savedIndicatorColorText}>
             Saved indicator color
           </Text>
-          {/* <Text style={{ color: COLORS.text }}>Saved indicator color</Text> */}
           <SelectDropdown
             data={savedIndicatorColors}
             onSelect={(selection, index) => {

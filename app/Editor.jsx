@@ -24,7 +24,7 @@ import { useMarkdown } from '../src/contexts/MDContext';
 import { useTheme } from '../src/contexts/ThemeContext';
 import Preview from '../src/components/PreviewMarkdown';
 import EditNote from '../src/components/inputs/EditNote';
-import NotSavedDot from '../src/components/indicators/NotSavedDot';
+import NotSavedIndicator from '../src/components/indicators/NotSavedIndicator';
 import SaveButton from '../src/components/buttons/SaveButton';
 import TogglePreview from '../src/components/buttons/TogglePreview';
 import getWordCount from '../src/util/getWordCount';
@@ -121,7 +121,11 @@ const Editor = ({ navigation, route }) => {
         return (
           <>
             {!saved ? (
-              <NotSavedDot showDot={!saved} COLORS={COLORS} configs={configs} />
+              <NotSavedIndicator
+                showDot={!saved}
+                COLORS={COLORS}
+                configs={configs}
+              />
             ) : null}
             {!configs?.hideWordCount ? (
               <Text style={styles.words}>{words} words</Text>
