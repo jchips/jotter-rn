@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-const NotSavedDot = ({ showDot, COLORS, configs }) => {
+const NotSavedIndicator = ({ showDot, COLORS, configs }) => {
   const scale = useSharedValue(1);
 
   useEffect(() => {
@@ -15,10 +15,10 @@ const NotSavedDot = ({ showDot, COLORS, configs }) => {
       scale.value = withRepeat(
         withSequence(
           withTiming(1.4, { duration: 600 }),
-          withTiming(1, { duration: 600 })
+          withTiming(1, { duration: 600 }),
         ),
         -1,
-        true
+        true,
       );
     } else {
       scale.value = withTiming(0, { duration: 200 });
@@ -37,7 +37,10 @@ const NotSavedDot = ({ showDot, COLORS, configs }) => {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: COLORS.themePurple,
+          backgroundColor:
+            configs?.savedIndicatorColor === 'theme-purple'
+              ? COLORS.themePurple
+              : COLORS.savedIndicatorRed,
           marginHorizontal: !configs?.hideWordCount ? 0 : 10,
         },
         animatedStyle,
@@ -46,4 +49,4 @@ const NotSavedDot = ({ showDot, COLORS, configs }) => {
   );
 };
 
-export default NotSavedDot;
+export default NotSavedIndicator;
