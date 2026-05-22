@@ -10,7 +10,7 @@ import FitImage from 'react-native-fit-image';
 import Markdown from 'react-native-markdown-display';
 import { extractText } from '../util/extract';
 import { useTheme } from '../contexts/ThemeContext';
-import { noteView, useAppStyles } from '../styles';
+import { FONT, noteView, useAppStyles } from '../styles';
 
 const Preview = ({ markdown }) => {
   const { COLORS } = useTheme();
@@ -152,6 +152,50 @@ const Preview = ({ markdown }) => {
       }
 
       return <FitImage key={node.key} {...imageProps} />;
+    },
+
+    strong: (node, children, parent, styles) => {
+      const allStyles = [];
+      children.forEach((child) => {
+        if (child?.props?.children && Array.isArray(child?.props?.children)) {
+          child.props.children.forEach((nestedChild) => {
+            if (nestedChild?.props?.style) {
+              allStyles.push(nestedChild?.props?.style);
+            }
+          });
+        }
+      });
+      const finalStyles = combineStyles(allStyles);
+      if (finalStyles[0] && finalStyles[0]?.fontFamily) {
+        finalStyles[0]?.fontFamily = FONT.boldItalic;
+      }
+      return (
+        <Text key={node.key} style={finalStyles[0]}>
+          {children}
+        </Text>
+      );
+    },
+
+    em: (node, children, parent, styles) => {
+      const allStyles = [];
+      children.forEach((child) => {
+        if (child?.props?.children && Array.isArray(child?.props?.children)) {
+          child.props.children.forEach((nestedChild) => {
+            if (nestedChild?.props?.style) {
+              allStyles.push(nestedChild?.props?.style);
+            }
+          });
+        }
+      });
+      const finalStyles = combineStyles(allStyles);
+      if (finalStyles[0] && finalStyles[0]?.fontFamily) {
+        finalStyles[0]?.fontFamily = FONT.boldItalic;
+      }
+      return (
+        <Text key={node.key} style={finalStyles[0]}>
+          {children}
+        </Text>
+      );
     },
   };
 
