@@ -1,13 +1,39 @@
-const demoNote = `# Markdown Example
-Hello! Use this demo note to learn how to **format text** with Markdown in Jotter.
+const demoNote = `# How to use Jotter
+Hello! Jotter uses Markdown to create notes with text formatting.
 
-**Double tap** the screen to make the edit note button appear and press it to view how the formatting works. In the editor, you will see a **preview** of the rendered Markdown on the ***top (or right)*** half of the screen and the **text editor** where the formatting happens on the **bottom *(or left)*** half.
+> **Use this demo note to learn how to format text in Jotter**.
 
-Feel free to delete this note once you no longer need it.
+**Feel free to delete this note** once you no longer need it.
 
 Bookmarking [this Markdown guide](https://www.markdownguide.org/basic-syntax/) might also help if you are new to Markdown.
 
+Thank you for using Jotter.
+
 ---
+
+### For mobile users:
+**Double tap** anywhere on the screen to make the edit button appear and press it to view how Markdown text formatting works.
+
+In the editor, you will see a **preview** of the rendered note with Markdown on the ***top half*** of the screen and the **text editor** where the typing/formatting happens on the ***bottom half***. **Double tap (again)** on the text editor half to start typing.
+
+**You must press the save button in the editor *(bottom right corner)* to save any new text that you add to your notes**. Otherwise, your changes will not be saved and you will lose them upon exiting the note. If you prefer to not have the rendered text preview shown while you're editing the note, press the 'hide preview' button *(bottom left)* to toggle it on or off.
+
+*Additional note: Use your mobile device's built-in back button/gesture to navigate through your created folders on the dashboard.*
+
+### For web users:
+**Double click** on a note or folder to open it from the dashboard. Once the note is opened, the edit button should be on the **bottom right** of the screen. Press the edit button to enter the text editor and view how Markdown text formatting works.
+
+In the editor, you will see a **preview** of the rendered note with Markdown on the ***right half*** of the screen and the **text editor** where the typing/formatting happens on the ***left half***.
+
+**You must press the save button in the editor *(bottom right corner or ctrl/cmd-s key command)* to save any new text that you add to your notes**. Otherwise, your changes will not be saved and you will lose them upon exiting the note.
+
+*Additional note: If you ever save your note but your changes are not showing when you exit the editor then **refresh** the browser page *(ctrl/cmd-r key command)* and your changes should appear. This a known bug that is working to be fixed.*
+
+Web link: [https://jotter.jrotech.com](https://jotter.jrotech.com)
+
+---
+# Markdown Example:
+
 
 # Header 1
 ## Header 2

@@ -90,7 +90,7 @@ const SignupForm = () => {
 
       // add a markdown example (demo) note
       const mdDemoNote = {
-        title: 'markdown example',
+        title: 'jotter example note',
         content: demoNote,
         userId: newUser.id,
         folderId: null,
