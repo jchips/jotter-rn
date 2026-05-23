@@ -24,7 +24,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "f9fafb",
           "image": "./assets/imgs/jotter-circle2.png",
           "dark": {
             "backgroundColor": "#18181b",

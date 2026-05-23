@@ -9,10 +9,15 @@ import {
   Keyboard,
 } from 'react-native';
 import Constants from 'expo-constants';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
+import demoNote from '../../util/demoNote';
+import api from '../../util/api';
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
@@ -21,8 +26,10 @@ const SignupForm = () => {
   const [loading, setLoading] = useState(false);
   const { login, setIsLoggedIn } = useAuth();
   const { COLORS } = useTheme();
+  const navigation = useNavigation();
   const { app, buttons } = useAppStyles();
   const styles = styleSheet(app, COLORS, buttons);
+  const queryClient = useQueryClient();
   const fieldRequired = 'This field is required';
   const {
     control,
@@ -36,6 +43,15 @@ const SignupForm = () => {
       confirmPassword: '',
     },
   });
+
+  const createDemoNote = async (demoNote) => {
+    try {
+      await api.addNote(demoNote);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to create demo note');
+    }
+  };
 
   /**
    * Creates an account for new user
@@ -69,7 +85,20 @@ const SignupForm = () => {
       if (res.data.message) {
         return setError(res.data.message);
       }
-      await login(signupInfo.email, signupInfo.password); // log user in
+      const newUserRes = await login(signupInfo.email, signupInfo.password); // log user in
+      const newUser = newUserRes?.data?.user;
+
+      // add a markdown example (demo) note
+      const mdDemoNote = {
+        title: 'jotter example note',
+        content: demoNote,
+        userId: newUser.id,
+        folderId: null,
+      };
+      const newNote = await createDemoNote(mdDemoNote);
+      queryClient.invalidateQueries({
+        queryKey: ['notes', newUser?.id, null],
+      });
     } catch (err) {
       // error catching
       setIsLoggedIn(false);

@@ -9,7 +9,7 @@ const COMMON_COLORS = {
   danger: '#dc3545',
   savedIndicatorRed: '#FF0000', // '#ef4444',
   disabled: '#000abc',
-  white: '#ffffff',
+  white: '#f9fafb',
   offWhite: '#e4e4e7',
   black: '#09090B',
   darkTheme: '#18181b',
@@ -21,7 +21,7 @@ const NO_HASH = {
   textNH: '646cff',
   warningYellowNH: 'eed202',
   dangerNH: 'dc3545',
-  whiteNH: 'ffffff',
+  whiteNH: 'f9fafb',
   offWhiteNH: 'e4e4e7',
   blackNH: '09090B',
 }
