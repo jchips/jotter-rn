@@ -16,7 +16,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 2.0.0
+## Version: 1.4.0
 
 ## Architecture
 
@@ -52,17 +52,17 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Changelog
 
-- **2.0.0** (2026-05-23, 12:30am) - Added option to changed saved indicator color to red, added a 'jotter example' note to all users accounts when they first sign up, nested formatting is now available for notes (ex: bold _and_ italic text), offwhite app background instead of #fff.
+- **1.4.0** (2026-05-23, 12:30am) - Added option to changed saved indicator color to red, added a 'jotter example' note to all users accounts when they first sign up, nested formatting is now available for notes (ex: bold _and_ italic text), offwhite app background instead of #fff.
 - **1.3.10** (2026-05-18, 7:20pm) - Improved auth, auto log user out if their token is expired (10 days).
 - **1.3.9** (2025-12-19, 7:00pm) - New logo.
 - **1.3.8** (2025-12-15, 4:25pm) - Minor improvements.
 - **1.3.7** (2025-11-23, 1:30am) - Added recent notes feature in the drawer, improved navigation through folders.
-- **1.3.6** (2025-11-16, 11:55am) - Improved error handling, fixed moving to home folder bug.
+- **1.3.6** (2025-11-16, 11:55am) - Improved error handling, fixed 'moving to home folder' bug.
 - **1.3.5** (2025-11-09, 9:20pm) - Fixed bug where sort does not execute immediately.
 - **1.3.4** (2025-11-08, 12:55am) - Caches data to improve app performance.
-- **1.3.3** (2025-11-07, 12:55am) - Fixed breadcrumbs bug, fix keyboard covering up inputs on auth page bug.
-- **1.3.2** (2025-10-19, 10:25pm) - Fixed bullet point bug where cursor displays before bullet.
-- **1.3.1** (2025-10-15, 10:40pm) - Fixed text flickering bug with creating newlines.
+- **1.3.3** (2025-11-07, 12:55am) - Fixed breadcrumbs bug, fixed keyboard covering up inputs on auth page bug (expo 54 bug).
+- **1.3.2** (2025-10-19, 10:25pm) - Fixed bullet point bug where cursor displays before bullet (expo 54 bug).
+- **1.3.1** (2025-10-15, 10:40pm) - Fixed text flickering bug when creating newlines (expo 54 bug).
 - **1.3.0** (2025-10-12, 12:20pm) - Bug fixes and improved security. Server-side encryption for all notes and folders.
 - **1.2.8** (2025-08-31, 10:35pm) - Updated dependencies.
 - **1.2.7** (2025-05-25, 4:10pm) - Bug fix.
