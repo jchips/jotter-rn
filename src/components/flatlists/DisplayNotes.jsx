@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAppStyles } from '../../styles';
 import NoteCard from '../cards/NoteCard';
@@ -24,10 +24,18 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
    * @param {Object} param0 - The note item to be rendered
    * @returns - a note card that navigates to the note
    */
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     const note = item;
     return (
-      <Pressable
+      <NoteCard
+        note={note}
+        index={index} // for animation
+        setSelectedNote={setSelectedNote}
+        setOpenRename={setOpenRename}
+        setOpenDelete={setOpenDelete}
+        setOpenMove={setOpenMove}
+        setOpenDetails={setOpenDetails}
+        numColumns={numColumns}
         onPress={() => {
           navigation.navigate('View', {
             noteId: note.id,
@@ -35,17 +43,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
             folderId: note.folderId,
           });
         }}
-      >
-        <NoteCard
-          note={note}
-          setSelectedNote={setSelectedNote}
-          setOpenRename={setOpenRename}
-          setOpenDelete={setOpenDelete}
-          setOpenMove={setOpenMove}
-          setOpenDetails={setOpenDetails}
-          numColumns={numColumns}
-        />
-      </Pressable>
+      />
     );
   };
 

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,136 +6,161 @@ import {
   Image,
   Pressable,
   useWindowDimensions,
-} from 'react-native'
-import Popover from 'react-native-popover-view'
-import { useTheme } from '../../contexts/ThemeContext'
-import { moderateScale } from '../../util/scaling'
-import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles'
+} from 'react-native';
+import Animated, {
+  withSpring,
+  FadeInDown,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import Popover from 'react-native-popover-view';
+import { useTheme } from '../../contexts/ThemeContext';
+import { moderateScale } from '../../util/scaling';
+import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles';
 
 const FolderCard = (props) => {
   const {
     folder,
+    index,
     setSelectedFolder,
     setOpenRename,
     setOpenDelete,
     setOpenMove,
     setOpenDetails,
     numColumns,
-  } = props
-  const popoverRef = useRef()
-  const { COLORS } = useTheme()
-  const { app, buttons, POPOVER } = useAppStyles()
-  const styles = styleSheet(app, COLORS)
-  const { width: screenWidth } = useWindowDimensions()
+    onPress,
+  } = props;
+  const popoverRef = useRef();
+  const { COLORS } = useTheme();
+  const { app, buttons, POPOVER } = useAppStyles();
+  const styles = styleSheet(app, COLORS);
+  const { width: screenWidth } = useWindowDimensions();
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
-    numColumns
+    numColumns;
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   return (
-    <View style={[styles.container, { width: itemWidth }]}>
-      <View style={styles.h1Container}>
-        <Image
-          source={{
-            uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
-          }}
-          alt='folder-icon'
-          style={app.icon2}
-        />
-        <Text style={styles.h1}>{folder.title}</Text>
-      </View>
-
-      {/* Popover */}
-      <Popover
-        ref={popoverRef}
-        from={
-          <Pressable>
-            <Image
-              source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/more.png`,
-              }}
-              alt='more-icon'
-              style={app.icon2}
-            />
-          </Pressable>
-        }
-        arrowSize={{ width: 0, height: 0 }}
-        popoverStyle={styles.popover}
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => {
+        scale.value = withSpring(0.97);
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1);
+      }}
+    >
+      <Animated.View
+        entering={FadeInDown.delay(index * 40).duration(250)}
+        style={[animatedStyle, styles.container, { width: itemWidth }]}
       >
-        <View style={POPOVER.popoverContainer}>
-          <Pressable
-            style={POPOVER.button}
-            onPress={() => {
-              setSelectedFolder(folder)
-              setOpenRename(true)
-              popoverRef.current.requestClose()
+        <View style={styles.h1Container}>
+          <Image
+            source={{
+              uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/folder-invoices--v1.png`,
             }}
-          >
-            <Image
-              source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/rename.png`,
-              }}
-              alt='rename-icon'
-              style={app.icon2}
-            />
-            <Text style={buttons.btnText2}>Rename folder</Text>
-          </Pressable>
-          <Pressable
-            style={POPOVER.button}
-            onPress={() => {
-              setSelectedFolder(folder)
-              setOpenDetails(true)
-              popoverRef.current.requestClose()
-            }}
-          >
-            <Image
-              source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/info--v1.png`,
-              }}
-              alt='details-icon'
-              style={app.icon2}
-            />
-            <Text style={buttons.btnText2}>View details</Text>
-          </Pressable>
-          <Pressable
-            style={POPOVER.button}
-            onPress={() => {
-              setSelectedFolder(folder)
-              setOpenMove(true)
-              popoverRef.current.requestClose()
-            }}
-          >
-            <Image
-              source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/reorder.png`,
-              }}
-              alt='move-icon'
-              style={app.icon2}
-            />
-            <Text style={buttons.btnText2}>Move folder</Text>
-          </Pressable>
-          <Pressable
-            style={POPOVER.button}
-            onPress={() => {
-              setSelectedFolder(folder)
-              setOpenDelete(true)
-              popoverRef.current.requestClose()
-            }}
-          >
-            <Image
-              source={{
-                uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/trash--v1.png`,
-              }}
-              alt='delete-icon'
-              style={app.icon2}
-            />
-            <Text style={buttons.btnText2}>Delete folder</Text>
-          </Pressable>
+            alt='folder-icon'
+            style={app.icon2}
+          />
+          <Text style={styles.h1}>{folder.title}</Text>
         </View>
-      </Popover>
-    </View>
-  )
-}
+
+        {/* Popover */}
+        <Popover
+          ref={popoverRef}
+          from={
+            <Pressable>
+              <Image
+                source={{
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/more.png`,
+                }}
+                alt='more-icon'
+                style={app.icon2}
+              />
+            </Pressable>
+          }
+          arrowSize={{ width: 0, height: 0 }}
+          popoverStyle={styles.popover}
+        >
+          <View style={POPOVER.popoverContainer}>
+            <Pressable
+              style={POPOVER.button}
+              onPress={() => {
+                setSelectedFolder(folder);
+                setOpenRename(true);
+                popoverRef.current.requestClose();
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/rename.png`,
+                }}
+                alt='rename-icon'
+                style={app.icon2}
+              />
+              <Text style={buttons.btnText2}>Rename folder</Text>
+            </Pressable>
+            <Pressable
+              style={POPOVER.button}
+              onPress={() => {
+                setSelectedFolder(folder);
+                setOpenDetails(true);
+                popoverRef.current.requestClose();
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/info--v1.png`,
+                }}
+                alt='details-icon'
+                style={app.icon2}
+              />
+              <Text style={buttons.btnText2}>View details</Text>
+            </Pressable>
+            <Pressable
+              style={POPOVER.button}
+              onPress={() => {
+                setSelectedFolder(folder);
+                setOpenMove(true);
+                popoverRef.current.requestClose();
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/reorder.png`,
+                }}
+                alt='move-icon'
+                style={app.icon2}
+              />
+              <Text style={buttons.btnText2}>Move folder</Text>
+            </Pressable>
+            <Pressable
+              style={POPOVER.button}
+              onPress={() => {
+                setSelectedFolder(folder);
+                setOpenDelete(true);
+                popoverRef.current.requestClose();
+              }}
+            >
+              <Image
+                source={{
+                  uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/trash--v1.png`,
+                }}
+                alt='delete-icon'
+                style={app.icon2}
+              />
+              <Text style={buttons.btnText2}>Delete folder</Text>
+            </Pressable>
+          </View>
+        </Popover>
+      </Animated.View>
+    </Pressable>
+  );
+};
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -164,6 +189,6 @@ const styleSheet = (app, COLORS) =>
       width: moderateScale(172),
       backgroundColor: COLORS.cardBg,
     },
-  })
+  });
 
-export default FolderCard
+export default FolderCard;
