@@ -176,11 +176,6 @@ const Dashboard = ({ route }) => {
     setLoading(false);
   };
 
-  // Logs the user out
-  // const logUserOut = () => {
-  //   logout();
-  // };
-
   // Loading circle
   if (isLoading || loading) {
     return <Loading />;

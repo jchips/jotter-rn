@@ -50,6 +50,16 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 ![Jotter settings](https://iili.io/3hCtjte.jpg)
 ![Jotter account](https://iili.io/3hC5X8x.jpg)
 
+## Run code
+
+Development
+
+1. Ensure server and db are running for hosting locally.
+2. Ensure the `API_URL` in the `.env` matches your **computer IP address** and is using the right port (3001).
+   - Might have to do next step (below) to check the computer IP address that Expo Go Metro is using.
+3. Run `npx expo start -c` in terminal.
+4. Scan QR with Expo Go mobile app.
+
 ## Changelog
 
 - **1.4.0** (2026-05-23, 12:30am) - Added option to changed saved indicator color to red, added a 'jotter example' note to all users accounts when they first sign up, nested formatting is now available for notes (ex: bold _and_ italic text), offwhite app background instead of #fff.
