@@ -10,12 +10,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import Animated, {
+  withSpring,
+  FadeInDown,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient, useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import api from '../../util/api';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Rename = ({ openRename, setOpenRename, note, folder }) => {
   const [error, setError] = useState('');
@@ -30,6 +39,16 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
   const { app, MODAL, buttons } = useAppStyles();
   const { COLORS } = useTheme();
 
+  // animations
+  const cancelScale = useSharedValue(1);
+  const submitScale = useSharedValue(1);
+  const cancelAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cancelScale.value }],
+  }));
+  const submitAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: submitScale.value }],
+  }));
+
   /* Update note in database and cache */
   const updateNoteMutation = useMutation({
     mutationFn: async ({ noteId, title }) =>
@@ -38,7 +57,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
           title: title.rename,
           updatedAt: Date.now(),
         },
-        noteId
+        noteId,
       ),
     onSuccess: (res) => {
       queryClient.setQueryData(
@@ -46,10 +65,10 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         (oldNotes) => {
           if (oldNotes) {
             return oldNotes.map((note) =>
-              note.id === res.data.id ? res.data : note
+              note.id === res.data.id ? res.data : note,
             );
           }
-        }
+        },
       );
       queryClient.setQueryData(['note', user?.id, res.data.id], res.data);
       setOpenRename(false);
@@ -69,7 +88,7 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
           title: title.rename,
           updatedAt: Date.now(),
         },
-        folderId
+        folderId,
       ),
     onSuccess: (res) => {
       queryClient.setQueryData(
@@ -77,10 +96,10 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         (oldFolders) => {
           if (oldFolders) {
             return oldFolders.map((folder) =>
-              folder.id === res.data.id ? res.data : folder
+              folder.id === res.data.id ? res.data : folder,
             );
           }
-        }
+        },
       );
       setOpenRename(false);
     },
@@ -124,7 +143,11 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
         setOpenRename(!openRename);
       }}
     >
-      <View style={MODAL.centeredView}>
+      <Animated.View
+        entering={FadeInDown.duration(180)}
+        exiting={FadeOutUp.duration(180)}
+        style={MODAL.centeredView}
+      >
         <KeyboardAvoidingView behavior='padding' style={{ width: '100%' }}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={MODAL.modal}>
@@ -167,35 +190,54 @@ const Rename = ({ openRename, setOpenRename, note, folder }) => {
               {/* Modal footer */}
               <View style={MODAL.buttons}>
                 {/* Cancel button */}
-                <Pressable
-                  style={[buttons.outlineBtn2, MODAL.button]}
+                <AnimatedPressable
+                  style={[
+                    cancelAnimatedStyle,
+                    buttons.outlineBtn2,
+                    MODAL.button,
+                  ]}
                   onPress={() => {
                     setOpenRename(!openRename);
                     setError('');
                   }}
+                  onPressIn={() => {
+                    cancelScale.value = withSpring(0.92);
+                  }}
+                  onPressOut={() => {
+                    cancelScale.value = withSpring(1);
+                  }}
                 >
                   <Text style={buttons.btnText2}>Cancel</Text>
-                </Pressable>
+                </AnimatedPressable>
 
                 {/* Submit button */}
-                <Pressable
-                  style={{
-                    ...buttons.btn1,
-                    ...MODAL.button,
-                    backgroundColor: saving
-                      ? COLORS.disabled
-                      : COLORS.themePurple,
-                  }}
+                <AnimatedPressable
+                  style={[
+                    submitAnimatedStyle,
+                    {
+                      ...buttons.btn1,
+                      ...MODAL.button,
+                      backgroundColor: saving
+                        ? COLORS.disabled
+                        : COLORS.themePurple,
+                    },
+                  ]}
                   onPress={handleSubmit(onSubmit)}
+                  onPressIn={() => {
+                    submitScale.value = withSpring(0.92);
+                  }}
+                  onPressOut={() => {
+                    submitScale.value = withSpring(1);
+                  }}
                   disabled={saving}
                 >
                   <Text style={buttons.btnText4}>Rename</Text>
-                </Pressable>
+                </AnimatedPressable>
               </View>
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

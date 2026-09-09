@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 import { useAppStyles } from '../../styles';
 import NoteCard from '../cards/NoteCard';
 import Move from '../modals/Move';
@@ -48,7 +49,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
   };
 
   return (
-    <View>
+    <Animated.View layout={LinearTransition}>
       {notes?.length === 0 && folders?.length === 0 ? (
         <View style={{ marginHorizontal: 10 }}>
           <Text style={{ color: COLORS.text }}>No notes.</Text>
@@ -100,7 +101,7 @@ const DisplayNotes = ({ notes, folders, error, gridSize, refreshKey }) => {
         setOpenDelete={setOpenDelete}
         note={selectedNote}
       />
-    </View>
+    </Animated.View>
   );
 };
 

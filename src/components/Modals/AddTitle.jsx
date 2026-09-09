@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   Modal,
   StyleSheet,
@@ -9,23 +9,33 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
-import { useAuth, queryClient } from '../../contexts/AuthContext'
-import { useTheme } from '../../contexts/ThemeContext'
-import { useAppStyles } from '../../styles'
-import { ROOT_FOLDER } from '../../hooks/useFolder'
-import api from '../../util/api'
+} from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import Animated, {
+  withTiming,
+  withSpring,
+  FadeInDown,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { useAuth, queryClient } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { ROOT_FOLDER } from '../../hooks/useFolder';
+import api from '../../util/api';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const AddTitle = (props) => {
-  const { openAddTitle, setOpenAddTitle, type } = props
-  let { currentFolder } = props
-  const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
-  const { user } = useAuth()
-  const { app, MODAL, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
+  const { openAddTitle, setOpenAddTitle, type } = props;
+  let { currentFolder } = props;
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
   const {
     control,
     handleSubmit,
@@ -35,37 +45,47 @@ const AddTitle = (props) => {
     defaultValues: {
       title: '',
     },
-  })
+  });
+
+  // animations
+  const cancelScale = useSharedValue(1);
+  const submitScale = useSharedValue(1);
+  const cancelAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cancelScale.value }],
+  }));
+  const submitAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: submitScale.value }],
+  }));
 
   const createNoteMutation = useMutation({
     mutationFn: async (newNote) => await api.addNote(newNote),
     onSuccess: (res, newNote) => {
       queryClient.setQueryData(['notes', user?.id, newNote.folderId], (old) =>
-        old ? [...old, res.data] : [res.data]
-      )
-      queryClient.setQueryData(['note', user?.id, newNote?.id])
-      setOpenAddTitle(false)
+        old ? [...old, res.data] : [res.data],
+      );
+      queryClient.setQueryData(['note', user?.id, newNote?.id]);
+      setOpenAddTitle(false);
     },
     onError: (err) => {
-      setError('Failed to create ' + type)
-      console.error(err)
+      setError('Failed to create ' + type);
+      console.error(err);
     },
-  })
+  });
 
   const createFolderMutation = useMutation({
     mutationFn: async (newFolder) => await api.addFolder(newFolder),
     onSuccess: (res, newFolder) => {
       queryClient.setQueryData(
         ['folders', user?.id, newFolder.parentId],
-        (old) => (old ? [...old, res.data] : [res.data])
-      )
-      setOpenAddTitle(false)
+        (old) => (old ? [...old, res.data] : [res.data]),
+      );
+      setOpenAddTitle(false);
     },
     onError: (err) => {
-      setError('Failed to create ' + type)
-      console.error(err)
+      setError('Failed to create ' + type);
+      console.error(err);
     },
-  })
+  });
 
   /**
    * Adds a title to a note or folder
@@ -74,25 +94,25 @@ const AddTitle = (props) => {
    * @returns - exits the function if there is no current folder
    */
   const onSubmit = async (titleControl) => {
-    if (currentFolder === null) return
-    currentFolder = currentFolder?.data ? currentFolder.data : currentFolder
-    let path = currentFolder === ROOT_FOLDER ? [] : [ROOT_FOLDER]
+    if (currentFolder === null) return;
+    currentFolder = currentFolder?.data ? currentFolder.data : currentFolder;
+    let path = currentFolder === ROOT_FOLDER ? [] : [ROOT_FOLDER];
     let parsedPath =
       typeof currentFolder.path === 'string'
         ? JSON.parse(currentFolder.path)
-        : currentFolder.path
-    let currentFolderPath = currentFolder !== ROOT_FOLDER ? parsedPath : path // parse from db
-    path = [...currentFolderPath]
+        : currentFolder.path;
+    let currentFolderPath = currentFolder !== ROOT_FOLDER ? parsedPath : path; // parse from db
+    path = [...currentFolderPath];
 
     // Adds current folder to the path
     if (currentFolder !== ROOT_FOLDER) {
       path.push({
         id: currentFolder.id,
-      })
+      });
     }
     try {
-      setError('')
-      setSaving(true)
+      setError('');
+      setSaving(true);
       switch (type) {
         // add note
         case 'note':
@@ -101,9 +121,9 @@ const AddTitle = (props) => {
             content: '',
             userId: user.id,
             folderId: currentFolder.id,
-          }
-          await createNoteMutation.mutateAsync(newNote)
-          break
+          };
+          await createNoteMutation.mutateAsync(newNote);
+          break;
         // add folder
         case 'folder':
           const newFolder = {
@@ -111,18 +131,18 @@ const AddTitle = (props) => {
             userId: user.id,
             parentId: currentFolder.id,
             path,
-          }
-          await createFolderMutation.mutateAsync(newFolder)
-          break
+          };
+          await createFolderMutation.mutateAsync(newFolder);
+          break;
       }
     } catch (err) {
       // Handled in onError
     }
     reset({
       title: '',
-    })
-    setSaving(false)
-  }
+    });
+    setSaving(false);
+  };
 
   return (
     <Modal
@@ -130,10 +150,14 @@ const AddTitle = (props) => {
       transparent={true}
       visible={openAddTitle}
       onRequestClose={() => {
-        setOpenAddTitle(!openAddTitle)
+        setOpenAddTitle(!openAddTitle);
       }}
     >
-      <View style={MODAL.centeredView}>
+      <Animated.View
+        entering={FadeInDown.duration(180)}
+        exiting={FadeOutUp.duration(180)}
+        style={MODAL.centeredView}
+      >
         <KeyboardAvoidingView behavior='padding' style={{ width: '100%' }}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={MODAL.modal}>
@@ -174,39 +198,61 @@ const AddTitle = (props) => {
               {/* Modal footer */}
               <View style={MODAL.buttons}>
                 {/* Cancel button */}
-                <Pressable
-                  style={[buttons.outlineBtn2, MODAL.button]}
+                <AnimatedPressable
+                  style={[
+                    buttons.outlineBtn2,
+                    MODAL.button,
+                    cancelAnimatedStyle,
+                  ]}
                   onPress={() => {
-                    setOpenAddTitle(!openAddTitle)
-                    setError('')
+                    setOpenAddTitle((prev) => !prev);
+                    // setOpenAddTitle(!openAddTitle);
+                    setError('');
+                  }}
+                  onPressIn={() => {
+                    cancelScale.value = withSpring(0.92);
+                    // scale.value = withTiming(0.95, { duration: 100 });
+                  }}
+                  onPressOut={() => {
+                    cancelScale.value = withSpring(1);
+                    // scale.value = withTiming(1, { duration: 100 });
                   }}
                 >
                   <Text style={buttons.btnText2}>Cancel</Text>
-                </Pressable>
+                </AnimatedPressable>
 
                 {/* Submit button */}
-                <Pressable
-                  style={{
-                    ...buttons.btn1,
-                    ...MODAL.button,
-                    backgroundColor: saving
-                      ? COLORS.disabled
-                      : COLORS.themePurple,
-                  }}
+                <AnimatedPressable
+                  style={[
+                    submitAnimatedStyle,
+                    {
+                      ...buttons.btn1,
+                      ...MODAL.button,
+                      backgroundColor: saving
+                        ? COLORS.disabled
+                        : COLORS.themePurple,
+                    },
+                  ]}
                   onPress={handleSubmit(onSubmit)}
+                  onPressIn={() => {
+                    submitScale.value = withSpring(0.92);
+                  }}
+                  onPressOut={() => {
+                    submitScale.value = withSpring(1);
+                  }}
                   disabled={saving}
                 >
                   <Text style={buttons.btnText4}>Create {type}</Text>
-                </Pressable>
+                </AnimatedPressable>
               </View>
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-      </View>
+      </Animated.View>
     </Modal>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-export default AddTitle
+export default AddTitle;

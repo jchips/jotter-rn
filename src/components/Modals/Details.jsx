@@ -7,6 +7,13 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import Animated, {
+  withSpring,
+  FadeInDown,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useFolder } from '../../hooks/useFolder';
 import { useAppStyles } from '../../styles';
@@ -15,11 +22,19 @@ import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE } from '../../styles';
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 const Details = ({ openDetails, setOpenDetails, note, folder }) => {
   const { childNotes, childFolders } = useFolder(folder?.id);
   const { COLORS } = useTheme();
   const { app, MODAL, buttons } = useAppStyles();
   const styles = styleSheet(COLORS, MODAL);
+
+  // animations
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   return (
     <Modal
@@ -30,7 +45,11 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
         setOpenDetails(!openDetails);
       }}
     >
-      <View style={MODAL.centeredView}>
+      <Animated.View
+        entering={FadeInDown.duration(180)}
+        exiting={FadeOutUp.duration(180)}
+        style={MODAL.centeredView}
+      >
         <View style={styles.modal}>
           <Text style={app.header}>
             {note?.title || folder?.title}{' '}
@@ -80,16 +99,22 @@ const Details = ({ openDetails, setOpenDetails, note, folder }) => {
               ) : null}
             </Text>
           </View>
-          <Pressable
-            style={[buttons.btn1, MODAL.wideButton]}
+          <AnimatedPressable
+            style={[animatedStyle, buttons.btn1, MODAL.wideButton]}
             onPress={() => {
               setOpenDetails(!openDetails);
             }}
+            onPressIn={() => {
+              scale.value = withSpring(0.92);
+            }}
+            onPressOut={() => {
+              scale.value = withSpring(1);
+            }}
           >
             <Text style={buttons.btnText1}>Close</Text>
-          </Pressable>
+          </AnimatedPressable>
         </View>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

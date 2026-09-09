@@ -10,6 +10,7 @@ import {
 import Popover from 'react-native-popover-view';
 import Animated, {
   withSpring,
+  FadeIn,
   FadeInDown,
   useSharedValue,
   useAnimatedStyle,
@@ -86,7 +87,10 @@ const NoteCard = (props) => {
             arrowSize={{ width: 0, height: 0 }}
             popoverStyle={styles.popover}
           >
-            <View style={POPOVER.popoverContainer}>
+            <Animated.View
+              entering={FadeIn.duration(150)}
+              style={POPOVER.popoverContainer}
+            >
               {/* Rename note */}
               <Pressable
                 style={POPOVER.button}
@@ -162,7 +166,7 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>Delete note</Text>
               </Pressable>
-            </View>
+            </Animated.View>
           </Popover>
         </View>
         <View>

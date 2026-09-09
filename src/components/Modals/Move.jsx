@@ -8,6 +8,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
+import Animated, {
+  withSpring,
+  FadeInDown,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import api from '../../util/api';
 import DropdownBtn from '../buttons/DropdownBtn';
 import { useFolder } from '../../hooks/useFolder';
@@ -16,6 +23,8 @@ import { FONT, FONTSIZE, useAppStyles } from '../../styles';
 import { getFolderTitle } from '../../util/getFolder';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient, useAuth } from '../../contexts/AuthContext';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Move = (props) => {
   const { navigation, openMove, setOpenMove, type, note, folder } = props;
@@ -28,6 +37,12 @@ const Move = (props) => {
   const { COLORS } = useTheme();
   const { childFolders } = useFolder(folder ? folder.id : null);
   let folders = childFolders.data;
+
+  // animations
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   /**
    * Fetch all folders that the user can move current folder to
@@ -60,7 +75,7 @@ const Move = (props) => {
           for (let j = 0; j < formatFolders[i].path.length; j++) {
             // loop path ids
             const folderInfo = await getFolderTitle(
-              formatFolders[i].path[j].id
+              formatFolders[i].path[j].id,
             );
             formatFolders[i].path[j]['title'] = folderInfo.title;
           }
@@ -97,20 +112,20 @@ const Move = (props) => {
         {
           folderId: folderTarget.value === 'null' ? null : folderTarget.value,
         },
-        note.id
+        note.id,
       ),
     onSuccess: (res, { folderTarget, moveToFolder }) => {
       const sourceFolderId = note.folderId || null; // null is Home folder
       // Remove note from the old folder’s cache
       queryClient.setQueryData(
         ['notes', user?.id, sourceFolderId],
-        (oldNotes = []) => oldNotes.filter((n) => n.id !== res.data.id)
+        (oldNotes = []) => oldNotes.filter((n) => n.id !== res.data.id),
       );
 
       // Add note to the new folder’s cache
       queryClient.setQueryData(
         ['notes', user?.id, res.data.folderId],
-        (oldNotes = []) => [...(oldNotes || []), res.data]
+        (oldNotes = []) => [...(oldNotes || []), res.data],
       );
 
       queryClient.setQueryData(['note', user?.id, res.data.id], res.data);
@@ -158,7 +173,7 @@ const Move = (props) => {
               ]
             : [],
         },
-        folder.id
+        folder.id,
       );
       let updatedFolderPath =
         typeof res.data.path === 'string'
@@ -175,13 +190,13 @@ const Move = (props) => {
       // Remove folder from the old folder’s cache
       queryClient.setQueryData(
         ['folders', user?.id, sourceFolderId],
-        (oldFolders = []) => oldFolders.filter((f) => f.id !== movedFolder.id)
+        (oldFolders = []) => oldFolders.filter((f) => f.id !== movedFolder.id),
       );
 
       // Add folder to the new folder’s cache
       queryClient.setQueryData(
         ['folders', user?.id, targetFolderId],
-        (oldFolders = []) => [...(oldFolders || []), movedFolder]
+        (oldFolders = []) => [...(oldFolders || []), movedFolder],
       );
 
       // Prefetch target folder to guarantee refresh
@@ -213,7 +228,7 @@ const Move = (props) => {
         {
           path: path,
         },
-        child.id
+        child.id,
       ),
     onSuccess: (res) => {
       queryClient.setQueryData(
@@ -221,10 +236,10 @@ const Move = (props) => {
         (oldFolders) => {
           if (oldFolders) {
             return oldFolders.map((folder) =>
-              folder.id === res.data.id ? res.data : folder
+              folder.id === res.data.id ? res.data : folder,
             );
           }
-        }
+        },
       );
     },
   });
@@ -289,7 +304,7 @@ const Move = (props) => {
     child,
     moveToFolder,
     folderPath,
-    orgFolderPath
+    orgFolderPath,
   ) => {
     let path;
     let childPath =
@@ -338,7 +353,7 @@ const Move = (props) => {
     parentId,
     moveToFolder,
     folderPath,
-    orgFolderPath
+    orgFolderPath,
   ) => {
     try {
       let children = await api.getFolders(parentId);
@@ -404,7 +419,11 @@ const Move = (props) => {
           setOpenMove(!openMove);
         }}
       >
-        <View style={MODAL.centeredView}>
+        <Animated.View
+          entering={FadeInDown.duration(180)}
+          exiting={FadeOutUp.duration(180)}
+          style={MODAL.centeredView}
+        >
           <View style={MODAL.modal}>
             <Text style={app.header}>Move {type}</Text>
             {error ? (
@@ -429,7 +448,7 @@ const Move = (props) => {
                     dropdownBtnText,
                     saving,
                     '95%',
-                    COLORS
+                    COLORS,
                   )
                 }
                 renderItem={renderItem}
@@ -446,17 +465,23 @@ const Move = (props) => {
             ) : null}
 
             {/* Close modal button */}
-            <Pressable
-              style={[buttons.btn1, MODAL.wideButton]}
+            <AnimatedPressable
+              style={[animatedStyle, buttons.btn1, MODAL.wideButton]}
               onPress={() => {
                 setOpenMove(!openMove);
                 setError('');
               }}
+              onPressIn={() => {
+                scale.value = withSpring(0.92);
+              }}
+              onPressOut={() => {
+                scale.value = withSpring(1);
+              }}
             >
               <Text style={buttons.btnText1}>Close</Text>
-            </Pressable>
+            </AnimatedPressable>
           </View>
-        </View>
+        </Animated.View>
       </Modal>
     ) : null
   ) : null;

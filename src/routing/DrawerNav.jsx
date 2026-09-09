@@ -65,11 +65,6 @@ function DrawerNav({ navigation }) {
     }
   }, [folder?.id]);
 
-  // log user out
-  // const logUserOut = () => {
-  //   logout();
-  // };
-
   // Custom drawer content (app icon, routes, recents, current, log out)
   const DrawerContent = (props) => {
     const { state, descriptors, navigation } = props;

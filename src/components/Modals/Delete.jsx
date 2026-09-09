@@ -1,117 +1,136 @@
-import { useState } from 'react'
-import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native'
-import { useMutation } from '@tanstack/react-query'
-import { useDispatch } from 'react-redux'
-import { removeRecent } from '../../reducers/recentsReducer'
-import { queryClient, useAuth } from '../../contexts/AuthContext'
-import api from '../../util/api'
-import { moderateScale } from '../../util/scaling'
-import { useTheme } from '../../contexts/ThemeContext'
-import { useAppStyles } from '../../styles'
-import { FONT, FONTSIZE } from '../../styles'
+import { useState } from 'react';
+import { Modal, StyleSheet, View, Text, Pressable, Image } from 'react-native';
+import Animated, {
+  withSpring,
+  FadeInDown,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { useMutation } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { removeRecent } from '../../reducers/recentsReducer';
+import { queryClient, useAuth } from '../../contexts/AuthContext';
+import api from '../../util/api';
+import { moderateScale } from '../../util/scaling';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+import { FONT, FONTSIZE } from '../../styles';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Delete = (props) => {
-  const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
-  const { app, MODAL, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
-  const { user } = useAuth()
-  const dispatch = useDispatch()
-  const styles = styleSheet(app, COLORS)
-  const { openDelete, setOpenDelete, note, folder } = props
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const styles = styleSheet(app, COLORS);
+  const { openDelete, setOpenDelete, note, folder } = props;
+
+  // animations
+  const cancelScale = useSharedValue(1);
+  const submitScale = useSharedValue(1);
+  const cancelAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cancelScale.value }],
+  }));
+  const submitAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: submitScale.value }],
+  }));
 
   /* Delete note */
   const deleteNoteMutation = useMutation({
     mutationFn: async (note) => {
-      await api.deleteNote(note.id)
-      return note
+      await api.deleteNote(note.id);
+      return note;
     },
     onMutate: async (note) => {
-      await queryClient.cancelQueries(['notes', user?.id, note.id])
+      await queryClient.cancelQueries(['notes', user?.id, note.id]);
       const previousNotes = queryClient.getQueryData([
         'notes',
         user?.id,
         note.folderId,
-      ])
+      ]);
 
       queryClient.setQueryData(
         ['notes', user?.id, note.folderId],
-        (oldNotes = []) => oldNotes.filter((n) => n.id !== note.id)
-      )
+        (oldNotes = []) => oldNotes.filter((n) => n.id !== note.id),
+      );
 
-      queryClient.cancelQueries(['note', user?.id, note.id])
+      queryClient.cancelQueries(['note', user?.id, note.id]);
 
-      dispatch(removeRecent({ noteId: note.id }))
+      dispatch(removeRecent({ noteId: note.id }));
 
-      return { previousNotes }
+      return { previousNotes };
     },
     onSuccess: () => {
-      setOpenDelete(false)
+      setOpenDelete(false);
     },
     onError: (err, note, context) => {
       if (context?.previousNotes) {
         queryClient.setQueryData(
           ['notes', user?.id, note.folderId],
-          context.previousNotes
-        )
+          context.previousNotes,
+        );
       }
-      console.error('Delete note failed:', err)
-      setError('Failed to delete ' + (note ? 'note' : 'folder'))
+      console.error('Delete note failed:', err);
+      setError('Failed to delete ' + (note ? 'note' : 'folder'));
     },
-  })
+  });
 
   /* Delete folder */
   const deleteFolderMutation = useMutation({
     mutationFn: async ({ folderId, folder }) => {
-      await api.deleteFolder(folderId)
-      return { folderId, folder }
+      await api.deleteFolder(folderId);
+      return { folderId, folder };
     },
     onMutate: async ({ folderId, folder }) => {
-      await queryClient.cancelQueries(['folders', user?.id, folderId])
+      await queryClient.cancelQueries(['folders', user?.id, folderId]);
       const previousFolders = queryClient.getQueryData([
         'folders',
         user?.id,
         folder.parentId,
-      ])
+      ]);
 
       queryClient.setQueryData(
         ['folders', user?.id, folder.parentId],
-        (oldFolders = []) => oldFolders.filter((f) => f.id !== folderId)
-      )
+        (oldFolders = []) => oldFolders.filter((f) => f.id !== folderId),
+      );
 
-      return { previousFolders }
+      return { previousFolders };
     },
     onSuccess: () => {
-      setOpenDelete(false)
+      setOpenDelete(false);
     },
     onError: (err, { folder }, context) => {
       if (context?.previousFolders) {
         queryClient.setQueryData(
           ['folders', user?.id, folder.parentId],
-          context.previousFolders
-        )
+          context.previousFolders,
+        );
       }
-      console.error('Delete folder failed:', err)
-      setError('Failed to delete ' + (note ? 'note' : 'folder'))
+      console.error('Delete folder failed:', err);
+      setError('Failed to delete ' + (note ? 'note' : 'folder'));
     },
-  })
+  });
 
   // Deletes the note or folder (and all its contents)
   const handleSubmit = async () => {
     try {
-      setError('')
-      setSaving(true)
+      setError('');
+      setSaving(true);
       if (note) {
-        await deleteNoteMutation.mutateAsync(note)
+        await deleteNoteMutation.mutateAsync(note);
       } else {
-        await deleteFolderMutation.mutateAsync({ folderId: folder.id, folder })
+        await deleteFolderMutation.mutateAsync({ folderId: folder.id, folder });
       }
     } catch (err) {
       // Handled in onError
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return (
     <Modal
@@ -119,10 +138,14 @@ const Delete = (props) => {
       transparent={true}
       visible={openDelete}
       onRequestClose={() => {
-        setOpenDelete(!openDelete)
+        setOpenDelete(!openDelete);
       }}
     >
-      <View style={MODAL.centeredView}>
+      <Animated.View
+        entering={FadeInDown.duration(180)}
+        exiting={FadeOutUp.duration(180)}
+        style={MODAL.centeredView}
+      >
         <View style={MODAL.modal}>
           <Text style={styles.header}>Delete</Text>
           <View style={styles.modalContainer}>
@@ -167,34 +190,51 @@ const Delete = (props) => {
           {/* Modal footer */}
           <View style={MODAL.buttons}>
             {/* Cancel button */}
-            <Pressable
-              style={[buttons.outlineBtn2, MODAL.button]}
+            <AnimatedPressable
+              style={[cancelAnimatedStyle, buttons.outlineBtn2, MODAL.button]}
               onPress={() => {
-                setOpenDelete(!openDelete)
-                setError('')
+                setOpenDelete(!openDelete);
+                setError('');
+              }}
+              onPressIn={() => {
+                cancelScale.value = withSpring(0.92);
+              }}
+              onPressOut={() => {
+                cancelScale.value = withSpring(1);
               }}
             >
               <Text style={buttons.btnText2}>Cancel</Text>
-            </Pressable>
+            </AnimatedPressable>
 
             {/* Submit button */}
-            <Pressable
-              style={{
-                ...buttons.btn1,
-                ...MODAL.button,
-                backgroundColor: saving ? COLORS.disabled : COLORS.themePurple,
-              }}
+            <AnimatedPressable
+              style={[
+                submitAnimatedStyle,
+                {
+                  ...buttons.btn1,
+                  ...MODAL.button,
+                  backgroundColor: saving
+                    ? COLORS.disabled
+                    : COLORS.themePurple,
+                },
+              ]}
               onPress={handleSubmit}
+              onPressIn={() => {
+                submitScale.value = withSpring(0.92);
+              }}
+              onPressOut={() => {
+                submitScale.value = withSpring(1);
+              }}
               disabled={saving}
             >
               <Text style={buttons.btnText4}>Delete</Text>
-            </Pressable>
+            </AnimatedPressable>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </Modal>
-  )
-}
+  );
+};
 
 const styleSheet = (app, COLORS) =>
   StyleSheet.create({
@@ -230,6 +270,6 @@ const styleSheet = (app, COLORS) =>
       width: 27,
       marginRight: 3,
     },
-  })
+  });
 
-export default Delete
+export default Delete;

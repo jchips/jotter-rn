@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Animated, {
   withSpring,
+  FadeIn,
   FadeInDown,
   useSharedValue,
   useAnimatedStyle,
@@ -35,10 +36,14 @@ const FolderCard = (props) => {
   const { app, buttons, POPOVER } = useAppStyles();
   const styles = styleSheet(app, COLORS);
   const { width: screenWidth } = useWindowDimensions();
+
+  // grid
   const itemWidth =
     (screenWidth -
       app.dashboardContainer.paddingHorizontal * (numColumns + 1)) /
     numColumns;
+
+  // animations
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -86,7 +91,10 @@ const FolderCard = (props) => {
           arrowSize={{ width: 0, height: 0 }}
           popoverStyle={styles.popover}
         >
-          <View style={POPOVER.popoverContainer}>
+          <Animated.View
+            entering={FadeIn.duration(150)}
+            style={POPOVER.popoverContainer}
+          >
             <Pressable
               style={POPOVER.button}
               onPress={() => {
@@ -155,7 +163,7 @@ const FolderCard = (props) => {
               />
               <Text style={buttons.btnText2}>Delete folder</Text>
             </Pressable>
-          </View>
+          </Animated.View>
         </Popover>
       </Animated.View>
     </Pressable>
