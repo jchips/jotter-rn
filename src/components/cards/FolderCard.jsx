@@ -19,6 +19,8 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { moderateScale } from '../../util/scaling';
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../../styles';
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 const FolderCard = (props) => {
   const {
     folder,
@@ -44,24 +46,40 @@ const FolderCard = (props) => {
     numColumns;
 
   // animations
-  const scale = useSharedValue(1);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+  const cardScale = useSharedValue(1);
+  const cardAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: cardScale.value }],
+  }));
+  const renameBtnScale = useSharedValue(1);
+  const renameBtnAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: renameBtnScale.value }],
+  }));
+  const detailBtnScale = useSharedValue(1);
+  const detailBtnAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: detailBtnScale.value }],
+  }));
+  const moveBtnScale = useSharedValue(1);
+  const moveBtnAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: moveBtnScale.value }],
+  }));
+  const deleteBtnScale = useSharedValue(1);
+  const deleteBtnAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: deleteBtnScale.value }],
   }));
 
   return (
     <Pressable
       onPress={onPress}
       onPressIn={() => {
-        scale.value = withSpring(0.97);
+        cardScale.value = withSpring(0.97); // animation for card press
       }}
       onPressOut={() => {
-        scale.value = withSpring(1);
+        cardScale.value = withSpring(1);
       }}
     >
       <Animated.View
         entering={FadeInDown.delay(index * 40).duration(250)}
-        style={[animatedStyle, styles.container, { width: itemWidth }]}
+        style={[cardAnimatedStyle, styles.container, { width: itemWidth }]}
       >
         <View style={styles.h1Container}>
           <Image
@@ -92,15 +110,22 @@ const FolderCard = (props) => {
           popoverStyle={styles.popover}
         >
           <Animated.View
-            entering={FadeIn.duration(150)}
+            entering={FadeIn.duration(150)} // animation for popover
             style={POPOVER.popoverContainer}
           >
-            <Pressable
-              style={POPOVER.button}
+            {/* Rename */}
+            <AnimatedPressable
+              style={[renameBtnAnimatedStyle, POPOVER.button]}
               onPress={() => {
                 setSelectedFolder(folder);
                 setOpenRename(true);
                 popoverRef.current.requestClose();
+              }}
+              onPressIn={() => {
+                renameBtnScale.value = withSpring(0.97);
+              }}
+              onPressOut={() => {
+                renameBtnScale.value = withSpring(1);
               }}
             >
               <Image
@@ -111,13 +136,21 @@ const FolderCard = (props) => {
                 style={app.icon2}
               />
               <Text style={buttons.btnText2}>Rename folder</Text>
-            </Pressable>
-            <Pressable
-              style={POPOVER.button}
+            </AnimatedPressable>
+
+            {/* Details */}
+            <AnimatedPressable
+              style={[detailBtnAnimatedStyle, POPOVER.button]}
               onPress={() => {
                 setSelectedFolder(folder);
                 setOpenDetails(true);
                 popoverRef.current.requestClose();
+              }}
+              onPressIn={() => {
+                detailBtnScale.value = withSpring(0.97);
+              }}
+              onPressOut={() => {
+                detailBtnScale.value = withSpring(1);
               }}
             >
               <Image
@@ -128,13 +161,21 @@ const FolderCard = (props) => {
                 style={app.icon2}
               />
               <Text style={buttons.btnText2}>View details</Text>
-            </Pressable>
-            <Pressable
-              style={POPOVER.button}
+            </AnimatedPressable>
+
+            {/* Move */}
+            <AnimatedPressable
+              style={[moveBtnAnimatedStyle, POPOVER.button]}
               onPress={() => {
                 setSelectedFolder(folder);
                 setOpenMove(true);
                 popoverRef.current.requestClose();
+              }}
+              onPressIn={() => {
+                moveBtnScale.value = withSpring(0.97);
+              }}
+              onPressOut={() => {
+                moveBtnScale.value = withSpring(1);
               }}
             >
               <Image
@@ -145,13 +186,21 @@ const FolderCard = (props) => {
                 style={app.icon2}
               />
               <Text style={buttons.btnText2}>Move folder</Text>
-            </Pressable>
-            <Pressable
-              style={POPOVER.button}
+            </AnimatedPressable>
+
+            {/* Delete */}
+            <AnimatedPressable
+              style={[deleteBtnAnimatedStyle, POPOVER.button]}
               onPress={() => {
                 setSelectedFolder(folder);
                 setOpenDelete(true);
                 popoverRef.current.requestClose();
+              }}
+              onPressIn={() => {
+                deleteBtnScale.value = withSpring(0.97);
+              }}
+              onPressOut={() => {
+                deleteBtnScale.value = withSpring(1);
               }}
             >
               <Image
@@ -162,7 +211,7 @@ const FolderCard = (props) => {
                 style={app.icon2}
               />
               <Text style={buttons.btnText2}>Delete folder</Text>
-            </Pressable>
+            </AnimatedPressable>
           </Animated.View>
         </Popover>
       </Animated.View>

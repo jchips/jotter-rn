@@ -16,7 +16,7 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 ## Creator & developer: Jelani R
 
-## Version: 1.4.0
+## Version: 1.4.1
 
 ## Architecture
 
@@ -62,6 +62,7 @@ Development
 
 ## Changelog
 
+- **1.4.1** (2026-09-09, 12:00pm) - Added simple animations to make app feel smoother.
 - **1.4.0** (2026-05-23, 12:30am) - Added option to changed saved indicator color to red, added a 'jotter example' note to all users accounts when they first sign up, nested formatting is now available for notes (ex: bold _and_ italic text), offwhite app background instead of #fff.
 - **1.3.10** (2026-05-18, 7:20pm) - Improved auth, auto log user out if their token is expired (10 days).
 - **1.3.9** (2025-12-19, 7:00pm) - New logo.
@@ -106,6 +107,7 @@ Development
 
 - [React Navigation](https://reactnavigation.org/)
 - [React hook form](https://react-hook-form.com/)
+- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started)
 - [react-native-markdown-display](https://github.com/iamacup/react-native-markdown-display/tree/master)
 - [tanstack/react-query](https://tanstack.com/query/latest)
 - [react-native-popover-view](https://www.npmjs.com/package/react-native-popover-view)

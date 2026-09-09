@@ -6,7 +6,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { BORDER, useAppStyles } from '../../styles';
 import Animated, {
   FadeIn,
-  FadeInDown,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
@@ -19,6 +18,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
   const { COLORS } = useTheme();
   const { app, buttons, POPOVER } = useAppStyles();
   const styles = styleSheet(COLORS, POPOVER);
+
   // animations
   const newFolderScale = useSharedValue(1);
   const newNoteScale = useSharedValue(1);
@@ -52,10 +52,8 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         style={POPOVER.popoverContainer}
       >
         {/* Add folder */}
-        {/* <Pressable */}
         <AnimatedPressable
           style={[newFolderAnimatedStyle, styles.popoverButton]}
-          // style={styles.popoverButton}
           onPress={() => {
             setType('folder');
             setOpenAddTitle(true);
@@ -79,9 +77,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
         </AnimatedPressable>
 
         {/* Add note */}
-        {/* <Pressable */}
         <AnimatedPressable
-          // style={styles.popoverButton}
           style={[newNoteAnimatedStyle, styles.popoverButton]}
           onPress={() => {
             setType('note');
@@ -95,7 +91,6 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
             newNoteScale.value = withSpring(1);
           }}
         >
-          {/* <Animated.View style={[animatedStyle, styles.popoverButton]}> */}
           <Image
             source={{
               uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/file.png`,
@@ -104,9 +99,7 @@ const AddButton = ({ setOpenAddTitle, setType }) => {
             style={app.icon}
           />
           <Text style={buttons.btnText2}>New Note</Text>
-          {/* </Animated.View> */}
         </AnimatedPressable>
-        {/* </Pressable> */}
       </Animated.View>
     </Popover>
   );

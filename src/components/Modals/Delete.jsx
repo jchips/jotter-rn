@@ -142,7 +142,7 @@ const Delete = (props) => {
       }}
     >
       <Animated.View
-        entering={FadeInDown.duration(180)}
+        entering={FadeInDown.duration(250)}
         exiting={FadeOutUp.duration(180)}
         style={MODAL.centeredView}
       >

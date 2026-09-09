@@ -7,6 +7,13 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
+import Animated, {
+  withSpring,
+  FadeIn,
+  FadeInDown,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -22,6 +29,7 @@ import { getFolderTitle } from '../util/getFolder.js';
 import { FONT, FONTSIZE, BORDER, useAppStyles } from '../styles';
 
 const Drawer = createDrawerNavigator();
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 function DrawerNav({ navigation }) {
   const { width: screenWidth } = useWindowDimensions();
@@ -34,6 +42,12 @@ function DrawerNav({ navigation }) {
   const { COLORS } = useTheme();
   const recents = useSelector((state) => state.recents.data);
   const styles = styleSheet(COLORS);
+
+  // animations
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   useEffect(() => {
     navigation.setOptions({
@@ -194,9 +208,18 @@ function DrawerNav({ navigation }) {
             : null}
 
           {/* Log out button */}
-          <Pressable style={buttons.outlineBtn1} onPress={logout}>
+          <AnimatedPressable
+            style={[animatedStyle, buttons.outlineBtn1]}
+            onPress={logout}
+            onPressIn={() => {
+              scale.value = withSpring(0.92);
+            }}
+            onPressOut={() => {
+              scale.value = withSpring(1);
+            }}
+          >
             <Text style={buttons.btnText3}>Log out</Text>
-          </Pressable>
+          </AnimatedPressable>
         </DrawerContentScrollView>
       </View>
     );
