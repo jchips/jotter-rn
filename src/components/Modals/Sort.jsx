@@ -1,11 +1,20 @@
-import { Modal, StyleSheet, View, Text, Pressable } from 'react-native'
-import { useDispatch } from 'react-redux'
-import SelectDropdown from 'react-native-select-dropdown'
-import DropdownBtn from '../buttons/DropdownBtn'
-import api from '../../util/api'
-import { setConfigs } from '../../reducers/configReducer'
-import { useTheme } from '../../contexts/ThemeContext'
-import { useAppStyles } from '../../styles'
+import { Modal, StyleSheet, View, Text, Pressable } from 'react-native';
+import Animated, {
+  withSpring,
+  FadeIn,
+  FadeOutUp,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { useDispatch } from 'react-redux';
+import SelectDropdown from 'react-native-select-dropdown';
+import DropdownBtn from '../buttons/DropdownBtn';
+import api from '../../util/api';
+import { setConfigs } from '../../reducers/configReducer';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppStyles } from '../../styles';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 let sortOptions = [
   { label: 'Last created', value: '1' },
@@ -14,14 +23,20 @@ let sortOptions = [
   { label: 'Title - ZA', value: '4' },
   { label: 'Recently updated', value: '5' },
   { label: 'Oldest updated', value: '6' },
-]
+];
 
 const Sort = (props) => {
-  const { openSort, setOpenSort, currentSort } = props
-  const { app, MODAL, buttons } = useAppStyles()
-  const { COLORS } = useTheme()
-  const styles = styleSheet(COLORS, MODAL)
-  const dispatch = useDispatch() // Switch statement to perform chosen sort
+  const { openSort, setOpenSort, currentSort } = props;
+  const { app, MODAL, buttons } = useAppStyles();
+  const { COLORS } = useTheme();
+  const styles = styleSheet(COLORS, MODAL);
+  const dispatch = useDispatch(); // Switch statement to perform chosen sort
+
+  // animations
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   /**
    * Updates the user's new sort option in the db, global state,
@@ -30,24 +45,24 @@ const Sort = (props) => {
    */
   const setUConfigs = (sortOption) => {
     const updateSort = async (sortOption) => {
-      let configObj = { sort: sortOption }
+      let configObj = { sort: sortOption };
       try {
-        let res = await api.updateConfigs(configObj)
-        dispatch(setConfigs({ ...res.data, ...configObj }))
+        let res = await api.updateConfigs(configObj);
+        dispatch(setConfigs({ ...res.data, ...configObj }));
       } catch (err) {
-        console.error('Failed to update sort -', err)
+        console.error('Failed to update sort -', err);
       }
-    }
-    updateSort(sortOption)
-  }
+    };
+    updateSort(sortOption);
+  };
 
   /**
    * Dropdown button default text
    * @returns <Text> element
    */
   const dropdownBtnText = () => {
-    return <Text>Choose sort</Text>
-  }
+    return <Text>Choose sort</Text>;
+  };
 
   /**
    * Renders a sort option
@@ -66,8 +81,8 @@ const Sort = (props) => {
       >
         <Text style={styles.dropdownItemTxtStyle}>{item.label}</Text>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <Modal
@@ -75,18 +90,22 @@ const Sort = (props) => {
       transparent={true}
       visible={openSort}
       onRequestClose={() => {
-        setOpenSort(!openSort)
+        setOpenSort(!openSort);
       }}
     >
-      <View style={MODAL.centeredView}>
+      <Animated.View
+        entering={FadeIn.duration(250)}
+        exiting={FadeOutUp.duration(180)}
+        style={MODAL.centeredView}
+      >
         <View style={MODAL.modal}>
           <Text style={app.header}>Sort</Text>
           <SelectDropdown
             data={sortOptions}
             defaultValueByIndex={currentSort - 1}
             onSelect={(selection, index) => {
-              setUConfigs(selection.value)
-              setOpenSort(false)
+              setUConfigs(selection.value);
+              setOpenSort(false);
             }}
             renderButton={(selectedItem, isOpened) =>
               DropdownBtn(
@@ -95,26 +114,32 @@ const Sort = (props) => {
                 dropdownBtnText,
                 false,
                 '95%',
-                COLORS
+                COLORS,
               )
             }
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             dropdownStyle={MODAL.dropdownMenuStyle}
           />
-          <Pressable
-            style={[buttons.btn1, MODAL.wideButton]}
+          <AnimatedPressable
+            style={[animatedStyle, buttons.btn1, MODAL.wideButton]}
             onPress={() => {
-              setOpenSort(!openSort)
+              setOpenSort(!openSort);
+            }}
+            onPressIn={() => {
+              scale.value = withSpring(0.92);
+            }}
+            onPressOut={() => {
+              scale.value = withSpring(1);
             }}
           >
             <Text style={buttons.btnText1}>Close</Text>
-          </Pressable>
+          </AnimatedPressable>
         </View>
-      </View>
+      </Animated.View>
     </Modal>
-  )
-}
+  );
+};
 
 const styleSheet = (COLORS, MODAL) =>
   StyleSheet.create({
@@ -122,6 +147,6 @@ const styleSheet = (COLORS, MODAL) =>
       ...MODAL.dropdownItemTxtStyle,
       color: COLORS.themePurpleText,
     },
-  })
+  });
 
-export default Sort
+export default Sort;

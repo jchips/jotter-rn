@@ -18,7 +18,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
+import Animated, { runOnJS, FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMarkdown } from '../src/contexts/MDContext';
 import { useTheme } from '../src/contexts/ThemeContext';
@@ -140,13 +140,15 @@ const Editor = ({ navigation, route }) => {
                     undoStack?.length < 1 ? COLORS.subtle : COLORS.background,
                 }}
               >
-                <Image
-                  source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/undo.png`,
-                  }}
-                  alt='undo-button'
-                  style={app.icon}
-                />
+                <Animated.View entering={FadeIn.duration(250)}>
+                  <Image
+                    source={{
+                      uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/undo.png`,
+                    }}
+                    alt='undo-button'
+                    style={app.icon}
+                  />
+                </Animated.View>
               </Pressable>
               <Pressable
                 onPress={redo}
@@ -157,13 +159,15 @@ const Editor = ({ navigation, route }) => {
                     redoStack?.length < 1 ? COLORS.subtle : COLORS.background,
                 }}
               >
-                <Image
-                  source={{
-                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/redo.png`,
-                  }}
-                  alt='redo-button'
-                  style={app.icon}
-                />
+                <Animated.View entering={FadeIn.duration(250)}>
+                  <Image
+                    source={{
+                      uri: `https://img.icons8.com/material-outlined/100/${COLORS.themeBtnNH}/redo.png`,
+                    }}
+                    alt='redo-button'
+                    style={app.icon}
+                  />
+                </Animated.View>
               </Pressable>
             </View>
           </>
@@ -286,7 +290,7 @@ const Editor = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container} entering={FadeInDown.duration(250)}>
       <KeyboardAvoidingView
         behavior='height'
         style={{ flex: 1 }}
@@ -327,7 +331,7 @@ const Editor = ({ navigation, route }) => {
           />
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </Animated.View>
   );
 };
 

@@ -1,32 +1,40 @@
-import { useState } from 'react'
-import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useAppStyles } from '../../styles'
-import Delete from '../modals/Delete'
-import FolderCard from '../cards/FolderCard'
-import Move from '../modals/Move'
-import Rename from '../modals/Rename'
-import Details from '../modals/Details'
+import { useState } from 'react';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useAppStyles } from '../../styles';
+import Delete from '../modals/Delete';
+import FolderCard from '../cards/FolderCard';
+import Move from '../modals/Move';
+import Rename from '../modals/Rename';
+import Details from '../modals/Details';
 
 const DisplayFolders = ({ folders, error, gridSize }) => {
-  const [openMove, setOpenMove] = useState(false)
-  const [openRename, setOpenRename] = useState(false)
-  const [openDelete, setOpenDelete] = useState(false)
-  const [openDetails, setOpenDetails] = useState(false)
-  const [selectedFolder, setSelectedFolder] = useState(null)
-  const { app } = useAppStyles()
-  const navigation = useNavigation()
-  const numColumns = Number(gridSize) || 0
+  const [openMove, setOpenMove] = useState(false);
+  const [openRename, setOpenRename] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const { app } = useAppStyles();
+  const navigation = useNavigation();
+  const numColumns = Number(gridSize) || 0;
 
   /**
    * Renders list of folders
    * @param {Object} param0 - The folder item to be rendered
    * @returns - a folder card that navigates inside folder
    */
-  const renderItem = ({ item }) => {
-    const folder = item
+  const renderItem = ({ item, index }) => {
+    const folder = item;
     return (
-      <Pressable
+      <FolderCard
+        folder={folder}
+        index={index} // for animation
+        setSelectedFolder={setSelectedFolder}
+        setOpenRename={setOpenRename}
+        setOpenDelete={setOpenDelete}
+        setOpenMove={setOpenMove}
+        setOpenDetails={setOpenDetails}
+        numColumns={numColumns}
         onPress={() => {
           navigation.push('Drawer', {
             screen: 'Home',
@@ -35,21 +43,11 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
               folderTitle: folder.title,
               folderParent: folder.parentId,
             },
-          })
+          });
         }}
-      >
-        <FolderCard
-          folder={folder}
-          setSelectedFolder={setSelectedFolder}
-          setOpenRename={setOpenRename}
-          setOpenDelete={setOpenDelete}
-          setOpenMove={setOpenMove}
-          setOpenDetails={setOpenDetails}
-          numColumns={numColumns}
-        />
-      </Pressable>
-    )
-  }
+      />
+    );
+  };
 
   return folders?.length > 0 ? (
     <View>
@@ -95,9 +93,9 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
         folder={selectedFolder}
       />
     </View>
-  ) : null
-}
+  ) : null;
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
-export default DisplayFolders
+export default DisplayFolders;
