@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Animated, { LinearTransition } from 'react-native-reanimated';
 import { useAppStyles } from '../../styles';
 import Delete from '../modals/Delete';
 import FolderCard from '../cards/FolderCard';
@@ -51,7 +50,7 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
   };
 
   return folders?.length > 0 ? (
-    <Animated.View layout={LinearTransition}>
+    <View>
       {error ? (
         <View style={app.errorAlert}>
           <Text style={app.errorText}>{error}</Text>
@@ -93,7 +92,7 @@ const DisplayFolders = ({ folders, error, gridSize }) => {
         setOpenDelete={setOpenDelete}
         folder={selectedFolder}
       />
-    </Animated.View>
+    </View>
   ) : null;
 };
 

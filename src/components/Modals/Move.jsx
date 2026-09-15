@@ -10,7 +10,7 @@ import {
 import SelectDropdown from 'react-native-select-dropdown';
 import Animated, {
   withSpring,
-  FadeInDown,
+  FadeIn,
   FadeOutUp,
   useSharedValue,
   useAnimatedStyle,
@@ -420,7 +420,7 @@ const Move = (props) => {
         }}
       >
         <Animated.View
-          entering={FadeInDown.duration(250)}
+          entering={FadeIn.duration(250)}
           exiting={FadeOutUp.duration(180)}
           style={MODAL.centeredView}
         >

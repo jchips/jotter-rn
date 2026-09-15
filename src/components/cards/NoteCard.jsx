@@ -87,7 +87,6 @@ const NoteCard = (props) => {
           <View>
             <Text style={styles.h1}>{note.title}</Text>
           </View>
-
           {/* Note options Popover */}
           <Popover
             ref={popoverRef}
@@ -105,10 +104,7 @@ const NoteCard = (props) => {
             arrowSize={{ width: 0, height: 0 }}
             popoverStyle={styles.popover}
           >
-            <Animated.View
-              entering={FadeIn.duration(150)} // animation for popover
-              style={POPOVER.popoverContainer}
-            >
+            <Animated.View style={POPOVER.popoverContainer}>
               {/* Rename note */}
               <AnimatedPressable
                 style={[renameBtnAnimatedStyle, POPOVER.button]}
@@ -133,7 +129,6 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>Rename note</Text>
               </AnimatedPressable>
-
               {/* Open note details */}
               <AnimatedPressable
                 style={[detailBtnAnimatedStyle, POPOVER.button]}
@@ -158,7 +153,6 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>View details</Text>
               </AnimatedPressable>
-
               {/* Move note */}
               <AnimatedPressable
                 style={[moveBtnAnimatedStyle, POPOVER.button]}
@@ -183,7 +177,6 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>Move note</Text>
               </AnimatedPressable>
-
               {/* Delete note */}
               <AnimatedPressable
                 style={[deleteBtnAnimatedStyle, POPOVER.button]}

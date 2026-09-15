@@ -13,9 +13,8 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import Animated, {
-  withTiming,
   withSpring,
-  FadeInDown,
+  FadeIn,
   FadeOutUp,
   useSharedValue,
   useAnimatedStyle,
@@ -154,7 +153,7 @@ const AddTitle = (props) => {
       }}
     >
       <Animated.View
-        entering={FadeInDown.duration(250)}
+        entering={FadeIn.duration(250)}
         exiting={FadeOutUp.duration(180)}
         style={MODAL.centeredView}
       >
@@ -211,11 +210,9 @@ const AddTitle = (props) => {
                   }}
                   onPressIn={() => {
                     cancelScale.value = withSpring(0.92);
-                    // scale.value = withTiming(0.95, { duration: 100 });
                   }}
                   onPressOut={() => {
                     cancelScale.value = withSpring(1);
-                    // scale.value = withTiming(1, { duration: 100 });
                   }}
                 >
                   <Text style={buttons.btnText2}>Cancel</Text>

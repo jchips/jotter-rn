@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, View, Modal, Text, Pressable } from 'react-native';
 import Animated, {
   withSpring,
-  FadeInDown,
+  FadeIn,
   FadeOutUp,
   useSharedValue,
   useAnimatedStyle,
@@ -89,7 +89,7 @@ const Grid = (props) => {
       }}
     >
       <Animated.View
-        entering={FadeInDown.duration(250)}
+        entering={FadeIn.duration(250)}
         exiting={FadeOutUp.duration(180)}
         style={MODAL.centeredView}
       >

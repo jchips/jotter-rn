@@ -110,7 +110,7 @@ const FolderCard = (props) => {
           popoverStyle={styles.popover}
         >
           <Animated.View
-            entering={FadeIn.duration(150)} // animation for popover
+            // entering={FadeIn.duration(150)} // animation for popover
             style={POPOVER.popoverContainer}
           >
             {/* Rename */}
