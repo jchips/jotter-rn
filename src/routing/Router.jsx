@@ -66,27 +66,31 @@ const Router = () => {
   }, [user]);
 
   // Makes the Android navigation background color follow the device theme (dark or light)
+
   useEffect(() => {
-    try {
-      const navigationBg = async () => {
-        if (theme === 'system') {
-          if (systemTheme === 'light') {
-            await NavigationBar.setButtonStyleAsync('dark');
-          } else {
-            await NavigationBar.setButtonStyleAsync('light');
-          }
-        } else {
-          await NavigationBar.setButtonStyleAsync(
-            theme === 'dark' ? 'light' : 'dark'
-          );
-        }
+    if (Platform.OS !== 'android') return;
+
+    const updateNavigationBar = async () => {
+      try {
+        const buttonStyle =
+          theme === 'system'
+            ? systemTheme === 'light'
+              ? 'dark'
+              : 'light'
+            : theme === 'dark'
+              ? 'light'
+              : 'dark';
+
+        NavigationBar.setStyle(buttonStyle);
+
         await SystemUI.setBackgroundColorAsync(COLORS.background);
-      };
-      Platform.OS === 'android' ? navigationBg() : null;
-    } catch (err) {
-      console.error(err);
-    }
-  }, [NavigationBar, theme, systemTheme]);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    updateNavigationBar();
+  }, [theme, systemTheme, COLORS.background]);
 
   // Sets the status bar text theme
   const statusBarTextStyle =
@@ -95,8 +99,8 @@ const Router = () => {
         ? 'dark'
         : 'light'
       : theme === 'dark'
-      ? 'light'
-      : 'dark';
+        ? 'light'
+        : 'dark';
 
   let lastNoteId = null;
 
