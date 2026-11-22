@@ -37,6 +37,12 @@
         "expo-status-bar"
       ],
       [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false
+        }
+      ],
+      [
         "expo-asset"
       ],
       [
