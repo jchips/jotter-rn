@@ -6,15 +6,18 @@ import {
   TextInput,
   Pressable,
   Keyboard,
+  Image,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
+import ShowPassTextButton from '../buttons/ShowPassTextButton';
 
 const LoginForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const { login, setIsLoggedIn } = useAuth();
   const { COLORS } = useTheme();
   const { app, buttons } = useAppStyles();
@@ -108,20 +111,28 @@ const LoginForm = () => {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder='Password'
-              placeholderTextColor={COLORS.placeHolderText}
-              autoComplete='password'
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={app.input}
-              textContentType='password'
-              autoCapitalize='none'
-              autoCorrect={false}
-              onSubmitEditing={handleSubmit(onSubmit)}
-              secureTextEntry
-            />
+            <View style={app.passwordInputWrapper}>
+              <TextInput
+                placeholder='Password'
+                placeholderTextColor={COLORS.placeHolderText}
+                autoComplete='password'
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={app.passwordInput}
+                textContentType='password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                onSubmitEditing={handleSubmit(onSubmit)}
+                secureTextEntry={!showPass}
+                hitSlop={10}
+              />
+              <ShowPassTextButton
+                showPass={showPass}
+                setShowPass={setShowPass}
+                color={COLORS.textNH}
+              />
+            </View>
           )}
         />
         {errors.password && (

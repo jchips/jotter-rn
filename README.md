@@ -14,9 +14,9 @@ TLDR: Jotter is a mobile app for Android designed for note-taking with Markdown.
 
 [View the Jotter backend code here!](https://github.com/jchips/jotter-api)
 
-## Creator & developer: Jelani R
+## Creator & developer: jrotech
 
-## Version: 1.4.1
+## Version: 1.4.2
 
 ## Architecture
 
@@ -62,6 +62,7 @@ Development
 
 ## Changelog
 
+- **1.4.2** (2026-11-21, 11:10pm) - Added a button for users to show/hide password when using auth forms.
 - **1.4.1** (2026-09-09, 12:00pm) - Added simple animations to make app feel smoother.
 - **1.4.0** (2026-05-23, 12:30am) - Added option to changed saved indicator color to red, added a 'jotter example' note to all users accounts when they first sign up, nested formatting is now available for notes (ex: bold _and_ italic text), offwhite app background instead of #fff.
 - **1.3.10** (2026-05-18, 7:20pm) - Improved auth, auto log user out if their token is expired (10 days).

@@ -15,7 +15,7 @@ const COMMON_COLORS = {
   darkTheme: '#18181b',
   cardBgDark: '#1f1f23',
   sectionBg: '#1a1a1d',
-}
+};
 
 const NO_HASH = {
   textNH: '646cff',
@@ -24,7 +24,8 @@ const NO_HASH = {
   whiteNH: 'f9fafb',
   offWhiteNH: 'e4e4e7',
   blackNH: '09090B',
-}
+  subtleTextNH: '6B7280',
+};
 
 const light = {
   background: COMMON_COLORS.white,
@@ -47,8 +48,8 @@ const light = {
   errAlert: '#fee2e2',
   errText: '#991919',
   ...COMMON_COLORS,
-  ...NO_HASH
-}
+  ...NO_HASH,
+};
 
 const dark = {
   background: COMMON_COLORS.darkTheme,
@@ -71,7 +72,7 @@ const dark = {
   errAlert: '#300c0c',
   errText: '#fca5a5',
   ...COMMON_COLORS,
-  ...NO_HASH
-}
+  ...NO_HASH,
+};
 
 export { light, dark };

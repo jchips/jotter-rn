@@ -18,12 +18,15 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAppStyles } from '../../styles';
 import demoNote from '../../util/demoNote';
 import api from '../../util/api';
+import ShowPassTextButton from '../buttons/ShowPassTextButton';
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
 const SignupForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
   const { login, setIsLoggedIn } = useAuth();
   const { COLORS } = useTheme();
   const navigation = useNavigation();
@@ -159,19 +162,26 @@ const SignupForm = () => {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder='Password'
-              placeholderTextColor={COLORS.placeHolderText}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={app.input}
-              textContentType='newPassword'
-              autoComplete='password-new'
-              autoCapitalize='none'
-              autoCorrect={false}
-              secureTextEntry
-            />
+            <View style={app.passwordInputWrapper}>
+              <TextInput
+                placeholder='Password'
+                placeholderTextColor={COLORS.placeHolderText}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={app.passwordInput}
+                textContentType='newPassword'
+                autoComplete='password-new'
+                autoCapitalize='none'
+                autoCorrect={false}
+                secureTextEntry={!showPass}
+              />
+              <ShowPassTextButton
+                showPass={showPass}
+                setShowPass={setShowPass}
+                color={COLORS.textNH}
+              />
+            </View>
           )}
         />
         {errors.password && (
@@ -188,19 +198,26 @@ const SignupForm = () => {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder='Confirm password'
-              placeholderTextColor={COLORS.placeHolderText}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={app.input}
-              textContentType='password'
-              autoCapitalize='none'
-              autoCorrect={false}
-              onSubmitEditing={handleSubmit(onSubmit)}
-              secureTextEntry
-            />
+            <View style={app.passwordInputWrapper}>
+              <TextInput
+                placeholder='Confirm password'
+                placeholderTextColor={COLORS.placeHolderText}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={app.passwordInput}
+                textContentType='password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                onSubmitEditing={handleSubmit(onSubmit)}
+                secureTextEntry={!showConfirmPass}
+              />
+              <ShowPassTextButton
+                showPass={showConfirmPass}
+                setShowPass={setShowConfirmPass}
+                color={COLORS.textNH}
+              />
+            </View>
           )}
         />
         {errors.confirmPassword && (
