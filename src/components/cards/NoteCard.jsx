@@ -15,6 +15,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import * as Clipboard from 'expo-clipboard';
 import { useTheme } from '../../contexts/ThemeContext';
 import formatDate from '../../util/formatDate';
 import { moderateScale } from '../../util/scaling';
@@ -59,6 +60,10 @@ const NoteCard = (props) => {
   const detailBtnScale = useSharedValue(1);
   const detailBtnAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: detailBtnScale.value }],
+  }));
+  const copyTextBtnScale = useSharedValue(1);
+  const copyTextBtnAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: copyTextBtnScale.value }],
   }));
   const moveBtnScale = useSharedValue(1);
   const moveBtnAnimatedStyle = useAnimatedStyle(() => ({
@@ -129,6 +134,7 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>Rename note</Text>
               </AnimatedPressable>
+
               {/* Open note details */}
               <AnimatedPressable
                 style={[detailBtnAnimatedStyle, POPOVER.button]}
@@ -153,6 +159,32 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>View details</Text>
               </AnimatedPressable>
+
+              {/* Copy note text */}
+              <AnimatedPressable
+                style={[copyTextBtnAnimatedStyle, POPOVER.button]}
+                onPress={async () => {
+                  setSelectedNote(note);
+                  await Clipboard.setStringAsync(note.content);
+                  popoverRef.current.requestClose();
+                }}
+                onPressIn={() => {
+                  copyTextBtnScale.value = withSpring(0.97);
+                }}
+                onPressOut={() => {
+                  copyTextBtnScale.value = withSpring(1);
+                }}
+              >
+                <Image
+                  source={{
+                    uri: `https://img.icons8.com/material-outlined/100/${COLORS.textNH}/copy.png`,
+                  }}
+                  alt='copy-icon'
+                  style={app.icon2}
+                />
+                <Text style={buttons.btnText2}>Copy note</Text>
+              </AnimatedPressable>
+
               {/* Move note */}
               <AnimatedPressable
                 style={[moveBtnAnimatedStyle, POPOVER.button]}
@@ -177,6 +209,7 @@ const NoteCard = (props) => {
                 />
                 <Text style={buttons.btnText2}>Move note</Text>
               </AnimatedPressable>
+
               {/* Delete note */}
               <AnimatedPressable
                 style={[deleteBtnAnimatedStyle, POPOVER.button]}

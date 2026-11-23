@@ -1,5 +1,6 @@
 import { Pressable, Image } from 'react-native';
 import { useAppStyles } from '../../styles';
+import appIcons from '../../util/appIcons';
 
 /**
  * Button to show/hide password text in auth forms
@@ -8,8 +9,9 @@ import { useAppStyles } from '../../styles';
  * @param {String} color - in the format: 'COLORS.textNH'
  * @returns {Component} - A Button component
  */
-export default function ShowPassTextButton({ showPass, setShowPass, color }) {
-  const { app } = useAppStyles();
+export default function ShowPassTextButton({ showPass, setShowPass }) {
+  const { app, COLORS } = useAppStyles();
+  const icons = appIcons(COLORS);
   return (
     <Pressable
       onPress={() => setShowPass(!showPass)}
@@ -18,14 +20,14 @@ export default function ShowPassTextButton({ showPass, setShowPass, color }) {
       {showPass ? (
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${color}/visible--v1.png`,
+            uri: icons.show,
           }}
           style={app.icon}
         />
       ) : (
         <Image
           source={{
-            uri: `https://img.icons8.com/material-outlined/100/${color}/hide.png`,
+            uri: icons.hide,
           }}
           style={app.icon}
         />

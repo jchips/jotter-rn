@@ -130,7 +130,6 @@ const LoginForm = () => {
               <ShowPassTextButton
                 showPass={showPass}
                 setShowPass={setShowPass}
-                color={COLORS.textNH}
               />
             </View>
           )}
